@@ -25,6 +25,22 @@ export default function Landing() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const navHeight = scrolled ? 80 : 100;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - navHeight;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+    setMobileMenuOpen(false);
+  };
+
   const filteredBrands = BRANDS.filter(b => activeFilter === 'all' || b.category === activeFilter);
 
   return (
@@ -50,13 +66,14 @@ export default function Landing() {
               <a 
                 key={item} 
                 href={`#${item.toLowerCase().replace(' ', '-')}`}
+                onClick={(e) => scrollToSection(e, item.toLowerCase().replace(' ', '-'))}
                 className="text-xs font-mono uppercase tracking-widest text-white/60 hover:text-brand-green transition-colors"
               >
                 {item}
               </a>
             ))}
             <button 
-              onClick={() => document.getElementById('venture')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={(e) => scrollToSection(e, 'venture')}
               className="bg-brand-green text-black px-5 py-2 text-xs font-mono font-bold uppercase tracking-widest hover:bg-brand-green/80 transition-all"
             >
               Connect
@@ -85,17 +102,14 @@ export default function Landing() {
                 <a 
                   key={item} 
                   href={`#${item.toLowerCase().replace(' ', '-')}`}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={(e) => scrollToSection(e, item.toLowerCase().replace(' ', '-'))}
                   className="text-2xl font-display uppercase tracking-widest text-white hover:text-brand-green transition-colors"
                 >
                   {item}
                 </a>
               ))}
               <button 
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  document.getElementById('venture')?.scrollIntoView({ behavior: 'smooth' });
-                }}
+                onClick={(e) => scrollToSection(e, 'venture')}
                 className="mt-4 bg-brand-green text-black px-8 py-3 text-sm font-mono font-bold uppercase tracking-widest hover:bg-brand-green/80 transition-all"
               >
                 Connect
@@ -229,7 +243,7 @@ export default function Landing() {
       </section>
 
       {/* Leadership Section */}
-      <section id="leadership" className="py-24 px-6 md:px-12 bg-white/[0.01] border-b border-white/5">
+      <section id="leadership" className="py-24 px-6 md:px-12 bg-white/[0.01] border-b border-white/5 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
             <span className="font-mono text-xs text-brand-green uppercase tracking-widest mb-4 block">/ Leadership</span>
@@ -293,7 +307,7 @@ export default function Landing() {
       </section>
 
       {/* Portfolio Section */}
-      <section id="portfolio" className="py-24 px-6 md:px-12">
+      <section id="portfolio" className="py-24 px-6 md:px-12 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
             <span className="font-mono text-xs text-brand-green uppercase tracking-widest mb-4 block">/ Ecosystem</span>
@@ -469,7 +483,7 @@ export default function Landing() {
       </section>
 
       {/* Venture Studio Section */}
-      <section id="venture" className="py-24 px-6 md:px-12 bg-gradient-to-b from-transparent to-brand-green/[0.02]">
+      <section id="venture" className="py-24 px-6 md:px-12 bg-gradient-to-b from-transparent to-brand-green/[0.02] scroll-mt-24">
         <div className="max-w-7xl mx-auto">
           <div className="p-12 md:p-20 border border-brand-green/20 rounded-3xl relative overflow-hidden bg-brand-black mb-24">
             <div className="absolute top-0 right-0 w-96 h-96 bg-brand-green/5 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/4" />
@@ -491,7 +505,7 @@ export default function Landing() {
                 </div>
 
                 <button 
-                  onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={(e) => scrollToSection(e, 'portfolio')}
                   className="flex items-center gap-4 group"
                 >
                   <span className="font-mono text-xs uppercase tracking-[0.3em] text-white group-hover:text-brand-green transition-colors">Explore Ventures</span>
@@ -557,18 +571,18 @@ export default function Landing() {
             <div>
               <h4 className="font-mono text-xs uppercase tracking-widest text-white mb-8">Ecosystem</h4>
               <ul className="space-y-4">
-                <li><a href="#portfolio" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">College EsportsX</a></li>
-                <li><a href="#portfolio" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">AGONiQ</a></li>
-                <li><a href="#portfolio" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Warzai</a></li>
-                <li><a href="#portfolio" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Esports India</a></li>
+                <li><a href="#portfolio" onClick={(e) => scrollToSection(e, 'portfolio')} className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">College EsportsX</a></li>
+                <li><a href="#portfolio" onClick={(e) => scrollToSection(e, 'portfolio')} className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">AGONiQ</a></li>
+                <li><a href="#portfolio" onClick={(e) => scrollToSection(e, 'portfolio')} className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Warzai</a></li>
+                <li><a href="#portfolio" onClick={(e) => scrollToSection(e, 'portfolio')} className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Esports India</a></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-mono text-xs uppercase tracking-widest text-white mb-8">Company</h4>
               <ul className="space-y-4">
-                <li><a href="#leadership" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Leadership</a></li>
-                <li><a href="#venture" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Venture Studio</a></li>
+                <li><a href="#leadership" onClick={(e) => scrollToSection(e, 'leadership')} className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Leadership</a></li>
+                <li><a href="#venture" onClick={(e) => scrollToSection(e, 'venture')} className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Venture Studio</a></li>
                 <li><a href="/privacy" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Privacy Policy</a></li>
                 <li><a href="/terms" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Terms of Service</a></li>
               </ul>
