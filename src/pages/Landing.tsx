@@ -74,7 +74,7 @@ const Counter = ({ target, prefix = "", suffix = "", label }: { target: number, 
 
 export default function Landing() {
   const [scrolled, setScrolled] = useState(false);
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilters, setActiveFilters] = useState<string[]>(['all']);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
@@ -120,7 +120,28 @@ export default function Landing() {
     setMobileMenuOpen(false);
   };
 
-  const filteredBrands = BRANDS.filter(b => activeFilter === 'all' || b.category === activeFilter);
+  const toggleFilter = (id: string) => {
+    if (id === 'all') {
+      setActiveFilters(['all']);
+      return;
+    }
+
+    setActiveFilters(prev => {
+      const isAllSelected = prev.includes('all');
+      const isCurrentSelected = prev.includes(id);
+
+      let next: string[];
+      if (isAllSelected) {
+        next = [id];
+      } else if (isCurrentSelected) {
+        next = prev.filter(f => f !== id);
+        if (next.length === 0) next = ['all'];
+      } else {
+        next = [...prev, id];
+      }
+      return next;
+    });
+  };
 
   return (
     <div className="min-h-screen bg-brand-black selection:bg-brand-green selection:text-black grain-overlay">
@@ -411,10 +432,10 @@ export default function Landing() {
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => setActiveFilter(cat.id)}
+                onClick={() => toggleFilter(cat.id)}
                 className={cn(
                   "px-4 py-2 text-[10px] font-mono uppercase tracking-widest transition-all relative overflow-hidden group",
-                  activeFilter === cat.id 
+                  activeFilters.includes(cat.id) 
                     ? "text-white" 
                     : "text-white/40 hover:text-white"
                 )}
@@ -423,7 +444,7 @@ export default function Landing() {
                 <span 
                   className={cn(
                     "absolute bottom-0 left-0 w-full h-0.5 transition-transform duration-300",
-                    activeFilter === cat.id ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                    activeFilters.includes(cat.id) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                   )}
                   style={{ backgroundColor: cat.color }}
                 />
@@ -432,7 +453,7 @@ export default function Landing() {
           </div>
 
           {/* Spotlight Feature */}
-          {(activeFilter === 'all' || activeFilter === 'history') && (
+          {(activeFilters.includes('all') || activeFilters.includes('history')) && (
             <div className="mb-24">
               <div className="flex items-center gap-4 mb-10 pb-5 border-b border-white/5">
                 <div className="w-2 h-2 rounded-full bg-brand-green animate-pulse" />
@@ -516,7 +537,7 @@ export default function Landing() {
             {CATEGORIES.filter(c => c.id !== 'all' && c.id !== 'venture').map((category) => {
               const categoryBrands = BRANDS.filter(b => b.category === category.id);
               if (categoryBrands.length === 0) return null;
-              if (activeFilter !== 'all' && activeFilter !== category.id) return null;
+              if (!activeFilters.includes('all') && !activeFilters.includes(category.id)) return null;
 
               return (
                 <motion.div 
