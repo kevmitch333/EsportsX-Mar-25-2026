@@ -110,7 +110,7 @@ export default function Landing() {
     if (element) {
       const navHeight = scrolled ? 80 : 100;
       const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - navHeight;
+      const offsetPosition = elementPosition + window.scrollY - navHeight;
 
       window.scrollTo({
         top: offsetPosition,
@@ -940,10 +940,10 @@ export default function Landing() {
             <div>
               <h4 className="font-mono text-xs uppercase tracking-widest text-white mb-8">Ecosystem</h4>
               <ul className="space-y-4">
-                <li><a href="#portfolio" onClick={(e) => scrollToSection(e, 'portfolio')} className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">College EsportsX</a></li>
-                <li><a href="#portfolio" onClick={(e) => scrollToSection(e, 'portfolio')} className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">AGONiQ</a></li>
-                <li><a href="#portfolio" onClick={(e) => scrollToSection(e, 'portfolio')} className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Warzai</a></li>
-                <li><a href="#portfolio" onClick={(e) => scrollToSection(e, 'portfolio')} className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Esports India</a></li>
+                <li><Link to="/brand/college-esportsx" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">College EsportsX</Link></li>
+                <li><Link to="/brand/agoniq" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">AGONiQ</Link></li>
+                <li><Link to="/brand/warzai" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Warzai</Link></li>
+                <li><Link to="/brand/esports-india" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Esports India</Link></li>
               </ul>
             </div>
 
@@ -952,8 +952,8 @@ export default function Landing() {
               <ul className="space-y-4">
                 <li><a href="#leadership" onClick={(e) => scrollToSection(e, 'leadership')} className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Leadership</a></li>
                 <li><a href="#venture" onClick={(e) => scrollToSection(e, 'venture')} className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Venture Studio</a></li>
-                <li><a href="/privacy" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Privacy Policy</a></li>
-                <li><a href="/terms" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Terms of Service</a></li>
+                <li><Link to="/legal" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Privacy Policy</Link></li>
+                <li><Link to="/legal" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">Terms of Service</Link></li>
               </ul>
             </div>
           </div>
