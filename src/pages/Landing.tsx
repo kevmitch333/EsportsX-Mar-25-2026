@@ -431,6 +431,86 @@ export default function Landing() {
             ))}
           </div>
 
+          {/* Spotlight Feature */}
+          {(activeFilter === 'all' || activeFilter === 'history') && (
+            <div className="mb-24">
+              <div className="flex items-center gap-4 mb-10 pb-5 border-b border-white/5">
+                <div className="w-2 h-2 rounded-full bg-brand-green animate-pulse" />
+                <h2 className="font-display text-3xl uppercase tracking-wider group cursor-default">
+                  <span className="relative inline-block">
+                    Ecosystem Spotlights
+                    <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">Ecosystem Spotlights</span>
+                  </span>
+                </h2>
+                <span className="ml-auto font-mono text-[10px] uppercase tracking-widest text-white/20">Featured Strategic Assets</span>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {BRANDS.filter(b => b.featured && b.category === 'history').map((brand, idx) => (
+                  <motion.div
+                    key={brand.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: idx * 0.2 }}
+                    className="group relative h-[450px] overflow-hidden rounded-2xl border border-white/10 bg-brand-smoke hover:border-brand-green/40 transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,255,136,0.1)]"
+                  >
+                    {/* Background Image with Overlay */}
+                    <div className="absolute inset-0 z-0">
+                      <img 
+                        src={brand.images?.[0] || 'https://picsum.photos/seed/spotlight/1200/800'} 
+                        alt={brand.name}
+                        className="w-full h-full object-cover opacity-30 grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/60 to-transparent" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="relative z-10 h-full p-8 flex flex-col justify-end">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-white/5 border border-white/10 rounded-lg text-brand-green">
+                          {brand.icon}
+                        </div>
+                        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">/ Featured Asset</span>
+                      </div>
+                      
+                      <h3 className="font-display text-4xl mb-3 uppercase tracking-tight leading-none group-hover:text-brand-green transition-colors">
+                        {brand.name}
+                      </h3>
+                      
+                      <p className="text-white/60 text-sm leading-relaxed mb-6 line-clamp-3 font-light italic">
+                        "{brand.tagline}"
+                      </p>
+
+                      <div className="space-y-3 mb-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-4 group-hover:translate-y-0">
+                        {brand.backInfo?.rows.slice(0, 2).map((row, i) => (
+                          <div key={i} className="flex items-center gap-3">
+                            <Check className="w-3 h-3 text-brand-green" />
+                            <span className="text-[10px] font-mono uppercase tracking-widest text-white/40">{row.label}: <span className="text-white/80">{row.val}</span></span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <Link 
+                        to={`/brand/${brand.id}`}
+                        className="inline-flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.3em] text-brand-green hover:text-white transition-colors group/btn"
+                      >
+                        Explore Strategic Impact
+                        <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                      </Link>
+                    </div>
+
+                    {/* Corner Accent */}
+                    <div className="absolute top-0 right-0 w-24 h-24 overflow-hidden pointer-events-none">
+                      <div className="absolute top-0 right-0 w-[141%] h-2 bg-brand-green/20 rotate-45 translate-x-[30%] translate-y-[-50%]" />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Category Blocks */}
           <div className="space-y-24">
             {CATEGORIES.filter(c => c.id !== 'all' && c.id !== 'venture').map((category) => {

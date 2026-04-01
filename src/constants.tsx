@@ -651,6 +651,75 @@ export const BRANDS: Brand[] = [
         { label: 'Market', val: '$1.4B+ esports merchandise market' }
       ]
     }
+  },
+  {
+    id: 'red-bull-campus-clutch',
+    name: 'Red Bull Campus Clutch',
+    category: 'history',
+    tagline: 'The world\'s largest global university Valorant tournament',
+    desc: 'EsportsX provided strategic consulting and operational support for one of the most significant collegiate esports initiatives globally.',
+    icon: <Trophy className="w-6 h-6" />,
+    domain: 'redbull.com',
+    color: '#1e3799',
+    featured: true,
+    images: [
+      'https://picsum.photos/seed/redbull1/1200/800',
+      'https://picsum.photos/seed/redbull2/1200/800'
+    ],
+    backInfo: {
+      sub: 'Global Collegiate Initiative',
+      rows: [
+        { label: 'Role', val: 'Strategic operational partner for global university rollout' },
+        { label: 'Scale', val: '50+ countries, 25,000+ student participants' },
+        { label: 'Impact', val: 'Defined the gold standard for global collegiate competition' }
+      ]
+    }
+  },
+  {
+    id: 'twitch-student',
+    name: 'Twitch Student',
+    category: 'history',
+    tagline: 'Empowering the next generation of creators',
+    desc: 'Kevin Mitchell helped host one of the first Twitch streaming-focused classes in the US, bridging the gap between academia and the creator economy.',
+    icon: <Gamepad2 className="w-6 h-6" />,
+    domain: 'twitch.tv',
+    color: '#6441a5',
+    featured: true,
+    images: [
+      'https://picsum.photos/seed/twitch1/1200/800',
+      'https://picsum.photos/seed/twitch2/1200/800'
+    ],
+    backInfo: {
+      sub: 'Educational Partnership',
+      rows: [
+        { label: 'Milestone', val: 'Pioneered streaming-focused curriculum in US higher ed' },
+        { label: 'Focus', val: 'Creator economy, digital broadcasting, community building' },
+        { label: 'Legacy', val: 'Established blueprint for university-creator integrations' }
+      ]
+    }
+  },
+  {
+    id: 'intel-inspires',
+    name: 'Intel Inspires',
+    category: 'history',
+    tagline: 'Global gaming and esports education initiative',
+    desc: 'Kevin served as a two-time judge for Intel Inspires, a global initiative driving esports education and talent discovery.',
+    icon: <Cpu className="w-6 h-6" />,
+    domain: 'intel.com',
+    color: '#0071c5',
+    featured: true,
+    images: [
+      'https://picsum.photos/seed/intel1/1200/800',
+      'https://picsum.photos/seed/intel2/1200/800'
+    ],
+    backInfo: {
+      sub: 'Talent Discovery Program',
+      rows: [
+        { label: 'Role', val: 'Two-time judge for global talent and education initiative' },
+        { label: 'Scope', val: 'Global reach across multiple gaming and tech disciplines' },
+        { label: 'Mission', val: 'Identifying and supporting the next generation of esports talent' }
+      ]
+    }
   }
 ];
 
@@ -661,6 +730,7 @@ export const CATEGORIES = [
   { id: 'edu', label: 'Education & Development', color: '#ff9f43', overview: 'Collegiate systems, NIL monetization, and K-12 gaming curriculum.' },
   { id: 'regional', label: 'Regional & Communities', color: '#a29bfe', overview: 'Hyper-local and demographic-specific gaming networks.' },
   { id: 'infra', label: 'Infrastructure & Services', color: '#fd79a8', overview: 'The B2B operating system for the professional gaming industry.' },
+  { id: 'history', label: 'Strategic History', color: '#ff7675', overview: 'Legacy partnerships and global initiatives that defined the ecosystem.' },
   { id: 'venture', label: 'Venture Studio', color: '#ffeaa7', overview: 'The innovation engine behind the next generation of gaming.' }
 ];
 
