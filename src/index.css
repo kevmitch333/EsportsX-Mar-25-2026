@@ -9,6 +9,9 @@
   --color-brand-green: #00ff88;
   --color-brand-black: #0d0d0d;
   --color-brand-smoke: #1a1a1a;
+  --color-brand-mid: #404040;
+  --color-brand-light: #a0a0a0;
+  --color-brand-off-white: #f5f5f5;
   
   --color-c-core: #00ff88;
   --color-c-compete: #00d4ff;
@@ -23,7 +26,7 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-brand-black text-white font-sans antialiased overflow-x-hidden cursor-none;
+    @apply bg-brand-black text-brand-off-white font-sans antialiased overflow-x-hidden cursor-none selection:bg-brand-green selection:text-brand-black;
   }
 }
 

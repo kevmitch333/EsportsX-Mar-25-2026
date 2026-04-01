@@ -32,6 +32,7 @@ export interface Brand {
   color: string;
   featured?: boolean;
   stats?: Record<string, string>;
+  images?: string[];
   backInfo?: {
     sub: string;
     rows: { label: string; val: string }[];
@@ -52,6 +53,12 @@ export const BRANDS: Brand[] = [
     color: '#00ff88',
     featured: true,
     stats: { users: '50k+', growth: '+120%' },
+    images: [
+      'https://picsum.photos/seed/agoniq1/1200/800',
+      'https://picsum.photos/seed/agoniq2/1200/800',
+      'https://picsum.photos/seed/agoniq3/1200/800',
+      'https://picsum.photos/seed/agoniq4/1200/800'
+    ],
     backInfo: {
       sub: 'AI Competition Engine',
       rows: [
@@ -71,6 +78,11 @@ export const BRANDS: Brand[] = [
     icon: <BrainCircuit className="w-6 h-6" />,
     domain: 'warzai.com',
     color: '#00ff88',
+    images: [
+      'https://picsum.photos/seed/warzai1/1200/800',
+      'https://picsum.photos/seed/warzai2/1200/800',
+      'https://picsum.photos/seed/warzai3/1200/800'
+    ],
     backInfo: {
       sub: 'AI Tournament Format',
       rows: [
@@ -92,6 +104,11 @@ export const BRANDS: Brand[] = [
     icon: <GraduationCap className="w-6 h-6" />,
     domain: 'agoniq.com',
     color: '#00d4ff',
+    images: [
+      'https://picsum.photos/seed/collegiate1/1200/800',
+      'https://picsum.photos/seed/collegiate2/1200/800',
+      'https://picsum.photos/seed/collegiate3/1200/800'
+    ],
     backInfo: {
       sub: 'NCAA Cognitive Platform',
       rows: [
@@ -111,6 +128,11 @@ export const BRANDS: Brand[] = [
     icon: <Trophy className="w-6 h-6" />,
     domain: 'esportsfc.com',
     color: '#00d4ff',
+    images: [
+      'https://picsum.photos/seed/fc1/1200/800',
+      'https://picsum.photos/seed/fc2/1200/800',
+      'https://picsum.photos/seed/fc3/1200/800'
+    ],
     backInfo: {
       sub: 'Football Simulation League',
       rows: [
@@ -130,6 +152,11 @@ export const BRANDS: Brand[] = [
     icon: <Zap className="w-6 h-6" />,
     domain: 'esportsf1.com',
     color: '#00d4ff',
+    images: [
+      'https://picsum.photos/seed/f1-1/1200/800',
+      'https://picsum.photos/seed/f1-2/1200/800',
+      'https://picsum.photos/seed/f1-3/1200/800'
+    ],
     backInfo: {
       sub: 'Racing Simulation League',
       rows: [
@@ -149,6 +176,11 @@ export const BRANDS: Brand[] = [
     icon: <ShieldCheck className="w-6 h-6" />,
     domain: 'usolympicesports.com',
     color: '#00d4ff',
+    images: [
+      'https://picsum.photos/seed/olympic1/1200/800',
+      'https://picsum.photos/seed/olympic2/1200/800',
+      'https://picsum.photos/seed/olympic3/1200/800'
+    ],
     backInfo: {
       sub: 'National Team Infrastructure',
       rows: [
@@ -168,6 +200,11 @@ export const BRANDS: Brand[] = [
     icon: <Trophy className="w-6 h-6" />,
     domain: 'esportscfb.com',
     color: '#00d4ff',
+    images: [
+      'https://picsum.photos/seed/cfb1/1200/800',
+      'https://picsum.photos/seed/cfb2/1200/800',
+      'https://picsum.photos/seed/cfb3/1200/800'
+    ],
     backInfo: {
       sub: 'College Football Gaming League',
       rows: [
@@ -187,6 +224,11 @@ export const BRANDS: Brand[] = [
     icon: <Globe className="w-6 h-6" />,
     domain: 'mobileesportsx.com',
     color: '#00d4ff',
+    images: [
+      'https://picsum.photos/seed/mobile1/1200/800',
+      'https://picsum.photos/seed/mobile2/1200/800',
+      'https://picsum.photos/seed/mobile3/1200/800'
+    ],
     backInfo: {
       sub: 'Mobile Competition Platform',
       rows: [
@@ -210,6 +252,11 @@ export const BRANDS: Brand[] = [
     color: '#ff9f43',
     featured: true,
     stats: { universities: '250+', students: '1M+' },
+    images: [
+      'https://picsum.photos/seed/cex1/1200/800',
+      'https://picsum.photos/seed/cex2/1200/800',
+      'https://picsum.photos/seed/cex3/1200/800'
+    ],
     backInfo: {
       sub: 'Institutional Platform',
       rows: [
@@ -229,6 +276,11 @@ export const BRANDS: Brand[] = [
     icon: <Activity className="w-6 h-6" />,
     domain: 'esportsprocamp.com',
     color: '#ff9f43',
+    images: [
+      'https://picsum.photos/seed/procamp1/1200/800',
+      'https://picsum.photos/seed/procamp2/1200/800',
+      'https://picsum.photos/seed/procamp3/1200/800'
+    ],
     backInfo: {
       sub: 'Elite Training Platform',
       rows: [
@@ -248,6 +300,11 @@ export const BRANDS: Brand[] = [
     icon: <Coins className="w-6 h-6" />,
     domain: 'esportsnil.com',
     color: '#ff9f43',
+    images: [
+      'https://picsum.photos/seed/nil1/1200/800',
+      'https://picsum.photos/seed/nil2/1200/800',
+      'https://picsum.photos/seed/nil3/1200/800'
+    ],
     backInfo: {
       sub: 'Student-Athlete Monetization',
       rows: [
@@ -267,6 +324,11 @@ export const BRANDS: Brand[] = [
     icon: <Building2 className="w-6 h-6" />,
     domain: 'esportsschool.com',
     color: '#ff9f43',
+    images: [
+      'https://picsum.photos/seed/school1/1200/800',
+      'https://picsum.photos/seed/school2/1200/800',
+      'https://picsum.photos/seed/school3/1200/800'
+    ],
     backInfo: {
       sub: 'K–12 Integration Platform',
       rows: [
@@ -383,6 +445,11 @@ export const BRANDS: Brand[] = [
     icon: <Globe className="w-6 h-6" />,
     domain: 'esportslocal.com',
     color: '#a29bfe',
+    images: [
+      'https://picsum.photos/seed/local1/1200/800',
+      'https://picsum.photos/seed/local2/1200/800',
+      'https://picsum.photos/seed/local3/1200/800'
+    ],
     backInfo: {
       sub: '10 Active Markets',
       rows: [

@@ -1,14 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   ArrowLeft, 
   ExternalLink, 
   Linkedin,
-  ChevronRight
+  ChevronRight,
+  X,
+  Maximize2
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { BRANDS } from '../constants';
+
+const HeroGeo = () => (
+  <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
+    <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <defs>
+        <pattern id="grid-detail" width="10" height="10" patternUnits="userSpaceOnUse">
+          <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="0.1" />
+        </pattern>
+      </defs>
+      <rect width="100" height="100" fill="url(#grid-detail)" />
+      <motion.path
+        d="M 0 50 Q 25 40 50 50 T 100 50"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="0.2"
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
+    </svg>
+  </div>
+);
 
 export default function BrandDetail() {
   const { id } = useParams();
@@ -16,6 +40,7 @@ export default function BrandDetail() {
 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -49,7 +74,7 @@ export default function BrandDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-brand-black text-white selection:bg-brand-green selection:text-black grain-overlay cursor-none">
+    <div className="min-h-screen bg-brand-black text-white selection:bg-brand-green selection:text-black grain-overlay cursor-none overflow-x-hidden">
       {/* Custom Cursor */}
       <div 
         className="fixed w-2.5 h-2.5 bg-brand-green rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-screen transition-[width,height] duration-150 hidden md:block"
@@ -78,6 +103,7 @@ export default function BrandDetail() {
 
       {/* Hero Section */}
       <section className="relative pt-48 pb-20 px-6 md:px-12 overflow-hidden border-b border-white/5">
+        <HeroGeo />
         <div 
           className="absolute top-0 right-0 w-1/2 h-full blur-[120px] rounded-full -translate-y-1/2 translate-x-1/4 pointer-events-none opacity-10" 
           style={{ backgroundColor: brand.color }}
@@ -167,6 +193,47 @@ export default function BrandDetail() {
         </div>
       </section>
 
+      {/* Image Gallery Section */}
+      {brand.images && brand.images.length > 0 && (
+        <section className="py-24 px-6 md:px-12 border-b border-white/5">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-12">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: brand.color }} />
+                <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/60">Brand Assets</h3>
+              </div>
+              <h2 className="font-display text-4xl uppercase tracking-tight">Visual Identity Gallery</h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {brand.images.map((img, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="group relative aspect-[3/2] overflow-hidden rounded-xl bg-white/5 border border-white/10 cursor-none"
+                  onClick={() => setSelectedImage(img)}
+                >
+                  <img 
+                    src={img} 
+                    alt={`${brand.name} asset ${idx + 1}`}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-brand-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-brand-green flex items-center justify-center text-black scale-0 group-hover:scale-100 transition-transform duration-300">
+                      <Maximize2 className="w-5 h-5" />
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Detailed Analysis Section */}
       <section className="py-24 px-6 md:px-12 bg-white/[0.01]">
         <div className="max-w-4xl mx-auto">
@@ -212,6 +279,40 @@ export default function BrandDetail() {
           </div>
         </div>
       </section>
+
+      {/* Image Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6 md:p-12 bg-brand-black/95 backdrop-blur-md cursor-none"
+            onClick={() => setSelectedImage(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-6xl w-full max-h-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img 
+                src={selectedImage} 
+                alt="Selected asset"
+                className="w-full h-auto max-h-[85vh] object-contain rounded-lg shadow-2xl border border-white/10"
+                referrerPolicy="no-referrer"
+              />
+              <button
+                className="absolute -top-12 right-0 text-white/60 hover:text-white transition-colors flex items-center gap-2 font-mono text-xs uppercase tracking-widest"
+                onClick={() => setSelectedImage(null)}
+              >
+                Close <X className="w-5 h-5" />
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Footer */}
       <footer className="py-20 px-6 md:px-12 border-t border-white/5 bg-black">

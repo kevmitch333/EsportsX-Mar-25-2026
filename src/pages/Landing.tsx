@@ -9,10 +9,68 @@ import {
   Linkedin,
   Cpu,
   ShieldCheck,
-  Zap
+  Zap,
+  Check,
+  Mail,
+  ChevronRight
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { BRANDS, CATEGORIES, PARTNERS } from '../constants';
+
+const HeroGeo = () => (
+  <svg className="absolute right-[-80px] top-1/2 -translate-y-1/2 w-[55vw] max-w-[800px] opacity-[0.05] pointer-events-none z-0" viewBox="0 0 800 700" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="400" cy="350" r="320" stroke="#00ff88" strokeWidth="0.5"/>
+    <circle cx="400" cy="350" r="220" stroke="#00ff88" strokeWidth="0.5"/>
+    <circle cx="400" cy="350" r="140" stroke="#00ff88" strokeWidth="0.5"/>
+    <line x1="80" y1="350" x2="720" y2="350" stroke="#00ff88" strokeWidth="0.5"/>
+    <line x1="400" y1="30" x2="400" y2="670" stroke="#00ff88" strokeWidth="0.5"/>
+    <line x1="173" y1="123" x2="627" y2="577" stroke="#00ff88" strokeWidth="0.3"/>
+    <line x1="627" y1="123" x2="173" y2="577" stroke="#00ff88" strokeWidth="0.3"/>
+    <polygon points="400,50 700,200 700,500 400,650 100,500 100,200" stroke="#00ff88" strokeWidth="0.4" fill="none"/>
+    <polygon points="400,150 600,250 600,450 400,550 200,450 200,250" stroke="#00ff88" strokeWidth="0.3" fill="none"/>
+    <rect x="340" y="290" width="120" height="120" stroke="#00ff88" strokeWidth="0.5" fill="none" transform="rotate(45 400 350)"/>
+  </svg>
+);
+
+const Counter = ({ target, prefix = "", suffix = "", label }: { target: number, prefix?: string, suffix?: string, label: string }) => {
+  const [count, setCount] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
+
+  useEffect(() => {
+    if (!hasStarted) return;
+    let start = 0;
+    const end = target;
+    const duration = 2000;
+    const increment = end / (duration / 16);
+    
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        setCount(end);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    
+    return () => clearInterval(timer);
+  }, [hasStarted, target]);
+
+  return (
+    <motion.div 
+      onViewportEnter={() => setHasStarted(true)}
+      className="p-12 bg-white/[0.02] border border-white/5 text-center relative group overflow-hidden"
+    >
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-brand-green transition-all duration-1000 group-hover:w-3/4" style={{ width: hasStarted ? '60%' : '0%' }} />
+      <div className="font-mono text-4xl md:text-5xl font-medium text-brand-off-white mb-4 tracking-tighter">
+        {prefix}{count.toLocaleString()}{suffix}
+      </div>
+      <div className="text-xs font-mono uppercase tracking-widest text-brand-light max-w-[160px] mx-auto leading-relaxed">
+        {label}
+      </div>
+    </motion.div>
+  );
+};
 
 export default function Landing() {
   const [scrolled, setScrolled] = useState(false);
@@ -90,7 +148,7 @@ export default function Landing() {
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
-            {['Portfolio', 'Leadership', 'Venture'].map((item) => (
+            {['Portfolio', 'Pillars', 'Leadership', 'Venture', 'Contact'].map((item) => (
               <a 
                 key={item} 
                 href={`#${item.toLowerCase().replace(' ', '-')}`}
@@ -101,8 +159,8 @@ export default function Landing() {
               </a>
             ))}
             <button 
-              onClick={(e) => scrollToSection(e, 'venture')}
-              className="bg-brand-green text-black px-5 py-2 text-xs font-mono font-bold uppercase tracking-widest hover:bg-brand-green/80 transition-all"
+              onClick={(e) => scrollToSection(e, 'contact')}
+              className="bg-brand-green text-black px-5 py-2 text-xs font-mono font-bold uppercase tracking-widest hover:bg-brand-green/80 transition-all rounded-full"
             >
               Connect
             </button>
@@ -126,7 +184,7 @@ export default function Landing() {
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               className="fixed inset-0 bg-brand-black z-40 flex flex-col items-center justify-center gap-8 md:hidden"
             >
-              {['Portfolio', 'Leadership', 'Venture'].map((item) => (
+              {['Portfolio', 'Pillars', 'Leadership', 'Venture', 'Contact'].map((item) => (
                 <a 
                   key={item} 
                   href={`#${item.toLowerCase().replace(' ', '-')}`}
@@ -137,8 +195,8 @@ export default function Landing() {
                 </a>
               ))}
               <button 
-                onClick={(e) => scrollToSection(e, 'venture')}
-                className="mt-4 bg-brand-green text-black px-8 py-3 text-sm font-mono font-bold uppercase tracking-widest hover:bg-brand-green/80 transition-all"
+                onClick={(e) => scrollToSection(e, 'contact')}
+                className="mt-4 bg-brand-green text-black px-8 py-3 text-sm font-mono font-bold uppercase tracking-widest hover:bg-brand-green/80 transition-all rounded-full"
               >
                 Connect
               </button>
@@ -148,58 +206,123 @@ export default function Landing() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-40 pb-20 px-6 md:px-12 overflow-hidden border-b border-white/5">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_60%_40%,rgba(0,255,136,0.04)_0%,transparent_60%)] pointer-events-none" />
+      <section id="hero" className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 pt-32 pb-20 overflow-hidden">
+        <HeroGeo />
         
-        <div className="max-w-7xl mx-auto relative z-10">
+        <div className="max-w-7xl mx-auto relative z-10 w-full">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <span className="font-mono text-xs text-brand-green uppercase tracking-[0.15em] mb-6 block">
-              / Brand Portfolio · EsportsX Ecosystem
+            <span className="font-mono text-[10px] text-brand-green uppercase tracking-[0.3em] mb-8 block">
+              / National Brand Group · Flagship Division
             </span>
-            <h1 className="font-display text-6xl md:text-9xl leading-[0.95] mb-8 tracking-tight uppercase relative group cursor-default">
-              <span className="relative inline-block animate-glitch-skew group-hover:animate-none">
-                <span className="relative z-10">Every Brand.<br /></span>
-                <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">Every Brand.</span>
-                <span className="absolute inset-0 text-[#ff0055] opacity-0 group-hover:opacity-50 group-hover:animate-glitch-2 pointer-events-none">Every Brand.</span>
+            <h1 className="font-display text-[clamp(4.5rem,10vw,10rem)] leading-[0.9] uppercase tracking-tight mb-10 glitch-wrap">
+              <span className="relative inline-block">
+                The Architecture
+                <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">The Architecture</span>
               </span>
               <br />
-              <span className="text-brand-green relative inline-block animate-glitch-skew group-hover:animate-none">
-                One Platform.
-                <span className="absolute -bottom-2 left-0 w-full h-1 bg-brand-green/30 blur-sm" />
-                
-                {/* Glitch Layers */}
-                <span className="absolute inset-0 text-white opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">One Platform.</span>
-                <span className="absolute inset-0 text-[#ff0055] opacity-0 group-hover:opacity-50 group-hover:animate-glitch-2 pointer-events-none">One Platform.</span>
+              <span className="relative inline-block">
+                of Competitive
+                <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">of Competitive</span>
+              </span>
+              <br />
+              <span className="text-brand-green relative inline-block">
+                Gaming.
+                <span className="absolute inset-0 text-white opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">Gaming.</span>
               </span>
             </h1>
-            <p className="text-white/50 max-w-2xl text-lg leading-relaxed mb-12">
-              The EsportsX portfolio spans competitive gaming, collegiate education, AI innovation, regional expansion, and player infrastructure — 30+ brands built to define the institutional future of esports.
+            
+            <p className="text-brand-light text-xl md:text-2xl max-w-2xl leading-relaxed mb-12 font-light">
+              EsportsX is the strategic holding platform behind the next generation of esports, gaming, and digital competition brands.
             </p>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-              {[
-                { val: '30+', label: 'Active Brands' },
-                { val: '650+', label: 'Premium Domains' },
-                { val: '6', label: 'Core Divisions' },
-                { val: '10+', label: 'Global Markets' },
-              ].map((stat, i) => (
-                <div key={i} className="bg-white/5 border border-white/10 p-6 rounded-lg">
-                  <div className="font-mono text-3xl md:text-4xl mb-1 text-white">
-                    {stat.val.includes('+') ? (
-                      <>
-                        {stat.val.replace('+', '')}<span className="text-brand-green">+</span>
-                      </>
-                    ) : stat.val}
-                  </div>
-                  <div className="text-[10px] font-mono uppercase tracking-widest text-white/40">{stat.label}</div>
-                </div>
-              ))}
+            <div className="flex flex-wrap items-center gap-8">
+              <a 
+                href="#portfolio" 
+                onClick={(e) => scrollToSection(e, 'portfolio')}
+                className="bg-brand-green text-brand-black px-10 py-4 font-mono font-bold uppercase tracking-widest hover:bg-brand-green/80 transition-all rounded-full"
+              >
+                Explore Portfolio
+              </a>
+              <a 
+                href="#leadership" 
+                onClick={(e) => scrollToSection(e, 'leadership')}
+                className="flex items-center gap-3 text-brand-off-white hover:text-brand-green transition-colors font-mono text-xs uppercase tracking-widest group"
+              >
+                Meet the Founder
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </a>
             </div>
           </motion.div>
+        </div>
+
+        {/* Ticker */}
+        <div className="absolute bottom-0 left-0 right-0 py-6 border-t border-white/5 bg-brand-black/50 backdrop-blur-sm overflow-hidden">
+          <div className="flex whitespace-nowrap animate-ticker">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="flex items-center gap-12 px-6">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-brand-light">1,000+ Premium Domains</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-green" />
+                <span className="font-mono text-[10px] uppercase tracking-widest text-brand-light">5 Active Divisions</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-green" />
+                <span className="font-mono text-[10px] uppercase tracking-widest text-brand-light">10+ Years in Collegiate Esports</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-green" />
+                <span className="font-mono text-[10px] uppercase tracking-widest text-brand-light">Ivy League to NCAA</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-green" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Strategic Pillars Section */}
+      <section id="pillars" className="py-24 px-6 md:px-12 bg-brand-smoke relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(0,255,136,0.03)_0%,transparent_60%)] pointer-events-none" />
+        <div className="max-w-7xl mx-auto relative z-10">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-display text-5xl md:text-8xl uppercase tracking-tight mb-20 text-center leading-[0.9]"
+          >
+            Where Strategy<br />Meets Competition.
+          </motion.h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {[
+              {
+                num: '01',
+                title: 'Brand Development',
+                desc: 'EsportsX identifies, acquires, and develops premium domain properties into fully realized brands across the gaming and esports ecosystem. Every brand in our portfolio is built with institutional-grade positioning from day one.'
+              },
+              {
+                num: '02',
+                title: 'Strategic Partnerships',
+                desc: 'We connect brands, universities, and technology companies with the right properties, audiences, and activation platforms inside competitive gaming. Our relationships span the full spectrum from collegiate athletics to major entertainment.'
+              },
+              {
+                num: '03',
+                title: 'Ecosystem Building',
+                desc: "EsportsX doesn't just occupy the gaming space — it architects it. Our divisions cover cognitive competition, AI gaming, entertainment, and creator ecosystems, giving partners a single entry point into a unified platform."
+              }
+            ].map((pillar, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.2 }}
+                className="pt-8 border-t border-brand-mid"
+              >
+                <div className="font-mono text-xs text-brand-green uppercase tracking-widest mb-6">{pillar.num}</div>
+                <h3 className="font-display text-2xl uppercase mb-4 tracking-wide">{pillar.title}</h3>
+                <p className="text-brand-light text-sm leading-relaxed">{pillar.desc}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -532,7 +655,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Leadership Section (Moved) */}
+      {/* Leadership Section */}
       <section id="leadership" className="py-24 px-6 md:px-12 bg-white/[0.01] border-b border-white/5 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
@@ -552,7 +675,7 @@ export default function Landing() {
             <div className="lg:col-span-2 p-10 border border-brand-green/20 bg-brand-green/[0.02] rounded-xl relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-64 h-64 bg-brand-green/5 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/4" />
               <div className="flex flex-col md:flex-row items-start md:items-center gap-8 mb-10">
-                <div className="w-24 h-24 bg-brand-green/10 border border-brand-green/20 rounded-full flex items-center justify-center text-3xl">
+                <div className="w-24 h-24 bg-brand-green/10 border border-brand-green/20 rounded-full flex items-center justify-center text-3xl font-display">
                   KM
                 </div>
                 <div>
@@ -572,11 +695,11 @@ export default function Landing() {
                 </a>
               </div>
               
-              <p className="text-white/60 text-xl leading-relaxed mb-10 font-light italic">
+              <p className="text-brand-light text-xl leading-relaxed mb-10 font-light italic">
                 "Three decades spanning Grammy-nominated music production, pioneering collegiate esports, and AI integration strategy. We are building the institutional future of gaming."
               </p>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 mb-12">
                 {[
                   'Grammy-Nominated Executive',
                   '12 Multi-Platinum Certifications',
@@ -588,6 +711,16 @@ export default function Landing() {
                     {tag}
                   </span>
                 ))}
+              </div>
+
+              {/* Partner Bar */}
+              <div className="pt-10 border-t border-white/5">
+                <div className="text-[10px] font-mono uppercase tracking-widest text-white/20 mb-6">Strategic Partners & Clients</div>
+                <div className="flex flex-wrap items-center gap-x-10 gap-y-6 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
+                  {['HP', 'Intel', 'Red Bull', 'NCAA', 'Ivy League', 'NACE'].map((partner) => (
+                    <span key={partner} className="font-display text-xl tracking-widest text-white">{partner}</span>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -605,6 +738,97 @@ export default function Landing() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-24 px-6 md:px-12 bg-brand-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="font-mono text-[10px] text-brand-green uppercase tracking-[0.3em] mb-8 block">/ Contact</div>
+              <h2 className="font-display text-6xl md:text-8xl uppercase tracking-tight mb-8 leading-[0.9]">
+                Let's Build<br />Something.
+              </h2>
+              <p className="text-brand-light text-xl leading-relaxed mb-12 font-light">
+                Whether you're a brand partner, university, investor, or industry professional, we want to hear from you. Tell us a little about what you're working on.
+              </p>
+              <div className="space-y-6">
+                <div className="flex items-center gap-4 group">
+                  <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-brand-green group-hover:bg-brand-green group-hover:text-brand-black transition-all">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">Direct Inquiry</div>
+                    <a href="mailto:info@esportsx.com" className="text-brand-off-white hover:text-brand-green transition-colors font-mono text-sm">info@esportsx.com</a>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="p-10 bg-brand-smoke border border-white/5 rounded-2xl"
+            >
+              <form className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">Full Name</label>
+                    <input type="text" placeholder="Jane Smith" className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">Organization</label>
+                    <input type="text" placeholder="Acme Corp" className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">Email Address</label>
+                    <input type="email" placeholder="jane@example.com" className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">Role / Title</label>
+                    <input type="text" placeholder="VP of Partnerships" className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">Message</label>
+                  <textarea placeholder="Tell us about your project..." rows={4} className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors resize-none" />
+                </div>
+                <button type="submit" className="w-full bg-brand-green text-brand-black py-5 font-mono font-bold uppercase tracking-widest hover:bg-brand-green/80 transition-all">
+                  Send Message →
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* By the Numbers Section */}
+      <section id="numbers" className="py-24 px-6 md:px-12 bg-brand-smoke relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(0,255,136,0.05)_0%,transparent_60%)] pointer-events-none" />
+        <div className="max-w-7xl mx-auto relative z-10">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-display text-5xl md:text-7xl uppercase text-center mb-20 tracking-tight"
+          >
+            Built Over a Decade.
+          </motion.h2>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 border border-white/5">
+            <Counter target={1000} suffix="+" label="Premium Domains Under Management" />
+            <Counter target={5} label="Active Brand Divisions" />
+            <Counter target={8} label="Ivy League Institutions Engaged" />
+            <Counter target={1} prefix="$" suffix="M+" label="Alumni Commitments Secured, Collegiate Esports" />
           </div>
         </div>
       </section>
