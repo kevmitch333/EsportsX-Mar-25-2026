@@ -18,12 +18,33 @@ export default function Landing() {
   const [scrolled, setScrolled] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
+
+  useEffect(() => {
+    const followMouse = () => {
+      setCursorPos(prev => ({
+        x: prev.x + (mousePos.x - prev.x) * 0.12,
+        y: prev.y + (mousePos.y - prev.y) * 0.12
+      }));
+      requestAnimationFrame(followMouse);
+    };
+    const raf = requestAnimationFrame(followMouse);
+    return () => cancelAnimationFrame(raf);
+  }, [mousePos]);
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>, id: string) => {
     e.preventDefault();
@@ -44,12 +65,19 @@ export default function Landing() {
   const filteredBrands = BRANDS.filter(b => activeFilter === 'all' || b.category === activeFilter);
 
   return (
-    <div className="min-h-screen bg-brand-black selection:bg-brand-green selection:text-black">
+    <div className="min-h-screen bg-brand-black selection:bg-brand-green selection:text-black grain-overlay">
+      {/* Custom Cursor */}
+      <div 
+        className="fixed w-2.5 h-2.5 bg-brand-green rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-screen transition-[width,height] duration-150 hidden md:block"
+        style={{ left: mousePos.x, top: mousePos.y }}
+      />
+      <div 
+        className="fixed w-9 h-9 border border-brand-green/30 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-[width,height] duration-200 hidden md:block"
+        style={{ left: cursorPos.x, top: cursorPos.y }}
+      />
+
       {/* Scanline Effect */}
       <div className="scanline" />
-
-      {/* Grain Overlay */}
-      <div className="fixed inset-0 pointer-events-none z-[9999] opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat" />
 
       {/* Navigation */}
       <nav className={cn(
@@ -121,7 +149,7 @@ export default function Landing() {
 
       {/* Hero Section */}
       <section className="relative pt-40 pb-20 px-6 md:px-12 overflow-hidden border-b border-white/5">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-brand-green/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_60%_40%,rgba(0,255,136,0.04)_0%,transparent_60%)] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
@@ -129,34 +157,43 @@ export default function Landing() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="font-mono text-xs text-brand-green uppercase tracking-[0.3em] mb-6 block">
-              / Brand Portfolio · Ecosystem v3.0
+            <span className="font-mono text-xs text-brand-green uppercase tracking-[0.15em] mb-6 block">
+              / Brand Portfolio · EsportsX Ecosystem
             </span>
-            <h1 className="font-display text-6xl md:text-9xl leading-[0.85] mb-8 tracking-tight uppercase relative group">
-              <span className="relative z-10">The EsportsX<br /></span>
-              <span className="text-brand-green relative inline-block">
-                Opportunity.
+            <h1 className="font-display text-6xl md:text-9xl leading-[0.95] mb-8 tracking-tight uppercase relative group cursor-default">
+              <span className="relative inline-block animate-glitch-skew group-hover:animate-none">
+                <span className="relative z-10">Every Brand.<br /></span>
+                <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">Every Brand.</span>
+                <span className="absolute inset-0 text-[#ff0055] opacity-0 group-hover:opacity-50 group-hover:animate-glitch-2 pointer-events-none">Every Brand.</span>
+              </span>
+              <br />
+              <span className="text-brand-green relative inline-block animate-glitch-skew group-hover:animate-none">
+                One Platform.
                 <span className="absolute -bottom-2 left-0 w-full h-1 bg-brand-green/30 blur-sm" />
                 
                 {/* Glitch Layers */}
-                <span className="absolute inset-0 text-white opacity-0 group-hover:opacity-50 group-hover:animate-glitch-1 pointer-events-none">Opportunity.</span>
-                <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-50 group-hover:animate-glitch-2 pointer-events-none">Opportunity.</span>
+                <span className="absolute inset-0 text-white opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">One Platform.</span>
+                <span className="absolute inset-0 text-[#ff0055] opacity-0 group-hover:opacity-50 group-hover:animate-glitch-2 pointer-events-none">One Platform.</span>
               </span>
             </h1>
             <p className="text-white/50 max-w-2xl text-lg leading-relaxed mb-12">
-              Building the definitive platform for AI-enhanced competitive gaming. A defensible ecosystem of 22+ brands, 250+ premium domains, and a compounding network flywheel.
+              The EsportsX portfolio spans competitive gaming, collegiate education, AI innovation, regional expansion, and player infrastructure — 30+ brands built to define the institutional future of esports.
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
               {[
-                { val: '22+', label: 'Portfolio Companies', color: 'text-brand-green' },
-                { val: '250+', label: 'Premium Domains', color: 'text-brand-green' },
-                { val: '$75-100M', label: 'Domain Portfolio Value', color: 'text-brand-green' },
-                { val: '$200B+', label: 'Gaming Market', color: 'text-brand-green' },
+                { val: '30+', label: 'Active Brands' },
+                { val: '650+', label: 'Premium Domains' },
+                { val: '6', label: 'Core Divisions' },
+                { val: '10+', label: 'Global Markets' },
               ].map((stat, i) => (
                 <div key={i} className="bg-white/5 border border-white/10 p-6 rounded-lg">
-                  <div className={cn("font-display text-3xl md:text-4xl mb-1", stat.color)}>
-                    {stat.val}
+                  <div className="font-mono text-3xl md:text-4xl mb-1 text-white">
+                    {stat.val.includes('+') ? (
+                      <>
+                        {stat.val.replace('+', '')}<span className="text-brand-green">+</span>
+                      </>
+                    ) : stat.val}
                   </div>
                   <div className="text-[10px] font-mono uppercase tracking-widest text-white/40">{stat.label}</div>
                 </div>
@@ -242,204 +279,139 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Leadership Section */}
-      <section id="leadership" className="py-24 px-6 md:px-12 bg-white/[0.01] border-b border-white/5 scroll-mt-24">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
-            <span className="font-mono text-xs text-brand-green uppercase tracking-widest mb-4 block">/ Leadership</span>
-            <h2 className="font-display text-5xl md:text-6xl uppercase tracking-tight">Experienced. Credentialed. Connected.</h2>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-            <div className="lg:col-span-2 p-8 border border-brand-green/20 bg-brand-green/[0.02] rounded-xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-brand-green/5 blur-3xl rounded-full" />
-              <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8">
-                <div>
-                  <h3 className="font-display text-4xl mb-2">Kevin Mitchell</h3>
-                  <p className="text-brand-green font-mono text-xs uppercase tracking-widest">Founder & Chief Executive Officer</p>
-                </div>
-                <a 
-                  href="https://linkedin.com/in/kevinmitchell" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded font-mono text-[10px] uppercase tracking-widest text-white/60 hover:text-brand-green hover:border-brand-green/50 transition-all"
-                >
-                  <Linkedin className="w-3 h-3" />
-                  LinkedIn Profile
-                </a>
-              </div>
-              
-              <p className="text-white/60 text-lg leading-relaxed mb-8">
-                Three decades spanning Grammy-nominated music production (12 multi-platinum RIAA certifications), pioneering collegiate esports (first collegiate esports conference in the Western Hemisphere), and AI integration strategy. Strategic relationships with HP, Intel, Red Bull, Disney, and Sony provide immediate partnership opportunities.
-              </p>
-
-              <div className="flex flex-wrap gap-3">
-                {[
-                  'Grammy-Nominated Executive',
-                  '12 Multi-Platinum Certifications',
-                  'College Esports Expo Founder',
-                  'AI Integration Pioneer',
-                  'HP · Intel · Red Bull Partner'
-                ].map((tag, i) => (
-                  <span key={i} className="px-3 py-1 bg-white/5 border border-white/10 rounded text-[10px] font-mono uppercase tracking-wider text-white/40">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              <h4 className="font-mono text-xs uppercase tracking-widest text-white/40 mb-4">Advisory Board</h4>
-              {[
-                { title: 'Education Technology', desc: 'University leadership guiding institutional adoption and program development.' },
-                { title: 'Esports Industry', desc: 'Professional team and tournament operations expertise with media rights experience.' },
-                { title: 'Artificial Intelligence', desc: 'AI researchers guiding technology strategy and emerging capabilities.' },
-                { title: 'Brand Marketing', desc: 'CMO-level gaming and entertainment executives advising sponsorship strategy.' }
-              ].map((adv, i) => (
-                <div key={i} className="p-6 border border-white/5 bg-white/[0.01] rounded-lg">
-                  <h5 className="font-display text-xl uppercase mb-2 tracking-wide">{adv.title}</h5>
-                  <p className="text-white/30 text-xs leading-relaxed">{adv.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Portfolio Section */}
       <section id="portfolio" className="py-24 px-6 md:px-12 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
-            <span className="font-mono text-xs text-brand-green uppercase tracking-widest mb-4 block">/ Ecosystem</span>
-            <h2 className="font-display text-5xl md:text-6xl uppercase tracking-tight">Portfolio Architecture</h2>
-          </div>
-
-          {/* Featured Bento Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            {BRANDS.filter(b => b.featured).map((brand) => (
-              <motion.div
-                key={brand.id}
-                whileHover={{ y: -5 }}
-                className={cn(
-                  "p-10 border border-white/10 rounded-2xl relative overflow-hidden group",
-                  brand.id === 'agoniq' ? "md:col-span-2 bg-gradient-to-br from-purple-500/10 to-transparent" : "bg-gradient-to-br from-blue-500/10 to-transparent"
-                )}
-              >
-                <Link to={`/brand/${brand.id}`} className="absolute inset-0 z-20" />
-                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                  {brand.icon}
-                </div>
-                <div className="relative z-10">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="p-3 rounded-lg bg-white/5 border border-white/10" style={{ color: brand.color }}>
-                      {brand.icon}
-                    </div>
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-white/40">Flagship Property</span>
-                  </div>
-                  <h3 className="font-display text-4xl md:text-5xl mb-4 uppercase tracking-tight">{brand.name}</h3>
-                  <p className="text-white/80 text-lg mb-6 max-w-lg leading-relaxed">{brand.tagline}</p>
-                  <p className="text-white/40 text-sm mb-8 max-w-md leading-relaxed">{brand.desc}</p>
-                  <div className="flex items-center gap-4">
-                    <span className="font-mono text-xs text-white/30">{brand.domain}</span>
-                    <ArrowRight className="w-4 h-4 text-brand-green group-hover:translate-x-2 transition-transform" />
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
           {/* Filter Bar */}
-          <div className="sticky top-24 z-40 mb-12 bg-brand-black/80 backdrop-blur-md border border-white/10 p-2 rounded-lg flex flex-wrap items-center gap-2">
-            <span className="px-4 font-mono text-[10px] uppercase tracking-widest text-white/40 border-r border-white/10 mr-2">Division:</span>
+          <div className="sticky top-24 z-40 mb-12 bg-brand-smoke/90 backdrop-blur-md border-b border-white/10 p-4 flex flex-wrap items-center gap-2">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-white/40 mr-4">Filter:</span>
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setActiveFilter(cat.id)}
                 className={cn(
-                  "px-4 py-2 text-[10px] font-mono uppercase tracking-widest transition-all rounded",
+                  "px-4 py-2 text-[10px] font-mono uppercase tracking-widest transition-all relative overflow-hidden group",
                   activeFilter === cat.id 
-                    ? "bg-white text-black font-bold" 
-                    : "text-white/60 hover:text-white hover:bg-white/5"
+                    ? "text-white" 
+                    : "text-white/40 hover:text-white"
                 )}
-                style={activeFilter === cat.id ? { backgroundColor: cat.color, color: '#000' } : {}}
               >
                 {cat.label}
+                <span 
+                  className={cn(
+                    "absolute bottom-0 left-0 w-full h-0.5 transition-transform duration-300",
+                    activeFilter === cat.id ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                  )}
+                  style={{ backgroundColor: cat.color }}
+                />
               </button>
             ))}
           </div>
 
-          {/* Division Overview */}
-          <motion.div 
-            key={activeFilter}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="mb-12 p-8 border-l-2 border-brand-green bg-white/[0.02]"
-          >
-            <h3 className="font-display text-3xl uppercase mb-2">
-              {CATEGORIES.find(c => c.id === activeFilter)?.label}
-            </h3>
-            <p className="text-white/40 font-mono text-sm">
-              {CATEGORIES.find(c => c.id === activeFilter)?.overview}
-            </p>
-          </motion.div>
+          {/* Category Blocks */}
+          <div className="space-y-24">
+            {CATEGORIES.filter(c => c.id !== 'all' && c.id !== 'venture').map((category) => {
+              const categoryBrands = BRANDS.filter(b => b.category === category.id);
+              if (categoryBrands.length === 0) return null;
+              if (activeFilter !== 'all' && activeFilter !== category.id) return null;
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 border border-white/5">
-            <AnimatePresence mode="popLayout">
-              {filteredBrands.filter(b => !b.featured).map((brand) => (
-                <motion.div
-                  key={brand.id}
-                  layout
+              return (
+                <motion.div 
+                  key={category.id}
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className="bg-brand-black p-8 group relative overflow-hidden border border-white/5 hover:border-white/20 transition-colors"
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="category-block"
                 >
-                  <Link to={`/brand/${brand.id}`} className="absolute inset-0 z-20" />
-                  <div 
-                    className="absolute top-0 left-0 w-full h-1 opacity-30 transition-opacity group-hover:opacity-100" 
-                    style={{ backgroundColor: brand.color }}
-                  />
-                  
-                  <div className="flex justify-between items-start mb-8">
-                    <div 
-                      className="p-3 bg-white/5 border border-white/10 rounded text-white group-hover:scale-110 transition-transform"
-                      style={{ color: brand.color }}
-                    >
-                      {brand.icon}
-                    </div>
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-white/20">
-                      {brand.category}
+                  <div className="flex items-center gap-4 mb-10 pb-5 border-b border-white/5">
+                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: category.color }} />
+                    <h2 className="font-display text-3xl uppercase tracking-wider group cursor-default">
+                      <span className="relative inline-block">
+                        {category.label}
+                        <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">{category.label}</span>
+                      </span>
+                    </h2>
+                    <span className="ml-auto font-mono text-[10px] uppercase tracking-widest text-white/20">
+                      {categoryBrands.length.toString().padStart(2, '0')} Brands
                     </span>
                   </div>
 
-                  <h3 className="font-display text-2xl mb-2 group-hover:translate-x-1 transition-transform uppercase tracking-wide">
-                    {brand.name}
-                  </h3>
-                  <p className="text-white/40 text-[10px] font-mono uppercase tracking-wider mb-6">{brand.tagline}</p>
-                  <p className="text-white/50 text-xs leading-relaxed mb-8 line-clamp-3 group-hover:text-white/70 transition-colors">
-                    {brand.desc}
-                  </p>
-
-                  {brand.stats && (
-                    <div className="grid grid-cols-2 gap-2 mb-8">
-                      {Object.entries(brand.stats).map(([key, val]) => (
-                        <div key={key} className="p-2 bg-white/5 border border-white/5 rounded">
-                          <div className="text-[8px] font-mono uppercase text-white/20 mb-1">{key.replace('_', ' ')}</div>
-                          <div className="text-xs font-display text-brand-green">{val as string}</div>
-                        </div>
+                  {category.id === 'regional' && (
+                    <div className="mb-10 flex flex-wrap gap-2">
+                      {['NY', 'CA', 'TX', 'FL', 'IL', 'PA', 'OH', 'GA', 'NC', 'MI'].map((state) => (
+                        <span key={state} className="px-3 py-1.5 bg-brand-regional/5 border border-brand-regional/20 text-[9px] font-mono uppercase tracking-widest text-brand-regional">
+                          {state}
+                        </span>
                       ))}
+                      <span className="px-3 py-1.5 border border-white/10 text-[9px] font-mono uppercase tracking-widest text-white/20 italic">
+                        + 40 more states active
+                      </span>
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between mt-auto pt-6 border-t border-white/5">
-                    <span className="font-mono text-[10px] text-white/20 group-hover:text-white/40 transition-colors">{brand.domain}</span>
-                    <div className="text-white/20 group-hover:text-brand-green transition-colors">
-                      <ExternalLink className="w-3 h-3" />
-                    </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 border border-white/5">
+                    {categoryBrands.map((brand) => (
+                      <div key={brand.id} className="card-flipper group perspective-1200 min-h-[320px]">
+                        <div className="card-inner relative w-full h-full preserve-3d transition-transform duration-700 group-hover:rotate-y-180">
+                          {/* Front Face */}
+                          <div className="card-front absolute inset-0 backface-hidden bg-brand-smoke p-9 flex flex-col border-t-2" style={{ borderTopColor: brand.color }}>
+                            <div className="flex justify-between items-start mb-5">
+                              <div className="px-2.5 py-1 border border-white/10 text-[10px] font-mono uppercase tracking-widest" style={{ color: brand.color, borderColor: `${brand.color}4D` }}>
+                                {brand.category}
+                              </div>
+                              <div className="text-xl opacity-60">{brand.icon}</div>
+                            </div>
+                            <h3 className="font-display text-3xl mb-2 tracking-wide uppercase group-hover:animate-glitch-skew">
+                              {brand.name}
+                            </h3>
+                            <p className="text-white/50 text-xs italic mb-4">{brand.tagline}</p>
+                            <p className="text-white/40 text-sm leading-relaxed flex-1 line-clamp-4">
+                              {brand.desc}
+                            </p>
+                            <div className="mt-5 pt-4 border-t border-white/10 flex justify-between items-center">
+                              <span className="font-mono text-[10px] text-white/20">{brand.domain}</span>
+                              <span className="font-mono text-[9px] text-white/20 uppercase tracking-widest">Hover to learn more →</span>
+                            </div>
+                          </div>
+
+                          {/* Back Face */}
+                          <div className="card-back absolute inset-0 backface-hidden bg-brand-black p-9 flex flex-col rotate-y-180 border-t-2" style={{ borderTopColor: brand.color }}>
+                            <div className="absolute top-4 right-4 font-mono text-[9px] text-white/20 uppercase tracking-widest">← Flip back</div>
+                            <div className="mb-6">
+                              <h3 className="font-display text-2xl mb-1 tracking-wide uppercase">{brand.name}</h3>
+                              <p className="font-mono text-[10px] uppercase tracking-widest" style={{ color: brand.color }}>{brand.backInfo?.sub || brand.tagline}</p>
+                            </div>
+                            <div className="flex-1 space-y-0">
+                              {brand.backInfo?.rows.map((row, idx) => (
+                                <div key={idx} className="py-2.5 border-b border-white/5 grid grid-cols-[auto_1fr] gap-3 items-start first:border-t">
+                                  <span className="font-mono text-[9px] text-white/20 uppercase tracking-widest pt-0.5">{row.label}</span>
+                                  <span className="text-xs text-white/60 leading-relaxed">{row.val}</span>
+                                </div>
+                              ))}
+                            </div>
+                            <Link 
+                              to={`/brand/${brand.id}`}
+                              className="mt-5 py-3 border text-center font-mono text-[10px] uppercase tracking-widest transition-all hover:bg-white hover:text-black"
+                              style={{ color: brand.color, borderColor: brand.color }}
+                              onMouseEnter={(e) => {
+                                (e.target as HTMLElement).style.backgroundColor = brand.color;
+                                (e.target as HTMLElement).style.color = '#000';
+                              }}
+                              onMouseLeave={(e) => {
+                                (e.target as HTMLElement).style.backgroundColor = 'transparent';
+                                (e.target as HTMLElement).style.color = brand.color;
+                              }}
+                            >
+                              Learn More ↗
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </motion.div>
-              ))}
-            </AnimatePresence>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -485,53 +457,69 @@ export default function Landing() {
       {/* Venture Studio Section */}
       <section id="venture" className="py-24 px-6 md:px-12 bg-gradient-to-b from-transparent to-brand-green/[0.02] scroll-mt-24">
         <div className="max-w-7xl mx-auto">
-          <div className="p-12 md:p-20 border border-brand-green/20 rounded-3xl relative overflow-hidden bg-brand-black mb-24">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-brand-green/5 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/4" />
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 relative z-10">
-              <div>
-                <span className="font-mono text-xs text-brand-green uppercase tracking-widest mb-6 block">/ Innovation Engine</span>
-                <h2 className="font-display text-6xl md:text-7xl uppercase tracking-tight mb-8">Venture Studio</h2>
-                <p className="text-white/50 text-lg leading-relaxed mb-12">
-                  Identifies, incubates, and accelerates the next generation of gaming innovation. Operating from a foundation of 650+ premium domains and strategic capital, we bring new ventures from concept to market with unmatched asset backing.
-                </p>
-                
-                <div className="flex flex-wrap gap-3 mb-12">
-                  {['AI Gaming Tools', 'Esports Infrastructure', 'Immersive Experiences', 'Creator Economy'].map((tag, i) => (
-                    <span key={i} className="px-4 py-2 bg-brand-green/10 border border-brand-green/20 rounded-full text-[10px] font-mono uppercase tracking-widest text-brand-green">
-                      {tag}
-                    </span>
-                  ))}
+          <div className="mb-16">
+            <div className="flex items-center gap-4 mb-10 pb-5 border-b border-white/5">
+              <div className="w-2 h-2 rounded-full bg-brand-venture" />
+              <h2 className="font-display text-3xl uppercase tracking-wider group cursor-default">
+                <span className="relative inline-block">
+                  Venture Studio
+                  <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">Venture Studio</span>
+                </span>
+              </h2>
+              <span className="ml-auto font-mono text-[10px] uppercase tracking-widest text-white/20">Innovation Engine</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6">
+            <div className="card-featured bg-gradient-to-br from-brand-smoke to-[#161616] p-12 relative overflow-hidden border-t-2 border-brand-venture">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start relative z-10">
+                <div>
+                  <div className="flex justify-between items-start mb-5">
+                    <div className="px-2.5 py-1 border border-brand-venture/30 text-[10px] font-mono uppercase tracking-widest text-brand-venture">
+                      Innovation
+                    </div>
+                    <div className="text-2xl opacity-65">🚀</div>
+                  </div>
+                  <h3 className="font-display text-5xl mb-2 tracking-wide uppercase text-brand-venture glitch-wrap">
+                    <span className="glitch" data-text="Venture Studio">Venture Studio</span>
+                  </h3>
+                  <p className="text-white/50 text-sm italic mb-5">The AI-driven engine behind the next generation of gaming innovation</p>
+                  <p className="text-white/40 text-base leading-relaxed mb-8">
+                    Identifies, incubates, and accelerates the next generation of gaming innovation — targeting AI-powered gaming tools, esports infrastructure, immersive experiences, and creator economy platforms. Operating from the foundation of 650+ premium domains and strategic capital, the Studio brings new ventures from concept to market with unmatched asset backing.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {['AI Gaming Tools', 'Esports Infrastructure', 'Immersive Experiences', 'Creator Economy', '650+ Domain Portfolio'].map((tag, i) => (
+                      <span key={i} className="px-2.5 py-1 bg-brand-venture/5 border border-brand-venture/15 text-[9px] font-mono uppercase tracking-widest text-brand-venture">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-
-                <button 
-                  onClick={(e) => scrollToSection(e, 'portfolio')}
-                  className="flex items-center gap-4 group"
-                >
-                  <span className="font-mono text-xs uppercase tracking-[0.3em] text-white group-hover:text-brand-green transition-colors">Explore Ventures</span>
-                  <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:border-brand-green group-hover:bg-brand-green group-hover:text-black transition-all">
-                    <ArrowRight className="w-5 h-5" />
+                <div>
+                  <div className="font-mono text-[11px] uppercase tracking-widest text-white/40 mb-4">Focus Areas</div>
+                  <div className="space-y-0.5">
+                    {[
+                      { title: 'AI-Powered Gaming', desc: 'Next-gen tools where AI enhances human competition' },
+                      { title: 'Esports Infrastructure', desc: 'B2B tools for tournament operators and institutions' },
+                      { title: 'Immersive Experiences', desc: 'XR and spatial computing for next-gen viewing' },
+                      { title: 'Creator Economy', desc: 'Monetization infrastructure for gaming content creators' }
+                    ].map((item, i) => (
+                      <div key={i} className="p-4 border-l-2 border-brand-venture bg-brand-venture/[0.03] hover:bg-brand-venture/[0.06] transition-colors">
+                        <h4 className="font-display text-lg tracking-wide mb-1 uppercase">{item.title}</h4>
+                        <p className="text-[11px] text-white/40 leading-relaxed">{item.desc}</p>
+                      </div>
+                    ))}
                   </div>
-                </button>
+                </div>
               </div>
-
-              <div className="space-y-4">
-                {[
-                  { title: 'AI-Powered Gaming', desc: 'Next-gen tools where AI enhances human competition.' },
-                  { title: 'Esports Infrastructure', desc: 'B2B tools for tournament operators and institutions.' },
-                  { title: 'Immersive Experiences', desc: 'XR and spatial computing for next-gen viewing.' },
-                  { title: 'Creator Economy', desc: 'Monetization and performance tools for the next generation of talent.' }
-                ].map((item, i) => (
-                  <div key={i} className="p-6 border border-white/10 bg-white/5 rounded-xl hover:border-brand-green/50 transition-colors">
-                    <h3 className="font-display text-xl uppercase mb-2">{item.title}</h3>
-                    <p className="text-white/40 text-xs leading-relaxed">{item.desc}</p>
-                  </div>
-                ))}
+              <div className="mt-8 pt-6 border-t border-white/10 flex justify-between items-center">
+                <span className="font-mono text-[10px] text-white/20">esportsx.ventures</span>
+                <a href="mailto:kevin@collegeesportsx.com" className="font-mono text-[10px] text-white/40 uppercase tracking-widest hover:text-brand-green transition-colors">↗ Explore</a>
               </div>
             </div>
           </div>
 
-          <div className="text-center">
+          <div className="mt-24 text-center">
             <h2 className="font-display text-4xl md:text-5xl uppercase mb-8">Ready to Build the Future?</h2>
             <a 
               href="mailto:kevin@collegeesportsx.com"
@@ -540,6 +528,83 @@ export default function Landing() {
               Connect with Venture Studio
               <ArrowRight className="w-5 h-5" />
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Leadership Section (Moved) */}
+      <section id="leadership" className="py-24 px-6 md:px-12 bg-white/[0.01] border-b border-white/5 scroll-mt-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-16">
+            <div className="flex items-center gap-4 mb-10 pb-5 border-b border-white/5">
+              <div className="w-2 h-2 rounded-full bg-brand-green" />
+              <h2 className="font-display text-3xl uppercase tracking-wider group cursor-default">
+                <span className="relative inline-block">
+                  Leadership
+                  <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">Leadership</span>
+                </span>
+              </h2>
+              <span className="ml-auto font-mono text-[10px] uppercase tracking-widest text-white/20">Executive Board</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+            <div className="lg:col-span-2 p-10 border border-brand-green/20 bg-brand-green/[0.02] rounded-xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-brand-green/5 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/4" />
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-8 mb-10">
+                <div className="w-24 h-24 bg-brand-green/10 border border-brand-green/20 rounded-full flex items-center justify-center text-3xl">
+                  KM
+                </div>
+                <div>
+                  <h3 className="font-display text-5xl mb-2 tracking-tight uppercase glitch-wrap">
+                    <span className="glitch" data-text="Kevin Mitchell">Kevin Mitchell</span>
+                  </h3>
+                  <p className="text-brand-green font-mono text-xs uppercase tracking-[0.2em]">Founder & Chief Executive Officer</p>
+                </div>
+                <a 
+                  href="https://linkedin.com/in/kevinmitchell" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="md:ml-auto flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded font-mono text-[10px] uppercase tracking-widest text-white/60 hover:text-brand-green hover:border-brand-green/50 transition-all"
+                >
+                  <Linkedin className="w-4 h-4" />
+                  LinkedIn Profile
+                </a>
+              </div>
+              
+              <p className="text-white/60 text-xl leading-relaxed mb-10 font-light italic">
+                "Three decades spanning Grammy-nominated music production, pioneering collegiate esports, and AI integration strategy. We are building the institutional future of gaming."
+              </p>
+
+              <div className="flex flex-wrap gap-3">
+                {[
+                  'Grammy-Nominated Executive',
+                  '12 Multi-Platinum Certifications',
+                  'College Esports Expo Founder',
+                  'AI Integration Pioneer',
+                  'HP · Intel · Red Bull Partner'
+                ].map((tag, i) => (
+                  <span key={i} className="px-4 py-2 bg-white/5 border border-white/10 rounded text-[10px] font-mono uppercase tracking-widest text-white/40">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="font-mono text-[11px] uppercase tracking-widest text-white/40 mb-6">Advisory Board</div>
+              {[
+                { title: 'Education Technology', desc: 'University leadership guiding institutional adoption and program development.' },
+                { title: 'Esports Industry', desc: 'Professional team and tournament operations expertise with media rights experience.' },
+                { title: 'Artificial Intelligence', desc: 'AI researchers guiding technology strategy and emerging capabilities.' },
+                { title: 'Brand Marketing', desc: 'CMO-level gaming and entertainment executives advising sponsorship strategy.' }
+              ].map((adv, i) => (
+                <div key={i} className="p-6 border-l-2 border-white/10 bg-white/[0.01] hover:bg-white/[0.03] transition-colors">
+                  <h5 className="font-display text-xl uppercase mb-2 tracking-wide text-white/80">{adv.title}</h5>
+                  <p className="text-white/30 text-xs leading-relaxed">{adv.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

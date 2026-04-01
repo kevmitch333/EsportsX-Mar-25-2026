@@ -6,282 +6,595 @@ import {
   Cpu, 
   Zap, 
   ShieldCheck, 
-  Rocket 
+  Rocket,
+  Gamepad2,
+  Users,
+  Building2,
+  Activity,
+  HeartPulse,
+  Scale,
+  Shirt,
+  Wallet,
+  Coins,
+  Stethoscope,
+  BrainCircuit,
+  Flag
 } from 'lucide-react';
 
-export const BRANDS = [
-  // COMPETITIVE TRACKS (Purple)
+export interface Brand {
+  id: string;
+  name: string;
+  category: string;
+  tagline: string;
+  desc: string;
+  icon: React.ReactNode;
+  domain: string;
+  color: string;
+  featured?: boolean;
+  stats?: Record<string, string>;
+  backInfo?: {
+    sub: string;
+    rows: { label: string; val: string }[];
+    cta?: string;
+  };
+}
+
+export const BRANDS: Brand[] = [
+  // CORE PLATFORM (Green)
   {
     id: 'agoniq',
     name: 'AGONiQ',
-    category: 'compete',
-    tagline: 'Intelligence Becomes Entertainment',
-    desc: 'The world\'s first AI-enhanced competition format where competitors use generative AI tools to solve real-world business and technical challenges.',
+    category: 'core',
+    tagline: 'AI-enhanced competitions & tournaments',
+    desc: 'The AI-enhanced competition engine powering EsportsX\'s next-generation tournament formats. AGONiQ integrates machine learning and generative AI tools into the fabric of competitive events.',
     icon: <Cpu className="w-6 h-6" />,
     domain: 'agoniq.com',
-    color: '#a29bfe',
+    color: '#00ff88',
     featured: true,
-    stats: { users: '50k+', growth: '+120%' }
+    stats: { users: '50k+', growth: '+120%' },
+    backInfo: {
+      sub: 'AI Competition Engine',
+      rows: [
+        { label: 'Model', val: 'AI-native tournament platform with generative challenge creation' },
+        { label: 'Audience', val: 'Competitive players, tournament operators, collegiate institutions' },
+        { label: 'Revenue', val: 'Platform licensing, entry fees, data analytics subscriptions' },
+        { label: 'Edge', val: 'First-mover in AI-integrated competition infrastructure' }
+      ]
+    }
   },
   {
     id: 'warzai',
     name: 'Warzai',
-    category: 'compete',
-    tagline: 'AI-Enhanced Creative & Code',
-    desc: 'A competitive vertical focused on creative design, coding, and business strategy sprints powered by real-time AI tool integration.',
-    icon: <Zap className="w-6 h-6" />,
+    category: 'core',
+    tagline: 'The world\'s first AI-enhanced tournament format',
+    desc: 'Where "War" meets "Zai" — players use generative AI tools like ChatGPT, Claude, and Midjourney to solve real-world challenges spanning business strategy, creative design, and technical problem-solving.',
+    icon: <BrainCircuit className="w-6 h-6" />,
     domain: 'warzai.com',
-    color: '#a29bfe',
-    stats: { events: '200+', reach: '1.2M' }
+    color: '#00ff88',
+    backInfo: {
+      sub: 'AI Tournament Format',
+      rows: [
+        { label: 'Format', val: 'Participants solve complex challenges using AI tools in real-time competition' },
+        { label: 'Audience', val: 'College students, professionals, corporate teams, AI enthusiasts' },
+        { label: 'Revenue', val: 'Entry fees, corporate sponsorships, B2B talent assessment licensing' },
+        { label: 'Edge', val: 'Unique category — no direct competitor in AI-native competition' }
+      ]
+    }
+  },
+
+  // COMPETITIVE TRACKS (Blue)
+  {
+    id: 'agoniq-collegiate',
+    name: 'AGONiQ Collegiate',
+    category: 'compete',
+    tagline: 'Cognitive competition meets NCAA compliance',
+    desc: 'The first AI-powered cognitive competition platform purpose-built for collegiate athletics. Transforms AI literacy into an athletic discipline.',
+    icon: <GraduationCap className="w-6 h-6" />,
+    domain: 'agoniq.com',
+    color: '#00d4ff',
+    backInfo: {
+      sub: 'NCAA Cognitive Platform',
+      rows: [
+        { label: 'Model', val: 'AI literacy competitions aligned with NCAA revenue sharing' },
+        { label: 'Audience', val: 'Universities, student-athletes, athletic departments' },
+        { label: 'Revenue', val: 'Institutional licensing, sponsorships, NIL revenue sharing' },
+        { label: 'Status', val: 'Active — pilot universities in development' }
+      ]
+    }
   },
   {
     id: 'esports-fc',
     name: 'EsportsFC',
     category: 'compete',
-    tagline: 'The Beautiful Game Goes Digital',
-    desc: 'Definitive global soccer gaming infrastructure connecting real-world club identities to digital leagues and championships.',
+    tagline: 'The global football simulation league',
+    desc: 'Organized competitive tracks and leagues for the world\'s most popular sport in digital form. Leverages the global appetite for football to build a dedicated soccer simulation community.',
     icon: <Trophy className="w-6 h-6" />,
     domain: 'esportsfc.com',
-    color: '#a29bfe'
+    color: '#00d4ff',
+    backInfo: {
+      sub: 'Football Simulation League',
+      rows: [
+        { label: 'Games', val: 'EA FC, eFootball and major football simulation titles' },
+        { label: 'Audience', val: 'Global football fans, competitive sim players, club communities' },
+        { label: 'Revenue', val: 'Entry fees, media rights, club partnerships, sponsorships' },
+        { label: 'Market', val: '$3.5B+ global football gaming market' }
+      ]
+    }
   },
   {
     id: 'esports-f1',
     name: 'EsportsF1',
     category: 'compete',
-    tagline: 'Speed, Strategy, Simulation',
-    desc: 'Premier racing esports infrastructure spanning professional championships to community leagues, mirroring the F1 constructor model.',
+    tagline: 'Competitive racing esports, elevated',
+    desc: 'Dedicated leagues and events for Formula 1 and professional racing simulation — a vertical with rare audience dedication and premium brand appeal.',
     icon: <Zap className="w-6 h-6" />,
     domain: 'esportsf1.com',
-    color: '#a29bfe'
+    color: '#00d4ff',
+    backInfo: {
+      sub: 'Racing Simulation League',
+      rows: [
+        { label: 'Games', val: 'F1 24, Assetto Corsa, iRacing and pro racing simulations' },
+        { label: 'Audience', val: 'Motorsport fans, sim racing community, F1 brand partners' },
+        { label: 'Revenue', val: 'Entry fees, premium sponsorships, broadcast partnerships' },
+        { label: 'Edge', val: 'Premium CPM — motorsport audience skews high-income' }
+      ]
+    }
   },
   {
     id: 'us-olympic',
     name: 'US Olympic Esports',
     category: 'compete',
-    tagline: 'Representing Nation Through Gaming',
-    desc: 'Comprehensive national team infrastructure for American competitive gaming, aligning with the traditional Olympic framework.',
+    tagline: 'America\'s national esports infrastructure',
+    desc: 'Dedicated to building and supporting the official United States national teams and infrastructure for global Olympic Esports participation.',
     icon: <ShieldCheck className="w-6 h-6" />,
     domain: 'usolympicesports.com',
-    color: '#a29bfe'
+    color: '#00d4ff',
+    backInfo: {
+      sub: 'National Team Infrastructure',
+      rows: [
+        { label: 'Mission', val: 'Official US team development for IOC-sanctioned esports events' },
+        { label: 'Partners', val: 'USOC-aligned bodies, national sports federations, game publishers' },
+        { label: 'Revenue', val: 'Sponsorships, government grants, licensing, broadcast deals' },
+        { label: 'Timeline', val: 'Targeting 2028 LA Olympics esports integration' }
+      ]
+    }
   },
   {
     id: 'esports-cfb',
     name: 'EsportsCFB',
     category: 'compete',
-    tagline: 'Campus Rivalry Meets Digital Gaming',
-    desc: 'Competitive gaming infrastructure specifically for college football enthusiasts, leveraging authentic school rivalries.',
+    tagline: 'College football culture, digitized',
+    desc: 'Competitive gaming infrastructure built around the cultural force of American college football. Enables fans and players to represent their schools.',
     icon: <Trophy className="w-6 h-6" />,
     domain: 'esportscfb.com',
-    color: '#a29bfe'
+    color: '#00d4ff',
+    backInfo: {
+      sub: 'College Football Gaming League',
+      rows: [
+        { label: 'Games', val: 'EA Sports College Football 25 and successor titles' },
+        { label: 'Audience', val: 'College football fans, student gamers, alumni networks' },
+        { label: 'Revenue', val: 'Entry fees, alumni sponsorships, conference partnerships' },
+        { label: 'Edge', val: 'CFB 25 drove record engagement — market timing ideal' }
+      ]
+    }
   },
   {
     id: 'mobile-esportsx',
     name: 'Mobile EsportsX',
     category: 'compete',
-    tagline: 'Accessible Competition for 200M+ Mobile Gamers',
-    desc: 'Mobile-optimized tournament systems and game-specific leagues serving the massively underrepresented mobile gaming community.',
+    tagline: 'Tournament infrastructure for the mobile-first generation',
+    desc: 'Dedicated tournaments and content for the world\'s largest gaming platform — smartphones. Capitalizes on the massive scale and global reach of mobile gaming.',
     icon: <Globe className="w-6 h-6" />,
     domain: 'mobileesportsx.com',
-    color: '#a29bfe'
+    color: '#00d4ff',
+    backInfo: {
+      sub: 'Mobile Competition Platform',
+      rows: [
+        { label: 'Market', val: '2.8B+ mobile gamers globally — largest gaming segment' },
+        { label: 'Audience', val: 'Mobile-first players across all age groups, global reach' },
+        { label: 'Revenue', val: 'Entry fees, in-app sponsorships, publisher partnerships' },
+        { label: 'Edge', val: 'Low barrier to entry drives massive participation volume' }
+      ]
+    }
   },
 
-  // EDUCATION & DEVELOPMENT (Blue)
+  // EDUCATION & DEVELOPMENT (Orange)
   {
     id: 'college-esportsx',
     name: 'College EsportsX',
     category: 'edu',
-    tagline: 'Complete Collegiate Infrastructure',
-    desc: 'Turnkey infrastructure for launching and scaling successful collegiate esports programs through a 250+ domain portfolio.',
+    tagline: 'University esports from zero to operational',
+    desc: 'The comprehensive institutional platform universities use to launch and scale esports programs. Dramatically reduces launch time and capital requirements.',
     icon: <GraduationCap className="w-6 h-6" />,
     domain: 'collegeesportsx.com',
-    color: '#00d4ff',
+    color: '#ff9f43',
     featured: true,
-    stats: { universities: '250+', students: '1M+' }
+    stats: { universities: '250+', students: '1M+' },
+    backInfo: {
+      sub: 'Institutional Platform',
+      rows: [
+        { label: 'Model', val: 'Full-stack university esports OS: ops, tournaments, curriculum, NIL' },
+        { label: 'Audience', val: '4,000+ US colleges and universities, student athletic programs' },
+        { label: 'Revenue', val: 'Annual licensing, implementation, revenue sharing' },
+        { label: 'Edge', val: 'Cuts launch timeline from 18 months to under 60 days' }
+      ]
+    }
   },
   {
     id: 'esports-procamp',
-    name: 'Esports ProCamp',
+    name: 'EsportsProCamp',
     category: 'edu',
-    tagline: 'AI-Powered Coaching',
-    desc: 'Performance optimization through data intelligence, providing automated gameplay analysis and personalized training plans.',
-    icon: <Cpu className="w-6 h-6" />,
+    tagline: 'Professional-grade skill development',
+    desc: 'Professional training camps and coaching resources — in-person and online — for aspiring competitive gamers. Provides structured curricula and elite coaching.',
+    icon: <Activity className="w-6 h-6" />,
     domain: 'esportsprocamp.com',
-    color: '#00d4ff'
+    color: '#ff9f43',
+    backInfo: {
+      sub: 'Elite Training Platform',
+      rows: [
+        { label: 'Format', val: 'In-person intensives + online coaching + performance analytics' },
+        { label: 'Audience', val: 'Aspiring competitive gamers ages 14–24, collegiate prospects' },
+        { label: 'Revenue', val: 'Camp fees, coaching subscriptions, corporate team packages' },
+        { label: 'Edge', val: 'Sports academy model applied to esports — proven demand' }
+      ]
+    }
   },
   {
     id: 'esports-nil',
     name: 'EsportsNIL',
     category: 'edu',
-    tagline: 'Monetizing Student-Athlete Brands',
-    desc: 'Comprehensive NIL monetization infrastructure connecting college esports athletes with brand partnerships in the creator economy.',
-    icon: <Rocket className="w-6 h-6" />,
+    tagline: 'Name, image & likeness for student-athletes',
+    desc: 'The Name, Image, and Likeness monetization platform for collegiate esports athletes. Connects student competitors with sponsorship opportunities.',
+    icon: <Coins className="w-6 h-6" />,
     domain: 'esportsnil.com',
-    color: '#00d4ff'
+    color: '#ff9f43',
+    backInfo: {
+      sub: 'Student-Athlete Monetization',
+      rows: [
+        { label: 'Model', val: 'NIL marketplace + brand matching + deal management platform' },
+        { label: 'Audience', val: 'Collegiate esports players, sponsoring brands, athletic programs' },
+        { label: 'Revenue', val: 'Transaction fees on deals, platform SaaS, brand access fees' },
+        { label: 'Timing', val: 'NCAA NIL rules effective 2021 — market in early growth phase' }
+      ]
+    }
   },
   {
     id: 'esports-school',
     name: 'Esports School',
     category: 'edu',
-    tagline: 'K-12 Gaming Education',
-    desc: 'Age-appropriate gaming education infrastructure spanning elementary through high school with standards-aligned curriculum.',
-    icon: <GraduationCap className="w-6 h-6" />,
+    tagline: 'K–12 esports integration, structured',
+    desc: 'Structured programs for K–12 integration, providing the curriculum, infrastructure, and institutional support schools need to launch esports clubs.',
+    icon: <Building2 className="w-6 h-6" />,
     domain: 'esportsschool.com',
-    color: '#00d4ff'
-  },
-  {
-    id: 'creator-academy',
-    name: 'Creator Academy',
-    category: 'edu',
-    tagline: 'Building the Next Generation of Creators',
-    desc: 'Comprehensive education and support for aspiring gaming content creators, streamers, and influencers.',
-    icon: <Zap className="w-6 h-6" />,
-    domain: 'creatoracademy.com',
-    color: '#00d4ff'
+    color: '#ff9f43',
+    backInfo: {
+      sub: 'K–12 Integration Platform',
+      rows: [
+        { label: 'Model', val: 'Turn-key club launch kits, curriculum, tournament access' },
+        { label: 'Audience', val: 'K–12 school administrators, teachers, student organizations' },
+        { label: 'Revenue', val: 'School licensing, district contracts, curriculum licensing' },
+        { label: 'Market', val: '130,000+ K–12 schools in the US alone' }
+      ]
+    }
   },
   {
     id: 'esports-education',
     name: 'Esports Education',
     category: 'edu',
-    tagline: 'Academic Programs for the Industry',
-    desc: 'Curriculum and credentialing platform creating academic programs in esports management, broadcasting, and analytics.',
+    tagline: 'Academic programs for the esports industry',
+    desc: 'A curriculum and credentialing platform creating and licensing academic programs in esports management, broadcasting, coaching, and analytics.',
     icon: <GraduationCap className="w-6 h-6" />,
     domain: 'esportseducation.com',
-    color: '#00d4ff'
+    color: '#ff9f43',
+    backInfo: {
+      sub: 'Academic Credentialing',
+      rows: [
+        { label: 'Proof', val: '20+ courses, 10,000s certified via EDX.org with HP, AMD, Intel' },
+        { label: 'Audience', val: 'Higher education institutions, workforce training, career changers' },
+        { label: 'Revenue', val: 'Curriculum licensing, certification fees, institutional contracts' },
+        { label: 'Edge', val: 'Proven model — built and scaled once already' }
+      ]
+    }
+  },
+  {
+    id: 'esports-camp',
+    name: 'Esports Camp',
+    category: 'edu',
+    tagline: 'Summer gaming programs for the next generation',
+    desc: 'Summer camps and short-term youth programs focused on fundamental gaming skills, team building, and responsible digital citizenship.',
+    icon: <Gamepad2 className="w-6 h-6" />,
+    domain: 'esportscamp.com',
+    color: '#ff9f43',
+    backInfo: {
+      sub: 'Youth Development Program',
+      rows: [
+        { label: 'Format', val: 'Day camps, residential, virtual — ages 10–18' },
+        { label: 'Audience', val: 'Youth gamers, parents, schools, community centers' },
+        { label: 'Revenue', val: 'Camp enrollment, franchise licensing, school contracts' },
+        { label: 'Market', val: '$3B+ US summer camp industry — esports is fastest-growing segment' }
+      ]
+    }
+  },
+  {
+    id: 'creator-academy',
+    name: 'Creator Academy',
+    category: 'edu',
+    tagline: 'Building the business of content creation',
+    desc: 'A platform and curriculum training the next generation of content creators, streamers, and commentators. Provides the skills and business frameworks.',
+    icon: <Zap className="w-6 h-6" />,
+    domain: 'creatoracademy.com',
+    color: '#ff9f43',
+    backInfo: {
+      sub: 'Content Creator Training',
+      rows: [
+        { label: 'Curriculum', val: 'Streaming, video production, brand deals, audience building' },
+        { label: 'Audience', val: 'Aspiring streamers, gaming content creators, media students' },
+        { label: 'Revenue', val: 'Course enrollment, mentorship subscriptions, brand partnerships' },
+        { label: 'Market', val: '50M+ creators globally — gaming is #1 content category' }
+      ]
+    }
   },
   {
     id: 'esports-research',
     name: 'Esports Research',
     category: 'edu',
-    tagline: 'The Intelligence Layer of Esports',
-    desc: 'Data and analytics division providing market research, performance science, and academic studies.',
+    tagline: 'The intelligence layer of esports',
+    desc: 'A data and analytics division providing market research, performance science, and academic studies. Licenses findings to brands and institutions.',
     icon: <Cpu className="w-6 h-6" />,
     domain: 'esportsresearch.com',
-    color: '#00d4ff'
+    color: '#ff9f43',
+    backInfo: {
+      sub: 'Data & Analytics Division',
+      rows: [
+        { label: 'Outputs', val: 'Market reports, player performance data, audience insights' },
+        { label: 'Audience', val: 'Brands, investors, academics, media, government bodies' },
+        { label: 'Revenue', val: 'Data licensing, custom research, report subscriptions' },
+        { label: 'Edge', val: 'Proprietary data from across the entire EsportsX ecosystem' }
+      ]
+    }
   },
 
-  // BRANDED COMMUNITIES (Green)
-  {
-    id: 'esports-india',
-    name: 'Esports India',
-    category: 'community',
-    tagline: 'Mobile-First, Locally Rooted',
-    desc: 'South Asia\'s fastest-growing gaming market through mobile-optimized platforms and vernacular content in 10+ languages.',
-    icon: <Globe className="w-6 h-6" />,
-    domain: 'esportsindia.com',
-    color: '#00ff88',
-    stats: { market_share: '15%', users: '5M+' }
-  },
+  // REGIONAL & COMMUNITIES (Purple)
   {
     id: 'military-esports',
     name: 'Military Esports',
-    category: 'community',
-    tagline: 'Service, Strategy, Competition',
-    desc: 'Purpose-built esports infrastructure for veterans and active duty, focusing on stress relief and career transitions.',
+    category: 'regional',
+    tagline: 'Serving those who serve',
+    desc: 'A dedicated division serving active-duty personnel, veterans, and military families through competitive gaming. Provides stress relief and camaraderie.',
     icon: <ShieldCheck className="w-6 h-6" />,
     domain: 'militaryesports.com',
-    color: '#00ff88'
+    color: '#a29bfe',
+    backInfo: {
+      sub: 'Veteran & Active Duty Gaming',
+      rows: [
+        { label: 'Mission', val: 'Gaming as wellness, community, and career pathway for service members' },
+        { label: 'Audience', val: 'Active duty (1.3M+), veterans (19M+), military families' },
+        { label: 'Partners', val: 'US Army, DoD, veteran nonprofits' },
+        { label: 'Revenue', val: 'Government contracts, sponsorships, program licensing' }
+      ]
+    }
+  },
+  {
+    id: 'esports-local',
+    name: 'Esports Local',
+    category: 'regional',
+    tagline: 'Premium localized infrastructure across global markets',
+    desc: 'The regional expansion architecture — purpose-built platforms providing localized competitive infrastructure and vernacular content in each market.',
+    icon: <Globe className="w-6 h-6" />,
+    domain: 'esportslocal.com',
+    color: '#a29bfe',
+    backInfo: {
+      sub: '10 Active Markets',
+      rows: [
+        { label: 'India', val: 'Mobile-first, massive scale' },
+        { label: 'UK', val: 'Premium market entry' },
+        { label: 'Russia', val: 'High-engagement community' },
+        { label: 'Colombia', val: 'Latin America entry' }
+      ]
+    }
   },
   {
     id: 'kings-of-ny',
     name: 'Kings of New York Gaming',
-    category: 'community',
-    tagline: 'Five Boroughs. One Championship.',
-    desc: 'NYC\'s premier esports destination through a borough-based franchise model and annual championship series.',
+    category: 'regional',
+    tagline: 'NYC\'s premier competitive gaming community',
+    desc: 'A regionally anchored competitive gaming brand built around the unique energy and identity of the New York metropolitan area.',
     icon: <Trophy className="w-6 h-6" />,
     domain: 'kingsofnewyorkgaming.com',
-    color: '#00ff88'
+    color: '#a29bfe',
+    backInfo: {
+      sub: 'Regional Gaming Brand',
+      rows: [
+        { label: 'Region', val: 'New York Metropolitan Area — 20M+ population catchment' },
+        { label: 'Audience', val: 'NYC area gamers, competitive players, content creators' },
+        { label: 'Revenue', val: 'Local sponsorships, event tickets, media, merchandise' },
+        { label: 'Edge', val: 'NYC cultural cachet amplifies brand beyond regional borders' }
+      ]
+    }
   },
   {
     id: 'esports-boston',
     name: 'Esports Boston',
-    category: 'community',
-    tagline: 'New England\'s Competitive Hub',
-    desc: 'Comprehensive competitive gaming infrastructure for the New England region, from pro leagues to amateur play.',
+    category: 'regional',
+    tagline: 'Greater Boston\'s competitive gaming hub',
+    desc: 'A dedicated regional brand serving the Greater Boston gaming community. Taps into one of America\'s densest concentrations of universities.',
     icon: <Trophy className="w-6 h-6" />,
     domain: 'esportsboston.com',
-    color: '#00ff88'
+    color: '#a29bfe',
+    backInfo: {
+      sub: 'Regional Gaming Brand',
+      rows: [
+        { label: 'Region', val: 'Greater Boston — 100+ colleges and universities within 50 miles' },
+        { label: 'Audience', val: 'Students, tech professionals, university esports programs' },
+        { label: 'Revenue', val: 'University partnerships, local sponsors, events, media' },
+        { label: 'Edge', val: 'Unmatched density of collegiate esports programs' }
+      ]
+    }
   },
 
-  // INFRASTRUCTURE & SERVICES (Pink/Orange)
-  {
-    id: 'esports-proam',
-    name: 'EsportsProAM',
-    category: 'infra',
-    tagline: 'The OS for Competitive Gaming',
-    desc: 'League and statistics management infrastructure providing turnkey solutions for competition management and ranking.',
-    icon: <Cpu className="w-6 h-6" />,
-    domain: 'esportsproam.com',
-    color: '#fd79a8',
-    stats: { api_calls: '10M/mo', uptime: '99.9%' }
-  },
+  // INFRASTRUCTURE & SERVICES (Pink)
   {
     id: 'esports-union',
     name: 'Esports Union',
     category: 'infra',
-    tagline: 'Building a Professional Foundation',
-    desc: 'Player advocacy, industry standards development, and governance frameworks for a mature, sustainable industry.',
-    icon: <ShieldCheck className="w-6 h-6" />,
+    tagline: 'Organized representation for competitive players',
+    desc: 'A platform organizing and representing the collective interests of competitive players — advocating for fair compensation and contract terms.',
+    icon: <Users className="w-6 h-6" />,
     domain: 'esportsunion.com',
-    color: '#fd79a8'
+    color: '#fd79a8',
+    backInfo: {
+      sub: 'Player Representation',
+      rows: [
+        { label: 'Model', val: 'Guild/union hybrid — membership, advocacy, collective bargaining' },
+        { label: 'Audience', val: 'Competitive players, semi-pro and pro teams, content creators' },
+        { label: 'Revenue', val: 'Membership fees, legal service referrals, brand deal facilitation' },
+        { label: 'Edge', val: 'Fills critical gap — no credible player union exists' }
+      ]
+    }
   },
   {
     id: 'esports-money',
     name: 'Esports Money',
     category: 'infra',
-    tagline: 'Financial Optimization for Players',
-    desc: 'Specialized financial services addressing the unique needs of competitive gaming professionals and organizations.',
-    icon: <Zap className="w-6 h-6" />,
+    tagline: 'Financial infrastructure for competitive gaming',
+    desc: 'Integrated fintech solution focused on prize pool distribution, secure player payments, and financial management tools.',
+    icon: <Wallet className="w-6 h-6" />,
     domain: 'esportsmoney.com',
-    color: '#fd79a8'
+    color: '#fd79a8',
+    backInfo: {
+      sub: 'Esports Fintech Platform',
+      rows: [
+        { label: 'Products', val: 'Prize distribution, player wallets, tax compliance, invoicing' },
+        { label: 'Audience', val: 'Players, teams, tournament operators, organizations' },
+        { label: 'Revenue', val: 'Transaction fees, SaaS, FX conversion' },
+        { label: 'Market', val: '$1.8B+ in prize money distributed annually' }
+      ]
+    }
   },
   {
-    id: 'esports-legal',
-    name: 'Esports Legal',
+    id: 'esports-proam',
+    name: 'EsportsProAM',
     category: 'infra',
-    tagline: 'Specialized Legal Services',
-    desc: 'Legal and compliance services covering gaming regulations, IP, player contracts, and representation.',
-    icon: <ShieldCheck className="w-6 h-6" />,
-    domain: 'esportslegal.com',
-    color: '#fd79a8'
+    tagline: 'Where pros meet emerging talent',
+    desc: 'Unique Professional-Amateur tournaments pairing elite competitors with emerging talent to foster mentorship and visibility.',
+    icon: <Trophy className="w-6 h-6" />,
+    domain: 'esportsproam.com',
+    color: '#fd79a8',
+    backInfo: {
+      sub: 'Pro-Amateur Tournament Series',
+      rows: [
+        { label: 'Format', val: 'Pro–amateur pairing brackets across multiple game titles' },
+        { label: 'Audience', val: 'Aspiring pros, current pros, spectators, talent scouts' },
+        { label: 'Revenue', val: 'Entry fees, sponsor activations, media/streaming rights' },
+        { label: 'Edge', val: 'Golf\'s ProAM model proven — esports version untapped' }
+      ]
+    }
   },
   {
     id: 'esports-arena',
     name: 'Esports Arena',
     category: 'infra',
-    tagline: 'Physical Venues for Digital Generation',
-    desc: 'Consulting, design, and management of dedicated esports venues for universities and corporate clients.',
-    icon: <Trophy className="w-6 h-6" />,
+    tagline: 'Physical venues for the digital generation',
+    desc: 'Consulting, design, and management of dedicated esports venues for universities, corporate clients, and municipalities.',
+    icon: <Building2 className="w-6 h-6" />,
     domain: 'esportsarena.com',
-    color: '#fd79a8'
+    color: '#fd79a8',
+    backInfo: {
+      sub: 'Venue Design & Management',
+      rows: [
+        { label: 'Services', val: 'Concept design, equipment specs, build oversight, ongoing ops' },
+        { label: 'Audience', val: 'Universities, municipalities, hotel/casino groups, corporates' },
+        { label: 'Revenue', val: 'Design fees, management contracts, equipment partnerships' },
+        { label: 'Trend', val: '300+ university esports arenas built in 5 years' }
+      ]
+    }
+  },
+  {
+    id: 'esports-legal',
+    name: 'Esports Legal',
+    category: 'infra',
+    tagline: 'Legal counsel for the gaming industry',
+    desc: 'Specialized legal and compliance services covering gaming regulations, intellectual property, contract review, and player representation.',
+    icon: <Scale className="w-6 h-6" />,
+    domain: 'esportslegal.com',
+    color: '#fd79a8',
+    backInfo: {
+      sub: 'Gaming Law Practice',
+      rows: [
+        { label: 'Practice', val: 'IP, player contracts, org formation, regulatory compliance' },
+        { label: 'Audience', val: 'Players, orgs, game publishers, event organizers, investors' },
+        { label: 'Revenue', val: 'Retainer fees, per-deal review, educational content licensing' },
+        { label: 'Need', val: 'Massive legal gap — most esports professionals lack representation' }
+      ]
+    }
   },
   {
     id: 'esports-doctor',
-    name: 'Esports Doctor / Psych',
+    name: 'Esports Doctor',
     category: 'infra',
-    tagline: 'Health, Wellness & Mental Performance',
-    desc: 'Specialized healthcare services addressing physical health and mental performance for competitive gamers.',
-    icon: <ShieldCheck className="w-6 h-6" />,
+    tagline: 'Physical health for competitive athletes',
+    desc: 'Health and wellness services dedicated to competitive gamers, providing resources for injury prevention and performance longevity.',
+    icon: <Stethoscope className="w-6 h-6" />,
     domain: 'esportsdoctor.com',
-    color: '#fd79a8'
+    color: '#fd79a8',
+    backInfo: {
+      sub: 'Player Physical Health',
+      rows: [
+        { label: 'Services', val: 'Injury prevention, ergonomics, nutrition, physical conditioning' },
+        { label: 'Audience', val: 'Professional players, collegiate athletes, amateur competitors' },
+        { label: 'Revenue', val: 'Telehealth subscriptions, team contracts, educational content' },
+        { label: 'Need', val: '70%+ of pro players report chronic pain' }
+      ]
+    }
+  },
+  {
+    id: 'esports-psych',
+    name: 'Esports Psych',
+    category: 'infra',
+    tagline: 'Mental performance for competitive players',
+    desc: 'Mental performance and behavioral health services helping competitive players manage stress and improve focus.',
+    icon: <BrainCircuit className="w-6 h-6" />,
+    domain: 'esportspsych.com',
+    color: '#fd79a8',
+    backInfo: {
+      sub: 'Mental Performance Coaching',
+      rows: [
+        { label: 'Services', val: '1:1 coaching, team sessions, pre-tournament prep' },
+        { label: 'Audience', val: 'Pro players, collegiate athletes, amateur competitors, teams' },
+        { label: 'Revenue', val: 'Session fees, team retainers, digital tools' },
+        { label: 'Need', val: 'Burnout rates in pro esports rival traditional pro sports' }
+      ]
+    }
   },
   {
     id: 'esports-wears',
     name: 'Esports Wears',
     category: 'infra',
-    tagline: 'Performance Apparel & Wearables',
-    desc: 'Merchandise and performance-optimized apparel designed for the unique demands of competitive gaming.',
-    icon: <Zap className="w-6 h-6" />,
+    tagline: 'Apparel & lifestyle for the ecosystem',
+    desc: 'A merchandise and apparel brand creating officially licensed team gear and functional athletic apparel for the EsportsX ecosystem.',
+    icon: <Shirt className="w-6 h-6" />,
     domain: 'esportswears.com',
-    color: '#fd79a8'
+    color: '#fd79a8',
+    backInfo: {
+      sub: 'Apparel & Merchandise',
+      rows: [
+        { label: 'Products', val: 'Team jerseys, lifestyle apparel, fan merchandise, gear' },
+        { label: 'Audience', val: 'Players, teams, fans, organizations across the ecosystem' },
+        { label: 'Revenue', val: 'DTC sales, team licensing, white-label for organizations' },
+        { label: 'Market', val: '$1.4B+ esports merchandise market' }
+      ]
+    }
   }
 ];
 
 export const CATEGORIES = [
   { id: 'all', label: 'All Brands', color: '#00ff88', overview: 'The complete EsportsX ecosystem spanning competition, education, and infrastructure.' },
-  { id: 'compete', label: 'Competitive Tracks', color: '#a29bfe', overview: 'AI-enhanced tournament formats and global league infrastructure.' },
-  { id: 'edu', label: 'Education & Development', color: '#00d4ff', overview: 'Collegiate systems, NIL monetization, and K-12 gaming curriculum.' },
-  { id: 'community', label: 'Branded Communities', color: '#00ff88', overview: 'Hyper-local and demographic-specific gaming networks.' },
-  { id: 'infra', label: 'Infrastructure & Services', color: '#fd79a8', overview: 'The B2B operating system for the professional gaming industry.' }
+  { id: 'core', label: 'Core Platform', color: '#00ff88', overview: 'AI-enhanced tournament formats and global platform infrastructure.' },
+  { id: 'compete', label: 'Competitive Tracks', color: '#00d4ff', overview: 'Specialized competitive tracks spanning collegiate, sports, and mobile.' },
+  { id: 'edu', label: 'Education & Development', color: '#ff9f43', overview: 'Collegiate systems, NIL monetization, and K-12 gaming curriculum.' },
+  { id: 'regional', label: 'Regional & Communities', color: '#a29bfe', overview: 'Hyper-local and demographic-specific gaming networks.' },
+  { id: 'infra', label: 'Infrastructure & Services', color: '#fd79a8', overview: 'The B2B operating system for the professional gaming industry.' },
+  { id: 'venture', label: 'Venture Studio', color: '#ffeaa7', overview: 'The innovation engine behind the next generation of gaming.' }
 ];
 
 export const PARTNERS = [
