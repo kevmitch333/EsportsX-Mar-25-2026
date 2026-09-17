@@ -30,6 +30,15 @@
   }
 }
 
+.signal-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 34px 34px;
+  -webkit-mask-image: radial-gradient(circle at center, black 18%, rgba(0,0,0,.75) 48%, transparent 78%);
+  mask-image: radial-gradient(circle at center, black 18%, rgba(0,0,0,.75) 48%, transparent 78%);
+}
+
 .scanline {
   width: 100%;
   height: 100px;
