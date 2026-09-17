@@ -28,35 +28,50 @@ const navItems = [
 const ecosystem = [
   {
     name: 'College EsportsX',
+    short: 'COLLEGE',
+    code: '01',
     eyebrow: 'Collegiate Market Infrastructure',
+    accent: '#00ff88',
     icon: <GraduationCap className="h-6 w-6" />,
     copy: 'Building the infrastructure for the collegiate esports marketplace through strategy, institutional advisory, events, education, brand activation, student engagement, and industry development.',
     bullets: ['Collegiate strategy', 'College Esports Expo', 'Campus activations', 'Education & workforce', 'NIL research', 'Industry intelligence'],
   },
   {
     name: 'Esports India',
+    short: 'INDIA',
+    code: '02',
     eyebrow: 'Global Market Entry',
+    accent: '#a29bfe',
     icon: <Globe2 className="h-6 w-6" />,
     copy: 'A gateway into one of gaming’s most consequential emerging markets, connecting international organizations with India’s competitive-gaming economy.',
     bullets: ['Gateway Lab', 'Regulatory Readiness Lab', 'Campus & city pilots', 'Operator partnerships', 'Fellows & diaspora network'],
   },
   {
     name: 'EsportsFC',
+    short: 'FOOTBALL',
+    code: '03',
     eyebrow: 'Football × Gaming × Culture',
+    accent: '#00d4ff',
     icon: <Trophy className="h-6 w-6" />,
     copy: 'A platform at the intersection of football, gaming, creators, clubs, competitions, brands, content, and global fan communities.',
     bullets: ['Digital competition', 'Creator programming', 'Branded experiences', 'Fan engagement', 'Global football culture'],
   },
   {
     name: 'Military Esports',
+    short: 'MILITARY',
+    code: '04',
     eyebrow: 'Community & Opportunity',
+    accent: '#ffeaa7',
     icon: <Shield className="h-6 w-6" />,
     copy: 'Exploring how competitive gaming can support community, education, career pathways, events, and partnerships across military and veteran communities.',
     bullets: ['Competition', 'Community building', 'Education', 'Career pathways', 'Events & partnerships'],
   },
   {
     name: 'Esports Education',
+    short: 'EDUCATION',
+    code: '05',
     eyebrow: 'The Business Behind the Game',
+    accent: '#ff9f43',
     icon: <BookOpen className="h-6 w-6" />,
     copy: 'Learning experiences that help students, educators, institutions, and professionals understand competitive gaming and the business ecosystem surrounding it.',
     bullets: ['Management', 'Business & entrepreneurship', 'Events & production', 'Marketing & sponsorship', 'Technology', 'Career development'],
@@ -118,9 +133,65 @@ function CTA({ href, children, secondary = false }: { href: string; children: Re
   );
 }
 
+function HeroArchitecture({ active, setActive }: { active: number; setActive: (index: number) => void }) {
+  const positions = [
+    'left-1/2 top-0 -translate-x-1/2',
+    'right-0 top-[28%]',
+    'bottom-[4%] right-[9%]',
+    'bottom-[4%] left-[9%]',
+    'left-0 top-[28%]',
+  ];
+
+  return (
+    <div className="relative mx-auto aspect-square w-full max-w-[520px]">
+      <div className="signal-grid absolute inset-[4%] rounded-full opacity-50" />
+      <motion.div
+        className="absolute inset-[10%] rounded-full border border-white/10"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+      >
+        <div className="absolute left-1/2 top-[-4px] h-2 w-2 -translate-x-1/2 rounded-full bg-brand-green shadow-[0_0_18px_rgba(0,255,136,.8)]" />
+      </motion.div>
+      <div className="absolute inset-[22%] rounded-full border border-white/10" />
+      <div className="absolute left-1/2 top-1/2 h-px w-[72%] -translate-x-1/2 -translate-y-1/2 rotate-[18deg] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute left-1/2 top-1/2 h-px w-[72%] -translate-x-1/2 -translate-y-1/2 rotate-[90deg] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute left-1/2 top-1/2 h-px w-[72%] -translate-x-1/2 -translate-y-1/2 rotate-[162deg] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      <div className="absolute inset-[34%] z-10 flex flex-col items-center justify-center rounded-full border border-brand-green/30 bg-brand-black/95 text-center shadow-[0_0_80px_rgba(0,255,136,.08)]">
+        <div className="font-display text-3xl tracking-wide md:text-4xl">ESPORTS<span className="text-brand-green">X</span></div>
+        <div className="mt-2 font-mono text-[7px] uppercase tracking-[.28em] text-white/30">Ecosystem Core</div>
+      </div>
+
+      {ecosystem.map((item, index) => (
+        <button
+          key={item.name}
+          onClick={() => setActive(index)}
+          className={`absolute z-20 ${positions[index]} min-w-[104px] rounded-full border px-4 py-2 text-left transition-all duration-300 ${active === index ? 'scale-105 bg-white/[.08]' : 'bg-brand-black/95 hover:bg-white/[.04]'}`}
+          style={{ borderColor: active === index ? item.accent : 'rgba(255,255,255,.12)', boxShadow: active === index ? `0 0 26px ${item.accent}22` : 'none' }}
+          aria-label={`Show ${item.name}`}
+        >
+          <span className="block font-mono text-[7px] uppercase tracking-[.2em]" style={{ color: item.accent }}>{item.code}</span>
+          <span className="mt-0.5 block font-mono text-[8px] uppercase tracking-[.14em] text-white/65">{item.short}</span>
+        </button>
+      ))}
+
+      <div className="absolute bottom-[24%] left-1/2 z-20 w-[72%] -translate-x-1/2 rounded-xl border border-white/10 bg-black/65 p-4 backdrop-blur-md">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <div className="font-mono text-[7px] uppercase tracking-[.2em] text-white/30">Active platform</div>
+            <div className="mt-1 font-display text-xl uppercase" style={{ color: ecosystem[active].accent }}>{ecosystem[active].name}</div>
+          </div>
+          <div className="rounded-lg border border-white/10 p-2" style={{ color: ecosystem[active].accent }}>{ecosystem[active].icon}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Landing() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeBrand, setActiveBrand] = useState(0);
 
   useEffect(() => {
     const handle = () => setScrolled(window.scrollY > 40);
@@ -162,12 +233,11 @@ export default function Landing() {
       <main id="top">
         <section className="relative flex min-h-screen items-center overflow-hidden px-6 pb-16 pt-32 md:px-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_35%,rgba(0,255,136,0.12),transparent_32%),radial-gradient(circle_at_20%_80%,rgba(0,212,255,0.08),transparent_30%)]" />
-          <div className="absolute right-[-10%] top-[18%] h-[520px] w-[520px] rounded-full border border-brand-green/10" />
-          <div className="absolute right-[4%] top-[30%] h-[300px] w-[300px] rounded-full border border-brand-green/10" />
-          <div className="relative z-10 mx-auto grid max-w-7xl items-end gap-12 lg:grid-cols-[1.2fr_.8fr]">
+          <div className="signal-grid absolute inset-0 opacity-[.13]" />
+          <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.12fr_.88fr]">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }}>
               <SectionLabel>National Brand Group Platform</SectionLabel>
-              <h1 className="max-w-5xl font-display text-[clamp(4.5rem,10vw,9.5rem)] uppercase leading-[.84] tracking-tight">
+              <h1 className="max-w-5xl font-display text-[clamp(4.5rem,9.2vw,9rem)] uppercase leading-[.84] tracking-tight">
                 Building What’s Next <span className="text-brand-green">in Esports.</span>
               </h1>
               <p className="mt-7 font-mono text-xs uppercase tracking-[0.22em] text-white/50">Competition. Education. Culture. Technology. Global Opportunity.</p>
@@ -180,16 +250,16 @@ export default function Landing() {
               <div className="mt-10 flex flex-wrap gap-4"><CTA href="#ecosystem">Explore EsportsX</CTA><CTA href="mailto:info@esportsx.com" secondary>Partner With Us</CTA></div>
             </motion.div>
 
-            <div className="hidden lg:block">
-              <div className="relative mx-auto aspect-square max-w-[470px] rounded-full border border-white/10 bg-white/[.015] p-12">
-                <div className="absolute inset-[18%] rounded-full border border-brand-green/15" />
-                <div className="absolute inset-[35%] flex items-center justify-center rounded-full border border-brand-green/30 bg-brand-green/5 font-display text-3xl tracking-wide">ESPORTS<span className="text-brand-green">X</span></div>
-                {['COLLEGE','INDIA','FOOTBALL','MILITARY','EDUCATION'].map((item, i) => {
-                  const positions = ['top-2 left-1/2 -translate-x-1/2','right-0 top-[28%]','bottom-[10%] right-[10%]','bottom-[10%] left-[10%]','left-0 top-[28%]'];
-                  return <div key={item} className={`absolute ${positions[i]} rounded-full border border-white/10 bg-brand-black px-4 py-2 font-mono text-[9px] tracking-[.18em] text-white/55`}>{item}</div>;
-                })}
+            <motion.div initial={{ opacity: 0, scale: .96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .9, delay: .15 }} className="hidden lg:block">
+              <div className="mb-4 flex items-center justify-between font-mono text-[8px] uppercase tracking-[.25em] text-white/25">
+                <span>Ecosystem Architecture</span><span>05 Entry Points</span>
               </div>
-            </div>
+              <HeroArchitecture active={activeBrand} setActive={setActiveBrand} />
+            </motion.div>
+          </div>
+          <div className="absolute bottom-5 left-1/2 hidden w-[calc(100%-5rem)] max-w-7xl -translate-x-1/2 items-center justify-between border-t border-white/10 pt-4 font-mono text-[8px] uppercase tracking-[.23em] text-white/25 md:flex">
+            <span>IP → Intelligence → Activation → Partnership → Commercialization</span>
+            <span>Scroll to explore ↓</span>
           </div>
         </section>
 
@@ -205,6 +275,14 @@ export default function Landing() {
                 <p>We work with universities, brands, technology companies, gaming organizations, investors, creators, communities, and market operators looking to build what comes next.</p>
               </div>
             </div>
+            <div className="mt-16 grid overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                ['Competition × Education', 'Programs, events, curriculum'],
+                ['Sport × Gaming', 'Fans, creators, culture'],
+                ['Markets × Networks', 'India, diaspora, operators'],
+                ['IP × Commercialization', 'Brands, pilots, ventures'],
+              ].map(([title, sub]) => <div key={title} className="bg-brand-black p-5"><div className="font-display text-xl uppercase text-white/80">{title}</div><div className="mt-2 font-mono text-[8px] uppercase tracking-[.17em] text-white/30">{sub}</div></div>)}
+            </div>
           </div>
         </section>
 
@@ -215,20 +293,52 @@ export default function Landing() {
               <h2 className="font-display text-5xl uppercase leading-none md:text-7xl">One Platform. Multiple Entry Points Into the Future of Esports.</h2>
               <p className="leading-relaxed text-white/45">Five focused platforms create clear ways for institutions, brands, operators, communities, and partners to engage with the broader EsportsX ecosystem.</p>
             </div>
-            <div className="grid gap-5 lg:grid-cols-2">
-              {ecosystem.map((item, index) => (
-                <motion.article key={item.name} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * .05 }} className={`${index === 0 ? 'lg:col-span-2 lg:grid-cols-[.7fr_1.3fr]' : ''} group grid gap-8 rounded-2xl border border-white/10 bg-white/[.02] p-7 transition hover:border-brand-green/35 md:p-9`}>
-                  <div>
-                    <div className="mb-5 inline-flex rounded-xl border border-white/10 bg-brand-green/5 p-3 text-brand-green">{item.icon}</div>
+
+            <div className="grid gap-7 lg:grid-cols-[1.15fr_.85fr]">
+              <div className="grid gap-4 sm:grid-cols-2">
+                {ecosystem.map((item, index) => (
+                  <motion.button
+                    key={item.name}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * .05 }}
+                    onClick={() => setActiveBrand(index)}
+                    className={`${index === 0 ? 'sm:col-span-2' : ''} group relative overflow-hidden rounded-2xl border bg-white/[.02] p-7 text-left transition md:p-8`}
+                    style={{ borderColor: activeBrand === index ? `${item.accent}88` : 'rgba(255,255,255,.1)', boxShadow: activeBrand === index ? `0 0 36px ${item.accent}10` : 'none' }}
+                  >
+                    <div className="absolute right-5 top-3 font-display text-7xl leading-none opacity-[.035]" style={{ color: item.accent }}>{item.code}</div>
+                    <div className="mb-5 inline-flex rounded-xl border border-white/10 bg-black/30 p-3" style={{ color: item.accent }}>{item.icon}</div>
                     <div className="font-mono text-[9px] uppercase tracking-[.25em] text-white/35">{item.eyebrow}</div>
                     <h3 className="mt-3 font-display text-4xl uppercase tracking-wide">{item.name}</h3>
                     <p className="mt-5 leading-relaxed text-white/50">{item.copy}</p>
+                  </motion.button>
+                ))}
+              </div>
+
+              <div className="lg:sticky lg:top-28 lg:self-start">
+                <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[.025] p-7 md:p-9">
+                  <div className="signal-grid absolute inset-0 opacity-[.18]" />
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between gap-5">
+                      <div>
+                        <div className="font-mono text-[8px] uppercase tracking-[.25em] text-white/30">Selected platform / {ecosystem[activeBrand].code}</div>
+                        <h3 className="mt-3 font-display text-5xl uppercase leading-none" style={{ color: ecosystem[activeBrand].accent }}>{ecosystem[activeBrand].name}</h3>
+                      </div>
+                      <div className="rounded-xl border border-white/10 bg-black/40 p-3" style={{ color: ecosystem[activeBrand].accent }}>{ecosystem[activeBrand].icon}</div>
+                    </div>
+                    <div className="my-8 h-px bg-gradient-to-r from-white/20 to-transparent" />
+                    <div className="font-mono text-[8px] uppercase tracking-[.22em] text-white/25">Opportunity stack</div>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {ecosystem[activeBrand].bullets.map((b, i) => <span key={b} className="rounded-full border px-3 py-2 font-mono text-[8px] uppercase tracking-wider text-white/50" style={{ borderColor: i === 0 ? `${ecosystem[activeBrand].accent}77` : 'rgba(255,255,255,.1)' }}>{b}</span>)}
+                    </div>
+                    <div className="mt-10 border-l-2 pl-5" style={{ borderColor: ecosystem[activeBrand].accent }}>
+                      <div className="font-mono text-[8px] uppercase tracking-[.22em] text-white/25">EsportsX role</div>
+                      <p className="mt-2 text-sm leading-relaxed text-white/55">Connect the category thesis to programming, partners, community, and a viable commercialization path.</p>
+                    </div>
                   </div>
-                  <div className="flex flex-wrap content-start gap-2 self-end">
-                    {item.bullets.map(b => <span key={b} className="rounded-full border border-white/10 px-3 py-2 font-mono text-[9px] uppercase tracking-wider text-white/45">{b}</span>)}
-                  </div>
-                </motion.article>
-              ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -242,10 +352,11 @@ export default function Landing() {
               <p className="mt-5 text-xl text-white/80">It is not simply another tournament. It is a marketplace for collegiate esports innovation.</p>
               <div className="mt-9 flex flex-wrap gap-4"><CTA href="mailto:info@esportsx.com?subject=Bring%20the%20College%20Esports%20Expo%20to%20our%20campus">Bring the Expo to Your Campus</CTA><CTA href="mailto:info@esportsx.com?subject=College%20Esports%20Expo%20Partnership" secondary>Become a Partner</CTA></div>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="relative grid gap-3 sm:grid-cols-2">
+              <div className="signal-grid absolute inset-0 opacity-[.12]" />
               {[
                 ['Universities need strategy.', Building2], ['Students need pathways.', Users], ['Brands need authentic participation.', Handshake], ['Technology companies need adoption environments.', Lightbulb],
-              ].map(([text, Icon]: any) => <div key={text} className="rounded-2xl border border-white/10 bg-black/20 p-6"><Icon className="mb-8 h-6 w-6 text-brand-green"/><p className="font-display text-2xl uppercase leading-tight">{text}</p></div>)}
+              ].map(([text, Icon]: any, index) => <motion.div initial={{ opacity: 0, scale: .96 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: index * .08 }} key={text} className="relative z-10 rounded-2xl border border-white/10 bg-black/35 p-6 backdrop-blur-sm"><div className="mb-8 flex items-center justify-between"><Icon className="h-6 w-6 text-brand-green"/><span className="font-mono text-[8px] text-white/20">0{index + 1}</span></div><p className="font-display text-2xl uppercase leading-tight">{text}</p></motion.div>)}
             </div>
           </div>
         </section>
@@ -255,7 +366,7 @@ export default function Landing() {
             <div className="grid gap-12 lg:grid-cols-[.75fr_1.25fr]">
               <div><SectionLabel>EsportsX Advisory</SectionLabel><h2 className="font-display text-5xl uppercase leading-none md:text-7xl">Navigate the Esports Economy With Greater Intelligence.</h2><p className="mt-7 leading-relaxed text-white/50">Organizations frequently enter esports knowing they want to participate but without knowing where they belong. EsportsX helps answer that question.</p></div>
               <div className="grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2">
-                {advisory.map(([title, copy]) => <div key={title} className="bg-brand-black p-6"><BriefcaseBusiness className="mb-5 h-5 w-5 text-brand-green"/><h3 className="font-display text-2xl uppercase">{title}</h3><p className="mt-3 text-sm leading-relaxed text-white/45">{copy}</p></div>)}
+                {advisory.map(([title, copy], index) => <div key={title} className="group bg-brand-black p-6 transition hover:bg-white/[.025]"><div className="flex items-center justify-between"><BriefcaseBusiness className="h-5 w-5 text-brand-green"/><span className="font-mono text-[8px] text-white/15">0{index + 1}</span></div><h3 className="mt-5 font-display text-2xl uppercase">{title}</h3><p className="mt-3 text-sm leading-relaxed text-white/45">{copy}</p></div>)}
               </div>
             </div>
             <div className="mt-10"><CTA href="mailto:info@esportsx.com?subject=EsportsX%20Advisory">Talk to EsportsX</CTA></div>
@@ -267,8 +378,9 @@ export default function Landing() {
             <SectionLabel>The EsportsX Model</SectionLabel>
             <h2 className="max-w-4xl font-display text-5xl uppercase leading-none md:text-7xl">From Digital Asset to Operating Opportunity.</h2>
             <p className="mt-7 max-w-3xl leading-relaxed text-white/50">EsportsX takes a venture-development approach to esports: identify promising categories and underserved communities, activate specialized intellectual property, develop a market thesis, establish partnerships, create programming, and test real-world demand.</p>
-            <div className="mt-14 grid gap-3 lg:grid-cols-5">
-              {model.map(([num, title, copy]) => <div key={title} className="relative rounded-2xl border border-white/10 bg-brand-black p-6"><div className="font-mono text-[9px] tracking-[.25em] text-brand-green">{num}</div><h3 className="mt-9 font-display text-3xl uppercase">{title}</h3><p className="mt-3 text-sm leading-relaxed text-white/45">{copy}</p></div>)}
+            <div className="relative mt-14 grid gap-3 lg:grid-cols-5">
+              <div className="absolute left-[8%] right-[8%] top-7 hidden h-px bg-gradient-to-r from-transparent via-brand-green/35 to-transparent lg:block" />
+              {model.map(([num, title, copy], index) => <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * .08 }} key={title} className="relative rounded-2xl border border-white/10 bg-brand-black p-6"><div className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-brand-green/35 bg-brand-black font-mono text-[9px] tracking-[.2em] text-brand-green">{num}</div><h3 className="mt-9 font-display text-3xl uppercase">{title}</h3><p className="mt-3 text-sm leading-relaxed text-white/45">{copy}</p></motion.div>)}
             </div>
             <div className="mt-14 rounded-2xl border border-brand-green/20 bg-brand-green/[.04] p-8 md:p-10">
               <div className="flex items-start gap-5"><Network className="mt-1 h-7 w-7 shrink-0 text-brand-green"/><div><div className="font-mono text-[9px] uppercase tracking-[.25em] text-brand-green">The critical question</div><p className="mt-3 max-w-4xl font-display text-3xl uppercase leading-tight md:text-5xl">What should this asset become?</p><p className="mt-5 max-w-4xl leading-relaxed text-white/55">An operating company, media property, event, educational platform, licensed brand, joint venture, strategic partnership—or an asset that creates greater value in someone else’s ecosystem? EsportsX provides the architecture for finding that answer.</p></div></div>
@@ -281,7 +393,7 @@ export default function Landing() {
             <SectionLabel>What We Build</SectionLabel>
             <h2 className="font-display text-5xl uppercase leading-none md:text-7xl">Multiple Business Models. One Esports Platform.</h2>
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {businessModels.map(([title, copy]) => <div key={title} className="rounded-2xl border border-white/10 p-6 transition hover:border-brand-green/30"><h3 className="font-display text-2xl uppercase">{title}</h3><p className="mt-4 text-sm leading-relaxed text-white/45">{copy}</p></div>)}
+              {businessModels.map(([title, copy], index) => <div key={title} className="group rounded-2xl border border-white/10 p-6 transition hover:border-brand-green/30 hover:bg-white/[.02]"><div className="font-mono text-[8px] tracking-[.2em] text-white/20">0{index + 1}</div><h3 className="mt-7 font-display text-2xl uppercase group-hover:text-brand-green">{title}</h3><p className="mt-4 text-sm leading-relaxed text-white/45">{copy}</p></div>)}
             </div>
           </div>
         </section>
@@ -298,12 +410,13 @@ export default function Landing() {
             <SectionLabel>Partner With EsportsX</SectionLabel>
             <div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr]">
               <div><h2 className="font-display text-5xl uppercase leading-none md:text-7xl">What Can We Build Together?</h2><p className="mt-7 leading-relaxed text-white/50">EsportsX is looking to work with organizations that see competitive gaming as more than an advertising channel. We are interested in partners who want to build.</p><div className="mt-8"><CTA href="mailto:info@esportsx.com?subject=Partner%20with%20EsportsX">Start a Conversation</CTA></div></div>
-              <div className="grid gap-4 sm:grid-cols-2">{partnerTypes.map(([title, copy]) => <div key={title} className="rounded-2xl border border-white/10 bg-white/[.02] p-6"><Handshake className="mb-6 h-5 w-5 text-brand-green"/><h3 className="font-display text-2xl uppercase">{title}</h3><p className="mt-3 text-sm leading-relaxed text-white/45">{copy}</p></div>)}</div>
+              <div className="grid gap-4 sm:grid-cols-2">{partnerTypes.map(([title, copy]) => <div key={title} className="rounded-2xl border border-white/10 bg-white/[.02] p-6 transition hover:-translate-y-1 hover:border-brand-green/30"><Handshake className="mb-6 h-5 w-5 text-brand-green"/><h3 className="font-display text-2xl uppercase">{title}</h3><p className="mt-3 text-sm leading-relaxed text-white/45">{copy}</p></div>)}</div>
             </div>
           </div>
         </section>
 
         <section className="relative overflow-hidden border-t border-white/5 px-6 py-28 md:px-10">
+          <div className="signal-grid absolute inset-0 opacity-[.12]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_80%,rgba(0,255,136,.14),transparent_38%)]" />
           <div className="relative z-10 mx-auto max-w-5xl text-center">
             <SectionLabel>Our Vision</SectionLabel>
