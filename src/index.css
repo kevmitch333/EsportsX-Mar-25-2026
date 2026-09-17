@@ -26,7 +26,7 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-brand-black text-brand-off-white font-sans antialiased overflow-x-hidden cursor-none selection:bg-brand-green selection:text-brand-black;
+    @apply bg-brand-black text-brand-off-white font-sans antialiased overflow-x-hidden selection:bg-brand-green selection:text-brand-black;
   }
 }
 
