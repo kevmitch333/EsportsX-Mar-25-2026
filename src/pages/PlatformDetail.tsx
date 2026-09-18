@@ -105,6 +105,39 @@ export default function PlatformDetail() {
           </div>
         </section>
 
+        {platform.proof && (
+          <section className="border-y border-white/5 bg-white/[.012] px-6 py-20 md:px-10">
+            <div className="mx-auto max-w-7xl">
+              <div className="grid gap-10 lg:grid-cols-[.68fr_1.32fr]">
+                <div>
+                  <div className="font-mono text-[9px] uppercase tracking-[.28em]" style={{ color: platform.accent }}>/ Historical proof</div>
+                  <h2 className="mt-5 font-display text-5xl uppercase leading-none md:text-7xl">Built Before the Category Was Mature.</h2>
+                  <div className="mt-6 inline-flex rounded-full border border-white/10 px-4 py-2 font-mono text-[8px] uppercase tracking-[.18em] text-white/40">{platform.proof.period}</div>
+                  <p className="mt-6 max-w-xl text-sm leading-relaxed text-white/40">{platform.proof.note}</p>
+                </div>
+                <div className="relative">
+                  <div className="absolute bottom-0 left-[14px] top-0 w-px bg-gradient-to-b from-transparent via-white/15 to-transparent" />
+                  <div className="space-y-3">
+                    {platform.proof.items.map((item, index) => (
+                      <div key={item.year + item.title} className="relative grid gap-4 rounded-2xl border border-white/10 bg-brand-black p-5 pl-12 transition hover:border-white/20 sm:grid-cols-[90px_1fr]">
+                        <div className="absolute left-[10px] top-7 h-2.5 w-2.5 rounded-full border border-brand-black" style={{ backgroundColor: platform.accent, boxShadow: `0 0 16px ${platform.accent}66` }} />
+                        <div>
+                          <div className="font-display text-3xl" style={{ color: platform.accent }}>{item.year}</div>
+                          <div className="mt-1 font-mono text-[7px] uppercase tracking-[.16em] text-white/20">Archive / {String(index + 1).padStart(2, '0')}</div>
+                        </div>
+                        <div>
+                          <h3 className="font-display text-2xl uppercase">{item.title}</h3>
+                          <p className="mt-3 text-sm leading-relaxed text-white/45">{item.copy}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
         <section className="border-y border-white/5 bg-white/[.018] px-6 py-20 md:px-10">
           <div className="mx-auto max-w-7xl">
             <div className="mb-12 grid gap-6 lg:grid-cols-[1fr_.55fr] lg:items-end">
