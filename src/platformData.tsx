@@ -23,6 +23,11 @@ export type Platform = {
   audiences: string[];
   cta: string;
   emailSubject: string;
+  proof?: {
+    period: string;
+    note: string;
+    items: { year: string; title: string; copy: string }[];
+  };
 };
 
 export const platforms: Platform[] = [
@@ -57,6 +62,17 @@ export const platforms: Platform[] = [
     audiences: ['Universities', 'Students', 'Brands', 'Technology companies', 'Employers', 'Esports organizations'],
     cta: 'Explore a College EsportsX collaboration',
     emailSubject: 'College EsportsX Collaboration',
+    proof: {
+      period: '2017–2021 historical record',
+      note: 'These are historical proof points preserved from the 2023 CEX media kit. They are presented as dated evidence of execution—not as current audience, event, partner, or market metrics.',
+      items: [
+        { year: '2017', title: 'Built in the classroom', copy: 'College Esports Expo was founded through an Emerson College esports class, using the event itself as an experiential-learning environment for students.' },
+        { year: '2018', title: 'First in-person conference', copy: 'The first CEX conference was held at Emerson College. The 2023 media kit records 105 attendees from the United States, Europe, and Australia.' },
+        { year: '2020', title: 'Multi-room event scale', copy: 'CEX expanded to seven rooms and 38 gaming sessions, with more than 50 speakers participating in the February 2020 event.' },
+        { year: '2020', title: 'International expansion', copy: 'CEX Brazil launched virtually in October 2020 and the media kit records more than 1,000 viewers.' },
+        { year: '2021', title: 'National championship collaboration', copy: 'CEX co-hosted a two-day virtual event alongside the College Esports National Championship, whose championship ecosystem included more than 50 colleges.' },
+      ],
+    },
   },
   {
     id: 'esports-india',
