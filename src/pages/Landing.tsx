@@ -28,6 +28,7 @@ const navItems = [
 const ecosystem = [
   {
     name: 'College EsportsX',
+    id: 'college-esportsx',
     short: 'COLLEGE',
     code: '01',
     eyebrow: 'Collegiate Market Infrastructure',
@@ -38,6 +39,7 @@ const ecosystem = [
   },
   {
     name: 'Esports India',
+    id: 'esports-india',
     short: 'INDIA',
     code: '02',
     eyebrow: 'Global Market Entry',
@@ -48,6 +50,7 @@ const ecosystem = [
   },
   {
     name: 'EsportsFC',
+    id: 'esportsfc',
     short: 'FOOTBALL',
     code: '03',
     eyebrow: 'Football × Gaming × Culture',
@@ -58,6 +61,7 @@ const ecosystem = [
   },
   {
     name: 'Military Esports',
+    id: 'military-esports',
     short: 'MILITARY',
     code: '04',
     eyebrow: 'Community & Opportunity',
@@ -68,6 +72,7 @@ const ecosystem = [
   },
   {
     name: 'Esports Education',
+    id: 'esports-education',
     short: 'EDUCATION',
     code: '05',
     eyebrow: 'The Business Behind the Game',
@@ -336,6 +341,14 @@ export default function Landing() {
                       <div className="font-mono text-[8px] uppercase tracking-[.22em] text-white/25">EsportsX role</div>
                       <p className="mt-2 text-sm leading-relaxed text-white/55">Connect the category thesis to programming, partners, community, and a viable commercialization path.</p>
                     </div>
+                    <div className="mt-8 flex flex-wrap gap-3">
+                      <a href={`/platform/${ecosystem[activeBrand].id}`} className="inline-flex items-center gap-2 rounded-full border px-5 py-3 font-mono text-[8px] uppercase tracking-[.16em] transition hover:bg-white hover:text-black" style={{ borderColor: `${ecosystem[activeBrand].accent}77`, color: ecosystem[activeBrand].accent }}>
+                        Explore {ecosystem[activeBrand].name}<ArrowRight className="h-4 w-4" />
+                      </a>
+                      <a href="/explore" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 font-mono text-[8px] uppercase tracking-[.16em] text-white/55 transition hover:border-white/30 hover:text-white">
+                        Find your entry point<ArrowRight className="h-4 w-4" />
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -433,7 +446,7 @@ export default function Landing() {
           <div><div className="font-display text-5xl uppercase tracking-wide">ESPORTS<span className="text-brand-green">X</span></div><p className="mt-2 font-mono text-[10px] uppercase tracking-[.22em] text-white/35">Build What’s Next.</p></div>
           <div className="max-w-xl text-sm leading-relaxed text-white/40">For partnerships, institutional programs, strategic advisory, brand activations, licensing, events, market-entry initiatives, and venture opportunities.</div>
         </div>
-        <div className="mx-auto mt-10 flex max-w-7xl flex-col gap-4 border-t border-white/5 pt-6 font-mono text-[9px] uppercase tracking-wider text-white/25 md:flex-row md:items-center md:justify-between"><span>College EsportsX · Esports India · EsportsFC · Military Esports · Esports Education</span><span>A National Brand Group platform.</span></div>
+        <div className="mx-auto mt-10 flex max-w-7xl flex-col gap-4 border-t border-white/5 pt-6 font-mono text-[9px] uppercase tracking-wider text-white/25 md:flex-row md:items-center md:justify-between"><span>College EsportsX · Esports India · EsportsFC · Military Esports · Esports Education</span><span className="flex flex-wrap items-center gap-4"><a href="/legal" className="transition hover:text-white">Legal</a><span>A National Brand Group platform.</span></span></div>
       </footer>
     </div>
   );
