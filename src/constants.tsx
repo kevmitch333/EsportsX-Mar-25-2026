@@ -33,6 +33,12 @@ export interface Brand {
   featured?: boolean;
   stats?: Record<string, string>;
   images?: string[];
+  engagementScore?: number;
+  growthTrajectory?: {
+    rate: string;
+    trend: number[];
+    metricLabel?: string;
+  };
   backInfo?: {
     sub: string;
     rows: { label: string; val: string }[];

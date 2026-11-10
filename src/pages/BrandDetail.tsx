@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { BRANDS } from '../constants';
+import { BrandSparkline } from '../components/BrandSparkline';
 
 const HeroGeo = () => (
   <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
@@ -172,6 +173,10 @@ export default function BrandDetail() {
               </div>
 
               <div className="space-y-4">
+                <div className="font-mono text-[11px] uppercase tracking-widest text-white/40 mb-4">Growth Trajectory & Engagement</div>
+                <div className="mb-6">
+                  <BrandSparkline brand={brand} />
+                </div>
                 <div className="font-mono text-[11px] uppercase tracking-widest text-white/40 mb-6">Key Metrics & Data</div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {brand.backInfo?.rows.map((row, idx) => (
