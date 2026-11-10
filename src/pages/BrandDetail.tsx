@@ -13,6 +13,7 @@ import { BrandSparkline } from '../components/BrandSparkline';
 import { CustomCursor } from '../components/CustomCursor';
 import { SiteNav } from '../components/SiteNav';
 import { SiteFooter } from '../components/SiteFooter';
+import { useLanguage } from '../context/LanguageContext';
 
 const HeroGeo = () => (
   <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
@@ -39,6 +40,7 @@ const HeroGeo = () => (
 export default function BrandDetail() {
   const { id } = useParams();
   const brand = BRANDS.find(b => b.id === id);
+  const { t, locale } = useLanguage();
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -52,15 +54,20 @@ export default function BrandDetail() {
         <CustomCursor />
         <SiteNav />
         <div className="flex-1 flex flex-col items-center justify-center px-6 pt-24">
-          <h1 className="text-4xl font-display mb-4 uppercase">Brand Not Found</h1>
+          <h1 className="text-4xl font-display mb-4 uppercase">{t.brandDetail.notFound}</h1>
           <Link to="/#portfolio" className="text-brand-green font-mono uppercase tracking-widest hover:underline">
-            Back to Portfolio
+            {t.brandDetail.backToPortfolio}
           </Link>
         </div>
         <SiteFooter />
       </div>
     );
   }
+
+  const isEsportsLocalHi = locale === 'hi' && brand.id === 'esports-local';
+  const displayName = isEsportsLocalHi ? t.landing.esportsLocalOverride.name : brand.name;
+  const displayTagline = isEsportsLocalHi ? t.landing.esportsLocalOverride.tagline : brand.tagline;
+  const displayDesc = isEsportsLocalHi ? t.landing.esportsLocalOverride.desc : brand.desc;
 
   return (
     <div className="min-h-screen bg-brand-black text-white selection:bg-brand-green selection:text-black grain-overlay cursor-none overflow-x-hidden">
@@ -91,7 +98,7 @@ export default function BrandDetail() {
               className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-white/50 hover:text-brand-green transition-colors mb-8 group"
             >
               <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
-              Back to Ecosystem
+              {t.brandDetail.backToEcosystem}
             </Link>
             <div className="flex items-center gap-4 mb-10">
               <div 
@@ -102,7 +109,7 @@ export default function BrandDetail() {
               </div>
               <div>
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40 block mb-1">
-                  / {brand.category} · Ecosystem Property
+                  / {t.brandDetail.categoryLabels[brand.category as keyof typeof t.brandDetail.categoryLabels] || brand.category} · {t.brandDetail.ecosystemProperty}
                 </span>
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-brand-green">
                   {brand.domain}
@@ -112,23 +119,23 @@ export default function BrandDetail() {
             
             <h1 className="font-display text-6xl md:text-9xl leading-[0.85] mb-10 tracking-tight uppercase group cursor-default">
               <span className="relative inline-block">
-                {brand.name}
-                <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">{brand.name}</span>
+                {displayName}
+                <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">{displayName}</span>
               </span>
             </h1>
             
             <p className="text-white/80 max-w-3xl text-2xl md:text-3xl leading-relaxed mb-16 italic font-light">
-              "{brand.tagline}"
+              "{displayTagline}"
             </p>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
               <div>
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: brand.color }} />
-                  <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/60">Strategic Overview</h3>
+                  <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/60">{t.brandDetail.strategicOverview}</h3>
                 </div>
                 <p className="text-white/50 text-lg leading-relaxed mb-10">
-                  {brand.desc}
+                  {displayDesc}
                 </p>
                 
                 <div className="flex flex-wrap items-center gap-6">
@@ -139,7 +146,7 @@ export default function BrandDetail() {
                     className="flex items-center gap-3 px-8 py-4 font-mono font-bold text-[10px] uppercase tracking-widest transition-all rounded-full"
                     style={{ backgroundColor: brand.color, color: '#000' }}
                   >
-                    Launch Platform
+                    {t.brandDetail.launchPlatform}
                     <ExternalLink className="w-4 h-4" />
                   </a>
                   <div className="flex items-center gap-3">
@@ -150,11 +157,11 @@ export default function BrandDetail() {
               </div>
 
               <div className="space-y-4">
-                <div className="font-mono text-[11px] uppercase tracking-widest text-white/40 mb-4">Growth Trajectory & Engagement</div>
+                <div className="font-mono text-[11px] uppercase tracking-widest text-white/40 mb-4">{t.brandDetail.growthLabel}</div>
                 <div className="mb-6">
                   <BrandSparkline brand={brand} />
                 </div>
-                <div className="font-mono text-[11px] uppercase tracking-widest text-white/40 mb-6">Key Metrics & Data</div>
+                <div className="font-mono text-[11px] uppercase tracking-widest text-white/40 mb-6">{t.brandDetail.metricsLabel}</div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {brand.backInfo?.rows.map((row, idx) => (
                     <div key={idx} className="p-6 bg-white/[0.02] border border-white/10 rounded-xl group hover:border-white/20 transition-colors">
@@ -182,9 +189,9 @@ export default function BrandDetail() {
             <div className="mb-12">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: brand.color }} />
-                <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/60">Brand Assets</h3>
+                <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/60">{t.brandDetail.brandAssets}</h3>
               </div>
-              <h2 className="font-display text-4xl uppercase tracking-tight">Visual Identity Gallery</h2>
+              <h2 className="font-display text-4xl uppercase tracking-tight">{t.brandDetail.visualGallery}</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -200,7 +207,7 @@ export default function BrandDetail() {
                 >
                   <img 
                     src={img} 
-                    alt={`${brand.name} asset ${idx + 1}`}
+                    alt={`${displayName} asset ${idx + 1}`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"
                   />
@@ -220,31 +227,31 @@ export default function BrandDetail() {
       <section className="py-24 px-6 md:px-12 bg-white/[0.01]">
         <div className="max-w-4xl mx-auto">
           <div className="mb-16 pb-8 border-b border-white/5">
-            <h2 className="font-display text-4xl uppercase mb-4 tracking-wide">Ecosystem Integration</h2>
-            <p className="text-white/40 font-mono text-xs uppercase tracking-widest">Strategic Positioning & Market Impact</p>
+            <h2 className="font-display text-4xl uppercase mb-4 tracking-wide">{t.brandDetail.integrationTitle}</h2>
+            <p className="text-white/40 font-mono text-xs uppercase tracking-widest">{t.brandDetail.integrationSub}</p>
           </div>
 
           <div className="space-y-16">
             <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-10 items-start">
-              <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand-green pt-2">/ The Opportunity</div>
+              <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand-green pt-2">{t.brandDetail.opportunityKicker}</div>
               <p className="text-white/60 text-xl leading-relaxed font-light">
-                {brand.desc} As a key pillar of the EsportsX ecosystem, {brand.name} is positioned to redefine how {brand.category === 'compete' ? 'competition is experienced' : brand.category === 'edu' ? 'education is delivered' : brand.category === 'community' ? 'communities are built' : 'infrastructure is managed'} in the digital age.
+                {displayDesc} {displayName} {t.brandDetail.opportunitySuffix}
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="p-10 border border-white/5 bg-brand-smoke/50 rounded-2xl relative overflow-hidden group">
                 <div className="absolute top-0 left-0 w-1 h-full bg-brand-green/30" />
-                <h3 className="font-display text-2xl uppercase mb-5 tracking-wide">Market Dynamics</h3>
+                <h3 className="font-display text-2xl uppercase mb-5 tracking-wide">{t.brandDetail.marketDynamics}</h3>
                 <p className="text-white/40 text-sm leading-relaxed">
-                  {brand.tagline}. By leveraging the convergence of AI and competitive gaming, {brand.name} captures a significant share of the evolving digital entertainment market, addressing the needs of a global audience of gamers and creators.
+                  {displayTagline}. {t.brandDetail.marketDynamicsSuffix}
                 </p>
               </div>
               <div className="p-10 border border-white/5 bg-brand-smoke/50 rounded-2xl relative overflow-hidden group">
                 <div className="absolute top-0 left-0 w-1 h-full bg-brand-green/30" />
-                <h3 className="font-display text-2xl uppercase mb-5 tracking-wide">Network Effects</h3>
+                <h3 className="font-display text-2xl uppercase mb-5 tracking-wide">{t.brandDetail.networkEffects}</h3>
                 <p className="text-white/40 text-sm leading-relaxed">
-                  Seamlessly integrated with the broader EsportsX flywheel, {brand.name} benefits from shared infrastructure, data intelligence, and cross-platform network effects that amplify its reach and defensibility.
+                  {t.brandDetail.networkEffectsCopy}
                 </p>
               </div>
             </div>
@@ -254,7 +261,7 @@ export default function BrandDetail() {
                 to="/"
                 className="inline-flex items-center gap-4 text-white/40 hover:text-brand-green transition-colors font-mono text-xs uppercase tracking-[0.3em]"
               >
-                Explore More Ecosystem Properties
+                {t.brandDetail.exploreMore}
                 <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
@@ -289,7 +296,7 @@ export default function BrandDetail() {
                 className="absolute -top-12 right-0 text-white/60 hover:text-white transition-colors flex items-center gap-2 font-mono text-xs uppercase tracking-widest"
                 onClick={() => setSelectedImage(null)}
               >
-                Close <X className="w-5 h-5" />
+                {t.brandDetail.close} <X className="w-5 h-5" />
               </button>
             </motion.div>
           </motion.div>

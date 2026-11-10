@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 export function SiteFooter() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const isHome = location.pathname === '/';
 
   const handleSectionLink = (e: React.MouseEvent, sectionId: string) => {
@@ -30,7 +32,7 @@ export function SiteFooter() {
               ESPORTS<span className="text-brand-green">X</span>
             </Link>
             <p className="text-white/40 max-w-sm text-sm leading-relaxed mb-8">
-              The institutional future of esports. A comprehensive portfolio of 22+ brands spanning competitive gaming, collegiate education, and AI innovation.
+              {t.footer.tagline}
             </p>
             <div className="flex items-center gap-6">
               {[
@@ -52,11 +54,13 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h4 className="font-mono text-xs uppercase tracking-widest text-white mb-8">Ecosystem</h4>
+            <h4 className="font-mono text-xs uppercase tracking-widest text-white mb-8">
+              {t.footer.ecosystemHeading}
+            </h4>
             <ul className="space-y-4">
               <li>
                 <Link to="/ecosystem" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">
-                  Ecosystem Overview
+                  {t.footer.ecosystemOverview}
                 </Link>
               </li>
               <li>
@@ -76,28 +80,30 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link to="/brand/esports-local" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">
-                  Esports Local
+                  {t.footer.esportsLocalLabel}
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-mono text-xs uppercase tracking-widest text-white mb-8">Company</h4>
+            <h4 className="font-mono text-xs uppercase tracking-widest text-white mb-8">
+              {t.footer.companyHeading}
+            </h4>
             <ul className="space-y-4">
               <li>
                 <Link to="/about" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">
-                  About Us
+                  {t.footer.aboutUs}
                 </Link>
               </li>
               <li>
                 <Link to="/model" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">
-                  Model
+                  {t.footer.model}
                 </Link>
               </li>
               <li>
                 <Link to="/partner" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">
-                  Partner
+                  {t.footer.partner}
                 </Link>
               </li>
               <li>
@@ -106,7 +112,7 @@ export function SiteFooter() {
                   onClick={(e) => handleSectionLink(e, 'leadership')}
                   className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest"
                 >
-                  Leadership
+                  {t.footer.leadership}
                 </a>
               </li>
               <li>
@@ -115,17 +121,17 @@ export function SiteFooter() {
                   onClick={(e) => handleSectionLink(e, 'venture')}
                   className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest"
                 >
-                  Venture Studio
+                  {t.footer.ventureStudio}
                 </a>
               </li>
               <li>
                 <Link to="/legal" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">
-                  Privacy Policy
+                  {t.footer.privacyPolicy}
                 </Link>
               </li>
               <li>
                 <Link to="/legal" className="text-white/40 hover:text-brand-green transition-colors text-xs font-mono uppercase tracking-widest">
-                  Terms of Service
+                  {t.footer.termsOfService}
                 </Link>
               </li>
             </ul>
@@ -134,11 +140,15 @@ export function SiteFooter() {
 
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-white/20 font-mono text-[10px] uppercase tracking-widest">
-            © 2026 EsportsX Ecosystem. All Rights Reserved.
+            {t.footer.copyright}
           </div>
           <div className="flex items-center gap-8">
-            <span className="text-white/20 font-mono text-[10px] uppercase tracking-widest">Institutional Grade</span>
-            <span className="text-white/20 font-mono text-[10px] uppercase tracking-widest">Global Infrastructure</span>
+            <span className="text-white/20 font-mono text-[10px] uppercase tracking-widest">
+              {t.footer.badgeLeft}
+            </span>
+            <span className="text-white/20 font-mono text-[10px] uppercase tracking-widest">
+              {t.footer.badgeRight}
+            </span>
           </div>
         </div>
       </div>

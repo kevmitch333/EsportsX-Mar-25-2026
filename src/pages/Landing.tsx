@@ -8,7 +8,12 @@ import {
   ShieldCheck,
   Check,
   Mail,
-  ChevronRight
+  ChevronRight,
+  Trophy,
+  GraduationCap,
+  Building2,
+  Rocket,
+  TrendingUp
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { BRANDS, CATEGORIES, PARTNERS } from '../constants';
@@ -16,8 +21,17 @@ import { BrandSparkline } from '../components/BrandSparkline';
 import { CustomCursor } from '../components/CustomCursor';
 import { SiteNav } from '../components/SiteNav';
 import { SiteFooter } from '../components/SiteFooter';
+import { useLanguage } from '../context/LanguageContext';
 import heroEsportsPlayerImg from '../assets/images/hero_esports_player_1794348240569.jpg';
 import marketConvergenceArenaImg from '../assets/images/market_convergence_arena_1794348241462.jpg';
+
+const STAKEHOLDER_ICONS = [
+  <Trophy key="trophy" className="w-5 h-5 text-brand-green" aria-hidden="true" />,
+  <GraduationCap key="grad" className="w-5 h-5 text-brand-green" aria-hidden="true" />,
+  <Building2 key="building" className="w-5 h-5 text-brand-green" aria-hidden="true" />,
+  <Rocket key="rocket" className="w-5 h-5 text-brand-green" aria-hidden="true" />,
+  <TrendingUp key="trending" className="w-5 h-5 text-brand-green" aria-hidden="true" />,
+];
 
 const HeroGeo = () => (
   <svg className="absolute right-[-80px] top-1/2 -translate-y-1/2 w-[55vw] max-w-[800px] opacity-[0.05] pointer-events-none z-0" viewBox="0 0 800 700" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -81,6 +95,7 @@ export default function Landing() {
   const [heroImgFailed, setHeroImgFailed] = useState(false);
   const [marketImgFailed, setMarketImgFailed] = useState(false);
   const location = useLocation();
+  const { t, locale } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -204,27 +219,27 @@ export default function Landing() {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <span className="font-mono text-[10px] text-brand-green uppercase tracking-[0.3em] mb-8 block">
-              / National Brand Group · Flagship Division
+              {t.landing.heroKicker}
             </span>
             <h1 className="font-display text-[clamp(4.5rem,10vw,10rem)] leading-[0.9] uppercase tracking-tight mb-10 glitch-wrap">
               <span className="relative inline-block">
-                The Architecture
-                <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">The Architecture</span>
+                {t.landing.heroLine1}
+                <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">{t.landing.heroLine1}</span>
               </span>
               <br />
               <span className="relative inline-block">
-                of Competitive
-                <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">of Competitive</span>
+                {t.landing.heroLine2}
+                <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">{t.landing.heroLine2}</span>
               </span>
               <br />
               <span className="text-brand-green relative inline-block">
-                Gaming.
-                <span className="absolute inset-0 text-white opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">Gaming.</span>
+                {t.landing.heroLine3}
+                <span className="absolute inset-0 text-white opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">{t.landing.heroLine3}</span>
               </span>
             </h1>
             
             <p className="text-brand-light text-xl md:text-2xl max-w-2xl leading-relaxed mb-12 font-light">
-              EsportsX is the strategic holding platform behind the next generation of esports, gaming, and digital competition brands.
+              {t.landing.heroSubtitle}
             </p>
 
             <div className="flex flex-wrap items-center gap-8">
@@ -233,14 +248,14 @@ export default function Landing() {
                 onClick={(e) => scrollToSection(e, 'portfolio')}
                 className="bg-brand-green text-brand-black px-10 py-4 font-mono font-bold uppercase tracking-widest hover:bg-brand-green/80 transition-all rounded-full"
               >
-                Explore Portfolio
+                {t.landing.explorePortfolio}
               </a>
               <a 
                 href="#leadership" 
                 onClick={(e) => scrollToSection(e, 'leadership')}
                 className="flex items-center gap-3 text-brand-off-white hover:text-brand-green transition-colors font-mono text-xs uppercase tracking-widest group"
               >
-                Meet the Founder
+                {t.landing.meetFounder}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
             </div>
@@ -252,14 +267,14 @@ export default function Landing() {
           <div className="flex whitespace-nowrap animate-ticker">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="flex items-center gap-12 px-6">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-brand-light">1,000+ Premium Domains</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-green" />
-                <span className="font-mono text-[10px] uppercase tracking-widest text-brand-light">5 Active Divisions</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-green" />
-                <span className="font-mono text-[10px] uppercase tracking-widest text-brand-light">10+ Years in Collegiate Esports</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-green" />
-                <span className="font-mono text-[10px] uppercase tracking-widest text-brand-light">Ivy League to NCAA</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-green" />
+                {t.landing.tickerItems.map((tickerText, itemIdx) => (
+                  <React.Fragment key={itemIdx}>
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-brand-light">
+                      {tickerText}
+                    </span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-brand-green" />
+                  </React.Fragment>
+                ))}
               </div>
             ))}
           </div>
@@ -270,7 +285,9 @@ export default function Landing() {
       <section className="py-12 border-b border-white/5 bg-white/[0.01]">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">Strategic Network /</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">
+              {t.landing.strategicNetwork}
+            </span>
             <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
               {PARTNERS.map((partner) => (
                 <img 
@@ -308,17 +325,16 @@ export default function Landing() {
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="mb-16 text-center">
-            <span className="font-mono text-xs text-brand-green uppercase tracking-widest mb-4 block">/ Market Convergence</span>
-            <h2 className="font-display text-5xl md:text-6xl uppercase tracking-tight">The $1 Trillion Intersection</h2>
+            <span className="font-mono text-xs text-brand-green uppercase tracking-widest mb-4 block">
+              {t.landing.marketKicker}
+            </span>
+            <h2 className="font-display text-5xl md:text-6xl uppercase tracking-tight">
+              {t.landing.marketTitle}
+            </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { val: '$200B+', label: 'Global Gaming', sub: 'Total Addressable Market' },
-              { val: '$4.3B', label: 'Esports by 2028', sub: 'Projected Industry Size' },
-              { val: '$605B', label: 'EdTech Market', sub: 'Digital Learning Sector' },
-              { val: '$75B', label: 'AI Education', sub: 'Emerging Tech Vertical' }
-            ].map((market, i) => (
+            {t.landing.markets.map((market, i) => (
               <div key={i} className="p-8 border border-white/10 bg-brand-black/75 backdrop-blur-md rounded-xl text-center group hover:border-brand-green/40 hover:bg-brand-black/85 transition-all">
                 <div className="font-display text-4xl text-brand-green mb-2 group-hover:scale-110 transition-transform">{market.val}</div>
                 <div className="font-mono text-[10px] uppercase tracking-widest text-white/80 mb-2">{market.label}</div>
@@ -329,33 +345,96 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Executive Overview & Core Architecture Section */}
+      <section id="core-architecture" className="relative py-24 px-6 md:px-12 border-b border-white/5 bg-white/[0.015] overflow-hidden scroll-mt-24">
+        <div className="signal-grid absolute inset-0 opacity-[0.08] pointer-events-none" aria-hidden="true" />
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid gap-12 lg:grid-cols-[.9fr_1.1fr] mb-16 items-start">
+            <div>
+              <div className="mb-6 font-mono text-[10px] uppercase tracking-[0.32em] text-brand-green">
+                {t.about.coreKicker}
+              </div>
+              <h2 className="font-display text-5xl uppercase leading-none md:text-7xl tracking-tight text-balance">
+                {t.about.coreTitle}
+              </h2>
+            </div>
+
+            <div className="space-y-6 text-base md:text-lg leading-relaxed text-white/65">
+              <p>
+                {t.about.coreParagraphLead}{' '}
+                <strong className="text-white font-medium">{t.about.coreParagraphOrg}</strong>
+                {t.about.coreParagraphMid}{' '}
+                <strong className="text-white font-medium">{t.about.coreParagraphConsulting}</strong>,{' '}
+                <strong className="text-white font-medium">{t.about.coreParagraphProduct}</strong>
+                {t.about.coreParagraphEnd}{' '}
+                <strong className="text-white font-medium">{t.about.coreParagraphStudio}</strong>.
+              </p>
+            </div>
+          </div>
+
+          <div className="mb-8 font-mono text-[11px] uppercase tracking-[0.25em] text-white/50">
+            {t.about.stakeholdersLead}
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+            {t.about.stakeholders.map((group, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.06 }}
+                className="rounded-2xl border border-white/10 bg-brand-black/80 p-6 transition hover:border-brand-green/30 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    {STAKEHOLDER_ICONS[idx]}
+                    <span className="font-mono text-[10px] text-white/25 tabular-nums">
+                      0{idx + 1}
+                    </span>
+                  </div>
+                  <h3 className="font-display text-2xl uppercase tracking-wide mb-3">
+                    {group.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-white/50">{group.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Portfolio Section */}
       <section id="portfolio" className="py-24 px-6 md:px-12 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
           {/* Filter Bar */}
           <div className="sticky top-24 z-40 mb-12 bg-brand-smoke/90 backdrop-blur-md border-b border-white/10 p-4 flex flex-wrap items-center gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-white/40 mr-4">Filter:</span>
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => toggleFilter(cat.id)}
-                className={cn(
-                  "px-4 py-2 text-[10px] font-mono uppercase tracking-widest transition-all relative overflow-hidden group",
-                  activeFilters.includes(cat.id) 
-                    ? "text-white" 
-                    : "text-white/40 hover:text-white"
-                )}
-              >
-                {cat.label}
-                <span 
+            <span className="font-mono text-[10px] uppercase tracking-widest text-white/40 mr-4">{t.landing.filterLabel}</span>
+            {CATEGORIES.map((cat) => {
+              const catLabel =
+                t.landing.categories[cat.id as keyof typeof t.landing.categories] || cat.label;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => toggleFilter(cat.id)}
                   className={cn(
-                    "absolute bottom-0 left-0 w-full h-0.5 transition-transform duration-300",
-                    activeFilters.includes(cat.id) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                    "px-4 py-2 text-[10px] font-mono uppercase tracking-widest transition-all relative overflow-hidden group",
+                    activeFilters.includes(cat.id) 
+                      ? "text-white" 
+                      : "text-white/40 hover:text-white"
                   )}
-                  style={{ backgroundColor: cat.color }}
-                />
-              </button>
-            ))}
+                >
+                  {catLabel}
+                  <span 
+                    className={cn(
+                      "absolute bottom-0 left-0 w-full h-0.5 transition-transform duration-300",
+                      activeFilters.includes(cat.id) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                    )}
+                    style={{ backgroundColor: cat.color }}
+                  />
+                </button>
+              );
+            })}
           </div>
 
           {/* Spotlight Feature */}
@@ -365,11 +444,11 @@ export default function Landing() {
                 <div className="w-2 h-2 rounded-full bg-brand-green animate-pulse" />
                 <h2 className="font-display text-3xl uppercase tracking-wider group cursor-default">
                   <span className="relative inline-block">
-                    Ecosystem Spotlights
-                    <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">Ecosystem Spotlights</span>
+                    {t.landing.spotlightsTitle}
+                    <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">{t.landing.spotlightsTitle}</span>
                   </span>
                 </h2>
-                <span className="ml-auto font-mono text-[10px] uppercase tracking-widest text-white/20">Featured Strategic Assets</span>
+                <span className="ml-auto font-mono text-[10px] uppercase tracking-widest text-white/20">{t.landing.spotlightsRight}</span>
               </div>
               
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -399,7 +478,7 @@ export default function Landing() {
                         <div className="p-2 bg-white/5 border border-white/10 rounded-lg text-brand-green">
                           {brand.icon}
                         </div>
-                        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">/ Featured Asset</span>
+                        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">{t.landing.featuredAsset}</span>
                       </div>
                       
                       <h3 className="font-display text-3xl md:text-4xl mb-2 uppercase tracking-tight leading-none group-hover:text-brand-green transition-colors">
@@ -428,7 +507,7 @@ export default function Landing() {
                         to={`/brand/${brand.id}`}
                         className="inline-flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.3em] text-brand-green hover:text-white transition-colors group/btn pt-2 border-t border-white/10"
                       >
-                        Explore Strategic Impact
+                        {t.landing.exploreImpact}
                         <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                       </Link>
                     </div>
@@ -449,6 +528,8 @@ export default function Landing() {
               const categoryBrands = BRANDS.filter(b => b.category === category.id);
               if (categoryBrands.length === 0) return null;
               if (!activeFilters.includes('all') && !activeFilters.includes(category.id)) return null;
+              const categoryLabel =
+                t.landing.categories[category.id as keyof typeof t.landing.categories] || category.label;
 
               return (
                 <motion.div 
@@ -463,101 +544,107 @@ export default function Landing() {
                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: category.color }} />
                     <h2 className="font-display text-3xl uppercase tracking-wider group cursor-default">
                       <span className="relative inline-block">
-                        {category.label}
-                        <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">{category.label}</span>
+                        {categoryLabel}
+                        <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">{categoryLabel}</span>
                       </span>
                     </h2>
                     <span className="ml-auto font-mono text-[10px] uppercase tracking-widest text-white/20">
-                      {categoryBrands.length.toString().padStart(2, '0')} Brands
+                      {categoryBrands.length.toString().padStart(2, '0')} {t.landing.brandsSuffix}
                     </span>
                   </div>
 
                   {category.id === 'regional' && (
                     <div className="mb-10 flex flex-wrap gap-2">
-                      {['NY', 'CA', 'TX', 'FL', 'IL', 'PA', 'OH', 'GA', 'NC', 'MI'].map((state) => (
+                      {['IN', 'NY', 'CA', 'TX', 'FL', 'IL', 'PA', 'OH', 'GA', 'NC', 'MI'].map((state) => (
                         <span key={state} className="px-3 py-1.5 bg-brand-regional/5 border border-brand-regional/20 text-[9px] font-mono uppercase tracking-widest text-brand-regional">
                           {state}
                         </span>
                       ))}
                       <span className="px-3 py-1.5 border border-white/10 text-[9px] font-mono uppercase tracking-widest text-white/20 italic">
-                        + 40 more states active
+                        {t.landing.statesMore}
                       </span>
                     </div>
                   )}
 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 border border-white/5">
-                    {categoryBrands.map((brand) => (
-                      <div
-                        key={brand.id}
-                        id={`portfolio-${brand.id}`}
-                        className={cn(
-                          'card-flipper group perspective-1200 min-h-[460px] scroll-mt-48 transition-all duration-500',
-                          highlightedBrandId === brand.id &&
-                            'ring-2 ring-brand-green shadow-[0_0_32px_rgba(0,255,136,0.35)] z-10'
-                        )}
-                      >
-                        <div className="card-inner relative w-full h-full preserve-3d transition-transform duration-700 group-hover:rotate-y-180">
-                          {/* Front Face */}
-                          <div className="card-front absolute inset-0 backface-hidden bg-brand-smoke p-7 flex flex-col border-t-2" style={{ borderTopColor: brand.color }}>
-                            <div className="flex justify-between items-start mb-4">
-                              <div className="px-2.5 py-1 border border-white/10 text-[10px] font-mono uppercase tracking-widest" style={{ color: brand.color, borderColor: `${brand.color}4D` }}>
-                                {brand.category}
-                              </div>
-                              <div className="text-xl opacity-60">{brand.icon}</div>
-                            </div>
-                            <h3 className="font-display text-2xl md:text-3xl mb-1.5 tracking-wide uppercase group-hover:animate-glitch-skew">
-                              {brand.name}
-                            </h3>
-                            <p className="text-white/50 text-xs italic mb-3 line-clamp-1">{brand.tagline}</p>
-                            <p className="text-white/40 text-xs sm:text-sm leading-relaxed mb-3 line-clamp-2">
-                              {brand.desc}
-                            </p>
-
-                            {/* Dynamic Sparkline Chart & Engagement Meter */}
-                            <div className="mt-auto pt-1">
-                              <BrandSparkline brand={brand} />
-                            </div>
-
-                            <div className="mt-3 pt-3 border-t border-white/10 flex justify-between items-center">
-                              <span className="font-mono text-[10px] text-white/20">{brand.domain}</span>
-                              <span className="font-mono text-[9px] text-white/30 uppercase tracking-widest">Hover to learn more →</span>
-                            </div>
-                          </div>
-
-                          {/* Back Face */}
-                          <div className="card-back absolute inset-0 backface-hidden bg-brand-black p-7 flex flex-col rotate-y-180 border-t-2" style={{ borderTopColor: brand.color }}>
-                            <div className="absolute top-4 right-4 font-mono text-[9px] text-white/20 uppercase tracking-widest">← Flip back</div>
-                            <div className="mb-4">
-                              <h3 className="font-display text-2xl mb-1 tracking-wide uppercase">{brand.name}</h3>
-                              <p className="font-mono text-[10px] uppercase tracking-widest" style={{ color: brand.color }}>{brand.backInfo?.sub || brand.tagline}</p>
-                            </div>
-                            <div className="flex-1 space-y-0 overflow-hidden">
-                              {brand.backInfo?.rows.map((row, idx) => (
-                                <div key={idx} className="py-2 border-b border-white/5 grid grid-cols-[auto_1fr] gap-3 items-start first:border-t">
-                                  <span className="font-mono text-[9px] text-white/20 uppercase tracking-widest pt-0.5">{row.label}</span>
-                                  <span className="text-xs text-white/60 leading-relaxed">{row.val}</span>
+                    {categoryBrands.map((brand) => {
+                      const isEsportsLocalHi = locale === 'hi' && brand.id === 'esports-local';
+                      const displayName = isEsportsLocalHi ? t.landing.esportsLocalOverride.name : brand.name;
+                      const displayTagline = isEsportsLocalHi ? t.landing.esportsLocalOverride.tagline : brand.tagline;
+                      const displayDesc = isEsportsLocalHi ? t.landing.esportsLocalOverride.desc : brand.desc;
+                      return (
+                        <div
+                          key={brand.id}
+                          id={`portfolio-${brand.id}`}
+                          className={cn(
+                            'card-flipper group perspective-1200 min-h-[460px] scroll-mt-48 transition-all duration-500',
+                            highlightedBrandId === brand.id &&
+                              'ring-2 ring-brand-green shadow-[0_0_32px_rgba(0,255,136,0.35)] z-10'
+                          )}
+                        >
+                          <div className="card-inner relative w-full h-full preserve-3d transition-transform duration-700 group-hover:rotate-y-180">
+                            {/* Front Face */}
+                            <div className="card-front absolute inset-0 backface-hidden bg-brand-smoke p-7 flex flex-col border-t-2" style={{ borderTopColor: brand.color }}>
+                              <div className="flex justify-between items-start mb-4">
+                                <div className="px-2.5 py-1 border border-white/10 text-[10px] font-mono uppercase tracking-widest" style={{ color: brand.color, borderColor: `${brand.color}4D` }}>
+                                  {t.landing.categories[brand.category as keyof typeof t.landing.categories] || brand.category}
                                 </div>
-                              ))}
+                                <div className="text-xl opacity-60">{brand.icon}</div>
+                              </div>
+                              <h3 className="font-display text-2xl md:text-3xl mb-1.5 tracking-wide uppercase group-hover:animate-glitch-skew">
+                                {displayName}
+                              </h3>
+                              <p className="text-white/50 text-xs italic mb-3 line-clamp-1">{displayTagline}</p>
+                              <p className="text-white/40 text-xs sm:text-sm leading-relaxed mb-3 line-clamp-2">
+                                {displayDesc}
+                              </p>
+
+                              {/* Dynamic Sparkline Chart & Engagement Meter */}
+                              <div className="mt-auto pt-1">
+                                <BrandSparkline brand={brand} />
+                              </div>
+
+                              <div className="mt-3 pt-3 border-t border-white/10 flex justify-between items-center">
+                                <span className="font-mono text-[10px] text-white/20">{brand.domain}</span>
+                                <span className="font-mono text-[9px] text-white/30 uppercase tracking-widest">{t.landing.hoverLearnMore}</span>
+                              </div>
                             </div>
-                            <Link 
-                              to={`/brand/${brand.id}`}
-                              className="mt-4 py-3 border text-center font-mono text-[10px] uppercase tracking-widest transition-all hover:bg-white hover:text-black"
-                              style={{ color: brand.color, borderColor: brand.color }}
-                              onMouseEnter={(e) => {
-                                (e.target as HTMLElement).style.backgroundColor = brand.color;
-                                (e.target as HTMLElement).style.color = '#000';
-                              }}
-                              onMouseLeave={(e) => {
-                                (e.target as HTMLElement).style.backgroundColor = 'transparent';
-                                (e.target as HTMLElement).style.color = brand.color;
-                              }}
-                            >
-                              Learn More ↗
-                            </Link>
+
+                            {/* Back Face */}
+                            <div className="card-back absolute inset-0 backface-hidden bg-brand-black p-7 flex flex-col rotate-y-180 border-t-2" style={{ borderTopColor: brand.color }}>
+                              <div className="absolute top-4 right-4 font-mono text-[9px] text-white/20 uppercase tracking-widest">{t.landing.flipBack}</div>
+                              <div className="mb-4">
+                                <h3 className="font-display text-2xl mb-1 tracking-wide uppercase">{displayName}</h3>
+                                <p className="font-mono text-[10px] uppercase tracking-widest" style={{ color: brand.color }}>{brand.backInfo?.sub || displayTagline}</p>
+                              </div>
+                              <div className="flex-1 space-y-0 overflow-hidden">
+                                {brand.backInfo?.rows.map((row, idx) => (
+                                  <div key={idx} className="py-2 border-b border-white/5 grid grid-cols-[auto_1fr] gap-3 items-start first:border-t">
+                                    <span className="font-mono text-[9px] text-white/20 uppercase tracking-widest pt-0.5">{row.label}</span>
+                                    <span className="text-xs text-white/60 leading-relaxed">{row.val}</span>
+                                  </div>
+                                ))}
+                              </div>
+                              <Link 
+                                to={`/brand/${brand.id}`}
+                                className="mt-4 py-3 border text-center font-mono text-[10px] uppercase tracking-widest transition-all hover:bg-white hover:text-black"
+                                style={{ color: brand.color, borderColor: brand.color }}
+                                onMouseEnter={(e) => {
+                                  (e.target as HTMLElement).style.backgroundColor = brand.color;
+                                  (e.target as HTMLElement).style.color = '#000';
+                                }}
+                                onMouseLeave={(e) => {
+                                  (e.target as HTMLElement).style.backgroundColor = 'transparent';
+                                  (e.target as HTMLElement).style.color = brand.color;
+                                }}
+                              >
+                                {t.landing.learnMoreArrow}
+                              </Link>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </motion.div>
               );
@@ -571,19 +658,19 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="font-mono text-xs text-brand-green uppercase tracking-widest mb-6 block">/ Strategic Assets</span>
-              <h2 className="font-display text-6xl md:text-7xl uppercase tracking-tight mb-8">Domain IP Fortress</h2>
+              <span className="font-mono text-xs text-brand-green uppercase tracking-widest mb-6 block">{t.landing.domainKicker}</span>
+              <h2 className="font-display text-6xl md:text-7xl uppercase tracking-tight mb-8">{t.landing.domainTitle}</h2>
               <p className="text-white/50 text-lg leading-relaxed mb-8">
-                EsportsX controls the industry's most valuable digital real estate portfolio. 250+ premium domains covering every Power 5 university, the Ivy League, and key international markets.
+                {t.landing.domainDesc}
               </p>
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-6 bg-white/5 border border-white/10 rounded-xl">
                   <div className="font-display text-3xl text-brand-green mb-1">$75M+</div>
-                  <div className="font-mono text-[10px] uppercase tracking-widest text-white/40">Standalone IP Value</div>
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-white/40">{t.landing.domainMetric1Label}</div>
                 </div>
                 <div className="p-6 bg-white/5 border border-white/10 rounded-xl">
                   <div className="font-display text-3xl text-brand-green mb-1">100%</div>
-                  <div className="font-mono text-[10px] uppercase tracking-widest text-white/40">Power 5 Coverage</div>
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-white/40">{t.landing.domainMetric2Label}</div>
                 </div>
               </div>
             </div>
@@ -612,11 +699,11 @@ export default function Landing() {
               <div className="w-2 h-2 rounded-full bg-brand-venture" />
               <h2 className="font-display text-3xl uppercase tracking-wider group cursor-default">
                 <span className="relative inline-block">
-                  Venture Studio
-                  <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">Venture Studio</span>
+                  {t.landing.ventureTitle}
+                  <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">{t.landing.ventureTitle}</span>
                 </span>
               </h2>
-              <span className="ml-auto font-mono text-[10px] uppercase tracking-widest text-white/20">Innovation Engine</span>
+              <span className="ml-auto font-mono text-[10px] uppercase tracking-widest text-white/20">{t.landing.ventureRight}</span>
             </div>
           </div>
 
@@ -626,19 +713,19 @@ export default function Landing() {
                 <div>
                   <div className="flex justify-between items-start mb-5">
                     <div className="px-2.5 py-1 border border-brand-venture/30 text-[10px] font-mono uppercase tracking-widest text-brand-venture">
-                      Innovation
+                      {t.landing.ventureBadge}
                     </div>
                     <div className="text-2xl opacity-65">🚀</div>
                   </div>
                   <h3 className="font-display text-5xl mb-2 tracking-wide uppercase text-brand-venture glitch-wrap">
-                    <span className="glitch" data-text="Venture Studio">Venture Studio</span>
+                    <span className="glitch" data-text={t.landing.ventureTitle}>{t.landing.ventureTitle}</span>
                   </h3>
-                  <p className="text-white/50 text-sm italic mb-5">The AI-driven engine behind the next generation of gaming innovation</p>
+                  <p className="text-white/50 text-sm italic mb-5">{t.landing.ventureTagline}</p>
                   <p className="text-white/40 text-base leading-relaxed mb-8">
-                    Identifies, incubates, and accelerates the next generation of gaming innovation — targeting AI-powered gaming tools, esports infrastructure, immersive experiences, and creator economy platforms. Operating from the foundation of 650+ premium domains and strategic capital, the Studio brings new ventures from concept to market with unmatched asset backing.
+                    {t.landing.ventureDesc}
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {['AI Gaming Tools', 'Esports Infrastructure', 'Immersive Experiences', 'Creator Economy', '650+ Domain Portfolio'].map((tag, i) => (
+                    {t.landing.ventureTags.map((tag, i) => (
                       <span key={i} className="px-2.5 py-1 bg-brand-venture/5 border border-brand-venture/15 text-[9px] font-mono uppercase tracking-widest text-brand-venture">
                         {tag}
                       </span>
@@ -646,14 +733,9 @@ export default function Landing() {
                   </div>
                 </div>
                 <div>
-                  <div className="font-mono text-[11px] uppercase tracking-widest text-white/40 mb-4">Focus Areas</div>
+                  <div className="font-mono text-[11px] uppercase tracking-widest text-white/40 mb-4">{t.landing.focusAreasLabel}</div>
                   <div className="space-y-0.5">
-                    {[
-                      { title: 'AI-Powered Gaming', desc: 'Next-gen tools where AI enhances human competition' },
-                      { title: 'Esports Infrastructure', desc: 'B2B tools for tournament operators and institutions' },
-                      { title: 'Immersive Experiences', desc: 'XR and spatial computing for next-gen viewing' },
-                      { title: 'Creator Economy', desc: 'Monetization infrastructure for gaming content creators' }
-                    ].map((item, i) => (
+                    {t.landing.ventureFocusAreas.map((item, i) => (
                       <div key={i} className="p-4 border-l-2 border-brand-venture bg-brand-venture/[0.03] hover:bg-brand-venture/[0.06] transition-colors">
                         <h4 className="font-display text-lg tracking-wide mb-1 uppercase">{item.title}</h4>
                         <p className="text-[11px] text-white/40 leading-relaxed">{item.desc}</p>
@@ -664,18 +746,18 @@ export default function Landing() {
               </div>
               <div className="mt-8 pt-6 border-t border-white/10 flex justify-between items-center">
                 <span className="font-mono text-[10px] text-white/20">esportsx.ventures</span>
-                <a href="mailto:kevin@collegeesportsx.com" className="font-mono text-[10px] text-white/40 uppercase tracking-widest hover:text-brand-green transition-colors">↗ Explore</a>
+                <a href="mailto:kevin@collegeesportsx.com" className="font-mono text-[10px] text-white/40 uppercase tracking-widest hover:text-brand-green transition-colors">{t.landing.ventureExplore}</a>
               </div>
             </div>
           </div>
 
           <div className="mt-24 text-center">
-            <h2 className="font-display text-4xl md:text-5xl uppercase mb-8">Ready to Build the Future?</h2>
+            <h2 className="font-display text-4xl md:text-5xl uppercase mb-8">{t.landing.ventureCtaHeading}</h2>
             <a 
               href="mailto:kevin@collegeesportsx.com"
               className="inline-flex items-center gap-4 bg-brand-green text-black px-10 py-4 font-mono font-bold uppercase tracking-widest hover:bg-brand-green/80 transition-all rounded-full"
             >
-              Connect with Venture Studio
+              {t.landing.ventureCtaBtn}
               <ArrowRight className="w-5 h-5" />
             </a>
           </div>
@@ -690,11 +772,11 @@ export default function Landing() {
               <div className="w-2 h-2 rounded-full bg-brand-green" />
               <h2 className="font-display text-3xl uppercase tracking-wider group cursor-default">
                 <span className="relative inline-block">
-                  Leadership
-                  <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">Leadership</span>
+                  {t.landing.leadershipTitle}
+                  <span className="absolute inset-0 text-brand-green opacity-0 group-hover:opacity-70 group-hover:animate-glitch-1 pointer-events-none">{t.landing.leadershipTitle}</span>
                 </span>
               </h2>
-              <span className="ml-auto font-mono text-[10px] uppercase tracking-widest text-white/20">Executive Board</span>
+              <span className="ml-auto font-mono text-[10px] uppercase tracking-widest text-white/20">{t.landing.leadershipRight}</span>
             </div>
           </div>
 
@@ -709,7 +791,7 @@ export default function Landing() {
                   <h3 className="font-display text-5xl mb-2 tracking-tight uppercase glitch-wrap">
                     <span className="glitch" data-text="Kevin Mitchell">Kevin Mitchell</span>
                   </h3>
-                  <p className="text-brand-green font-mono text-xs uppercase tracking-[0.2em]">Founder & Chief Executive Officer</p>
+                  <p className="text-brand-green font-mono text-xs uppercase tracking-[0.2em]">{t.landing.founderRole}</p>
                 </div>
                 <a 
                   href="https://linkedin.com/in/kevinmitchell" 
@@ -718,22 +800,16 @@ export default function Landing() {
                   className="md:ml-auto flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded font-mono text-[10px] uppercase tracking-widest text-white/60 hover:text-brand-green hover:border-brand-green/50 transition-all"
                 >
                   <Linkedin className="w-4 h-4" />
-                  LinkedIn Profile
+                  {t.landing.linkedinBtn}
                 </a>
               </div>
               
               <p className="text-brand-light text-xl leading-relaxed mb-10 font-light italic">
-                "Three decades spanning Grammy-nominated music production, pioneering collegiate esports, and AI integration strategy. We are building the institutional future of gaming."
+                {t.landing.founderQuote}
               </p>
 
               <div className="flex flex-wrap gap-3 mb-12">
-                {[
-                  'Grammy-Nominated Executive',
-                  '12 Multi-Platinum Certifications',
-                  'College Esports Expo Founder',
-                  'AI Integration Pioneer',
-                  'HP · Intel · Red Bull Partner'
-                ].map((tag, i) => (
+                {t.landing.founderTags.map((tag, i) => (
                   <span key={i} className="px-4 py-2 bg-white/5 border border-white/10 rounded text-[10px] font-mono uppercase tracking-widest text-white/40">
                     {tag}
                   </span>
@@ -742,7 +818,7 @@ export default function Landing() {
 
               {/* Partner Bar */}
               <div className="pt-10 border-t border-white/5">
-                <div className="text-[10px] font-mono uppercase tracking-widest text-white/20 mb-6">Strategic Partners & Clients</div>
+                <div className="text-[10px] font-mono uppercase tracking-widest text-white/20 mb-6">{t.landing.partnersClientsLabel}</div>
                 <div className="flex flex-wrap items-center gap-x-10 gap-y-6 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
                   {['HP', 'Intel', 'Red Bull', 'NCAA', 'Ivy League', 'NACE'].map((partner) => (
                     <span key={partner} className="font-display text-xl tracking-widest text-white">{partner}</span>
@@ -752,13 +828,8 @@ export default function Landing() {
             </div>
 
             <div className="space-y-4">
-              <div className="font-mono text-[11px] uppercase tracking-widest text-white/40 mb-6">Advisory Board</div>
-              {[
-                { title: 'Education Technology', desc: 'University leadership guiding institutional adoption and program development.' },
-                { title: 'Esports Industry', desc: 'Professional team and tournament operations expertise with media rights experience.' },
-                { title: 'Artificial Intelligence', desc: 'AI researchers guiding technology strategy and emerging capabilities.' },
-                { title: 'Brand Marketing', desc: 'CMO-level gaming and entertainment executives advising sponsorship strategy.' }
-              ].map((adv, i) => (
+              <div className="font-mono text-[11px] uppercase tracking-widest text-white/40 mb-6">{t.landing.advisoryBoardLabel}</div>
+              {t.landing.advisoryBoard.map((adv, i) => (
                 <div key={i} className="p-6 border-l-2 border-white/10 bg-white/[0.01] hover:bg-white/[0.03] transition-colors">
                   <h5 className="font-display text-xl uppercase mb-2 tracking-wide text-white/80">{adv.title}</h5>
                   <p className="text-white/30 text-xs leading-relaxed">{adv.desc}</p>
@@ -778,12 +849,12 @@ export default function Landing() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <div className="font-mono text-[10px] text-brand-green uppercase tracking-[0.3em] mb-8 block">/ Contact</div>
+              <div className="font-mono text-[10px] text-brand-green uppercase tracking-[0.3em] mb-8 block">{t.landing.contactKicker}</div>
               <h2 className="font-display text-6xl md:text-8xl uppercase tracking-tight mb-8 leading-[0.9]">
-                Let's Build<br />Something.
+                {t.landing.contactTitleLine1}<br />{t.landing.contactTitleLine2}
               </h2>
               <p className="text-brand-light text-xl leading-relaxed mb-12 font-light">
-                Whether you're a brand partner, university, investor, or industry professional, we want to hear from you. Tell us a little about what you're working on.
+                {t.landing.contactDesc}
               </p>
               <div className="space-y-6">
                 <div className="flex items-center gap-4 group">
@@ -791,7 +862,7 @@ export default function Landing() {
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">Direct Inquiry</div>
+                    <div className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">{t.landing.directInquiry}</div>
                     <a href="mailto:info@esportsx.com" className="text-brand-off-white hover:text-brand-green transition-colors font-mono text-sm">info@esportsx.com</a>
                   </div>
                 </div>
@@ -807,30 +878,30 @@ export default function Landing() {
               <form className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">Full Name</label>
-                    <input type="text" placeholder="Jane Smith" className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors" />
+                    <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">{t.landing.formFullName}</label>
+                    <input type="text" placeholder={t.landing.formPlaceholders.name} className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">Organization</label>
-                    <input type="text" placeholder="Acme Corp" className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors" />
+                    <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">{t.landing.formOrganization}</label>
+                    <input type="text" placeholder={t.landing.formPlaceholders.org} className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors" />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">Email Address</label>
-                    <input type="email" placeholder="jane@example.com" className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors" />
+                    <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">{t.landing.formEmail}</label>
+                    <input type="email" placeholder={t.landing.formPlaceholders.email} className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">Role / Title</label>
-                    <input type="text" placeholder="VP of Partnerships" className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors" />
+                    <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">{t.landing.formRole}</label>
+                    <input type="text" placeholder={t.landing.formPlaceholders.role} className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors" />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">Message</label>
-                  <textarea placeholder="Tell us about your project..." rows={4} className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors resize-none" />
+                  <label className="text-[10px] font-mono uppercase tracking-widest text-brand-mid">{t.landing.formMessage}</label>
+                  <textarea placeholder={t.landing.formMessagePlaceholder} rows={4} className="w-full bg-brand-black border border-brand-mid p-4 text-sm focus:border-brand-green outline-none transition-colors resize-none" />
                 </div>
                 <button type="submit" className="w-full bg-brand-green text-brand-black py-5 font-mono font-bold uppercase tracking-widest hover:bg-brand-green/80 transition-all">
-                  Send Message →
+                  {t.landing.formSubmit}
                 </button>
               </form>
             </motion.div>
@@ -848,14 +919,14 @@ export default function Landing() {
             viewport={{ once: true }}
             className="font-display text-5xl md:text-7xl uppercase text-center mb-20 tracking-tight"
           >
-            Built Over a Decade.
+            {t.landing.numbersTitle}
           </motion.h2>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 border border-white/5">
-            <Counter target={1000} suffix="+" label="Premium Domains Under Management" />
-            <Counter target={5} label="Active Brand Divisions" />
-            <Counter target={8} label="Ivy League Institutions Engaged" />
-            <Counter target={1} prefix="$" suffix="M+" label="Alumni Commitments Secured, Collegiate Esports" />
+            <Counter target={1000} suffix="+" label={t.landing.counters[0]} />
+            <Counter target={5} label={t.landing.counters[1]} />
+            <Counter target={8} label={t.landing.counters[2]} />
+            <Counter target={1} prefix="$" suffix="M+" label={t.landing.counters[3]} />
           </div>
         </div>
       </section>

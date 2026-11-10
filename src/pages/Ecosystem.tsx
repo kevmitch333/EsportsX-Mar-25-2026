@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -10,10 +10,12 @@ import {
   Building2,
   Rocket,
   Layers,
+  Info,
 } from 'lucide-react';
 import { CustomCursor } from '../components/CustomCursor';
 import { SiteNav } from '../components/SiteNav';
 import { SiteFooter } from '../components/SiteFooter';
+import { useLanguage } from '../context/LanguageContext';
 
 interface PropertyLink {
   label: string;
@@ -450,7 +452,180 @@ const ECOSYSTEM_PILLARS: EcosystemPillar[] = [
   },
 ];
 
+interface EcosystemPortfolioCardProps {
+  item: DivisionPropertyRow;
+  idx: number;
+  accent: string;
+  tooltipLabel: string;
+  tooltipAriaPrefix: string;
+  cardSuffix: string;
+  hoverHint: string;
+}
+
+const EcosystemPortfolioCard: React.FC<EcosystemPortfolioCardProps> = ({
+  item,
+  idx,
+  accent,
+  tooltipLabel,
+  tooltipAriaPrefix,
+  cardSuffix,
+  hoverHint,
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isPinned, setIsPinned] = useState(false);
+  const [placeBelow, setPlaceBelow] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const isOpen = isHovered || isFocused || isPinned;
+  const tooltipId = `focus-tooltip-${item.propertyDisplay
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')}`;
+
+  const updatePlacement = () => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setPlaceBelow(rect.top < 220);
+  };
+
+  useEffect(() => {
+    if (!isPinned && !isHovered && !isFocused) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsPinned(false);
+        setIsHovered(false);
+        setIsFocused(false);
+      }
+    };
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (isPinned && cardRef.current && !cardRef.current.contains(event.target as Node)) {
+        setIsPinned(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('pointerdown', handlePointerDown);
+    };
+  }, [isPinned, isHovered, isFocused]);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.35, delay: idx * 0.04 }}
+      onMouseEnter={() => {
+        updatePlacement();
+        setIsHovered(true);
+      }}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`relative rounded-2xl border bg-brand-black/80 p-6 flex flex-col justify-between transition duration-150 ${
+        isOpen ? 'z-40 border-white/30' : 'z-0 border-white/10 hover:border-white/25'
+      }`}
+    >
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            id={tooltipId}
+            role="tooltip"
+            initial={{ opacity: 0, y: placeBelow ? -6 : 6, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: placeBelow ? -4 : 4, scale: 0.98 }}
+            transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
+            className={`pointer-events-auto absolute left-0 right-0 sm:left-auto sm:right-4 sm:w-full sm:max-w-md z-40 ${
+              placeBelow ? 'top-full pt-2.5' : 'bottom-full pb-2.5'
+            }`}
+          >
+            <div
+              className="relative rounded-xl border bg-[#121212] p-4 shadow-[0_18px_40px_rgba(0,0,0,0.78)] backdrop-blur-md"
+              style={{ borderColor: `${accent}55` }}
+            >
+              <span
+                aria-hidden="true"
+                className={`absolute right-14 sm:right-11 h-2.5 w-2.5 rotate-45 bg-[#121212] ${
+                  placeBelow ? '-top-[6px] border-l border-t' : '-bottom-[6px] border-r border-b'
+                }`}
+                style={{ borderColor: `${accent}55` }}
+              />
+              <div
+                className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.2em]"
+                style={{ color: accent }}
+              >
+                {tooltipLabel}
+              </div>
+              <p className="text-xs sm:text-[13px] leading-relaxed text-white/90">{item.focus}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div>
+        <div className="flex items-start justify-between gap-4 mb-3">
+          <h3 className="font-display text-2xl uppercase tracking-wide text-white">
+            {item.propertyDisplay}
+          </h3>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                updatePlacement();
+                setIsPinned((prev) => !prev);
+              }}
+              onFocus={() => {
+                updatePlacement();
+                setIsFocused(true);
+              }}
+              onBlur={() => setIsFocused(false)}
+              aria-label={`${tooltipAriaPrefix} ${item.propertyDisplay}`}
+              aria-describedby={isOpen ? tooltipId : undefined}
+              aria-expanded={isOpen}
+              className="inline-flex h-10 w-10 sm:h-9 sm:w-9 -my-1 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-white/55 transition duration-150 hover:border-white/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green cursor-pointer"
+              style={isOpen ? { color: accent, borderColor: `${accent}66` } : undefined}
+            >
+              <Info className="h-3.5 w-3.5" aria-hidden="true" />
+            </button>
+            <span
+              className="font-mono text-[10px] uppercase tracking-widest tabular-nums shrink-0"
+              style={{ color: accent }}
+            >
+              0{idx + 1}
+            </span>
+          </div>
+        </div>
+        <p className="text-sm leading-relaxed text-white/55">{item.detailCopy}</p>
+      </div>
+
+      <div className="mt-5 pt-4 border-t border-white/5 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          {item.links.map((link) => (
+            <Link
+              key={link.label}
+              to={link.portfolioTarget}
+              className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest transition-colors hover:text-white"
+              style={{ color: accent }}
+            >
+              {link.label} {cardSuffix}
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
+          ))}
+        </div>
+        <span className="font-mono text-[9px] uppercase tracking-widest text-white/30">
+          {hoverHint}
+        </span>
+      </div>
+    </motion.div>
+  );
+};
+
 export default function Ecosystem() {
+  const { t, locale } = useLanguage();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -477,36 +652,42 @@ export default function Ecosystem() {
 
           <div className="relative z-10 mx-auto max-w-7xl">
             <div className="mb-6 font-mono text-[10px] uppercase tracking-[0.32em] text-brand-green">
-              / Ecosystem Architecture
+              {t.ecosystem.heroKicker}
             </div>
             <h1 className="max-w-5xl font-display text-5xl uppercase leading-none md:text-7xl lg:text-8xl tracking-tight">
-              Four Primary Ecosystem Pillars.
+              {t.ecosystem.heroTitle}
             </h1>
             <p className="mt-7 max-w-3xl text-lg leading-relaxed text-white/55">
-              The EsportsX ecosystem is structured around four primary divisions designed to capture value across every phase of the gaming lifecycle.
+              {t.ecosystem.heroDesc}
             </p>
 
             {/* Quick Pillar Navigation & 3D Portfolio Shortcut */}
             <div className="mt-10 flex flex-wrap items-center gap-3">
-              {ECOSYSTEM_PILLARS.map((pillar) => (
-                <button
-                  key={pillar.id}
-                  type="button"
-                  onClick={() => scrollToPillar(pillar.id)}
-                  className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-brand-black/80 px-5 py-2.5 font-mono text-[10px] uppercase tracking-widest text-white/75 transition hover:border-white/35 hover:text-white cursor-pointer whitespace-nowrap shrink-0"
-                >
-                  <span
-                    className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: pillar.accent }}
-                  />
-                  {pillar.code}: {pillar.title.replace(' Division', '').replace(' Expansion', '')}
-                </button>
-              ))}
+              {ECOSYSTEM_PILLARS.map((pillar) => {
+                const shortLabel =
+                  t.ecosystem.pillarShortNames[
+                    pillar.id as keyof typeof t.ecosystem.pillarShortNames
+                  ] || `${pillar.code}: ${pillar.title}`;
+                return (
+                  <button
+                    key={pillar.id}
+                    type="button"
+                    onClick={() => scrollToPillar(pillar.id)}
+                    className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-brand-black/80 px-5 py-2.5 font-mono text-[10px] uppercase tracking-widest text-white/75 transition hover:border-white/35 hover:text-white cursor-pointer whitespace-nowrap shrink-0"
+                  >
+                    <span
+                      className="h-2 w-2 rounded-full"
+                      style={{ backgroundColor: pillar.accent }}
+                    />
+                    {shortLabel}
+                  </button>
+                );
+              })}
               <Link
                 to="/#portfolio"
                 className="inline-flex items-center gap-2 rounded-full bg-brand-green px-5 py-2.5 font-mono text-[10px] font-bold uppercase tracking-widest text-black transition hover:bg-white whitespace-nowrap shrink-0"
               >
-                Open 3D Portfolio Grid
+                {t.ecosystem.open3dGrid}
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
@@ -514,148 +695,166 @@ export default function Ecosystem() {
         </section>
 
         {/* Four Primary Pillars */}
-        {ECOSYSTEM_PILLARS.map((pillar, pillarIdx) => (
-          <section
-            key={pillar.id}
-            id={pillar.id}
-            className={`px-6 py-24 md:px-10 border-b border-white/5 ${
-              pillarIdx % 2 === 1 ? 'bg-white/[.012]' : ''
-            }`}
-          >
-            <div className="mx-auto max-w-7xl">
-              {/* Division Header */}
-              <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-12 pb-8 border-b border-white/10">
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <span
-                      className="flex h-9 w-9 items-center justify-center rounded-lg border bg-white/[0.03]"
-                      style={{ color: pillar.accent, borderColor: `${pillar.accent}44` }}
-                    >
-                      {pillar.icon}
-                    </span>
-                    <span
-                      className="font-mono text-[10px] uppercase tracking-[0.28em]"
-                      style={{ color: pillar.accent }}
-                    >
-                      / {pillar.code} · {pillar.subtitle}
-                    </span>
+        {ECOSYSTEM_PILLARS.map((pillar, pillarIdx) => {
+          const localizedPillar =
+            t.ecosystem.pillarTitles[pillar.id as keyof typeof t.ecosystem.pillarTitles];
+          return (
+            <section
+              key={pillar.id}
+              id={pillar.id}
+              className={`px-6 py-24 md:px-10 border-b border-white/5 ${
+                pillarIdx % 2 === 1 ? 'bg-white/[.012]' : ''
+              }`}
+            >
+              <div className="mx-auto max-w-7xl">
+                {/* Division Header */}
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-12 pb-8 border-b border-white/10">
+                  <div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <span
+                        className="flex h-9 w-9 items-center justify-center rounded-lg border bg-white/[0.03]"
+                        style={{ color: pillar.accent, borderColor: `${pillar.accent}44` }}
+                      >
+                        {pillar.icon}
+                      </span>
+                      <span
+                        className="font-mono text-[10px] uppercase tracking-[0.28em]"
+                        style={{ color: pillar.accent }}
+                      >
+                        / {pillar.code} · {localizedPillar ? localizedPillar.subtitle : pillar.subtitle}
+                      </span>
+                    </div>
+                    <h2 className="font-display text-4xl uppercase leading-none md:text-6xl tracking-tight">
+                      {localizedPillar ? localizedPillar.title : pillar.title}
+                    </h2>
+                    <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/55">
+                      {localizedPillar ? localizedPillar.description : pillar.description}
+                    </p>
                   </div>
-                  <h2 className="font-display text-4xl uppercase leading-none md:text-6xl tracking-tight">
-                    {pillar.title}
-                  </h2>
-                  <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/55">
-                    {pillar.description}
-                  </p>
+
+                  <Link
+                    to={pillar.categoryAnchor}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 font-mono text-[10px] uppercase tracking-widest text-white/75 transition hover:border-white/40 hover:text-white whitespace-nowrap shrink-0 self-start lg:self-end"
+                  >
+                    {t.ecosystem.view3dDivision}
+                    <ArrowUpRight className="h-3.5 w-3.5" style={{ color: pillar.accent }} />
+                  </Link>
                 </div>
 
-                <Link
-                  to={pillar.categoryAnchor}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 font-mono text-[10px] uppercase tracking-widest text-white/75 transition hover:border-white/40 hover:text-white whitespace-nowrap shrink-0 self-start lg:self-end"
-                >
-                  View 3D Division Cards
-                  <ArrowUpRight className="h-3.5 w-3.5" style={{ color: pillar.accent }} />
-                </Link>
-              </div>
-
-              {/* Property Matrix Table */}
-              <div className="overflow-x-auto rounded-2xl border border-white/10 bg-brand-smoke/40 mb-10">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-white/10 bg-white/[0.02]">
-                      <th className="py-4 px-6 font-mono text-[10px] uppercase tracking-widest text-white/40 w-[24%]">
-                        Property Name
-                      </th>
-                      <th className="py-4 px-6 font-mono text-[10px] uppercase tracking-widest text-white/40 w-[46%]">
-                        Primary Focus &amp; Strategic Function
-                      </th>
-                      <th className="py-4 px-6 font-mono text-[10px] uppercase tracking-widest text-white/40 w-[30%]">
-                        Target Audience
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5">
-                    {pillar.properties.map((row) => (
-                      <tr
-                        key={row.propertyDisplay}
-                        className="transition-colors hover:bg-white/[0.025]"
-                      >
-                        <td className="py-5 px-6 align-top">
-                          <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
-                            {row.links.map((link, idx) => (
-                              <React.Fragment key={link.label}>
-                                {idx > 0 && (
-                                  <span className="text-white/30 font-mono text-xs">&amp;</span>
-                                )}
-                                <Link
-                                  to={link.portfolioTarget}
-                                  className="inline-flex items-center gap-1.5 font-display text-xl uppercase tracking-wide transition-colors hover:underline underline-offset-4"
-                                  style={{ color: pillar.accent }}
-                                  title={`Jump to ${link.label} 3D portfolio card`}
-                                >
-                                  {link.label}
-                                  <ArrowUpRight className="h-3.5 w-3.5 opacity-70" />
-                                </Link>
-                              </React.Fragment>
-                            ))}
-                          </div>
-                        </td>
-                        <td className="py-5 px-6 align-top text-sm leading-relaxed text-white/70">
-                          {row.focus}
-                        </td>
-                        <td className="py-5 px-6 align-top text-sm leading-relaxed text-white/45">
-                          {row.audience}
-                        </td>
+                {/* Property Matrix Table */}
+                <div className="overflow-x-auto rounded-2xl border border-white/10 bg-brand-smoke/40 mb-10">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-white/10 bg-white/[0.02]">
+                        <th className="py-4 px-6 font-mono text-[10px] uppercase tracking-widest text-white/40 w-[24%]">
+                          {t.ecosystem.colProperty}
+                        </th>
+                        <th className="py-4 px-6 font-mono text-[10px] uppercase tracking-widest text-white/40 w-[46%]">
+                          {t.ecosystem.colFocus}
+                        </th>
+                        <th className="py-4 px-6 font-mono text-[10px] uppercase tracking-widest text-white/40 w-[30%]">
+                          {t.ecosystem.colAudience}
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {pillar.properties.map((row) => {
+                        const isIndiaHi =
+                          locale === 'hi' && row.propertyDisplay === 'Esports India';
+                        const isIntlHi =
+                          locale === 'hi' &&
+                          row.propertyDisplay === 'International Regional Assets';
+                        const resolvedFocus = isIndiaHi
+                          ? t.ecosystem.indiaOverride.focus
+                          : isIntlHi
+                            ? t.ecosystem.intlOverride.focus
+                            : row.focus;
+                        const resolvedAudience = isIndiaHi
+                          ? t.ecosystem.indiaOverride.audience
+                          : isIntlHi
+                            ? t.ecosystem.intlOverride.audience
+                            : row.audience;
+                        return (
+                          <tr
+                            key={row.propertyDisplay}
+                            className="transition-colors hover:bg-white/[0.025]"
+                          >
+                            <td className="py-5 px-6 align-top">
+                              <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+                                {row.links.map((link, idx) => (
+                                  <React.Fragment key={link.label}>
+                                    {idx > 0 && (
+                                      <span className="text-white/30 font-mono text-xs">&amp;</span>
+                                    )}
+                                    <Link
+                                      to={link.portfolioTarget}
+                                      className="inline-flex items-center gap-1.5 font-display text-xl uppercase tracking-wide transition-colors hover:underline underline-offset-4"
+                                      style={{ color: pillar.accent }}
+                                      title={`Jump to ${link.label} 3D portfolio card`}
+                                    >
+                                      {isIndiaHi ? t.ecosystem.indiaOverride.propertyDisplay : link.label}
+                                      <ArrowUpRight className="h-3.5 w-3.5 opacity-70" />
+                                    </Link>
+                                  </React.Fragment>
+                                ))}
+                              </div>
+                            </td>
+                            <td className="py-5 px-6 align-top text-sm leading-relaxed text-white/70">
+                              {resolvedFocus}
+                            </td>
+                            <td className="py-5 px-6 align-top text-sm leading-relaxed text-white/45">
+                              {resolvedAudience}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
 
-              {/* Detailed Operational Breakdown Cards */}
-              <div className="grid gap-4 md:grid-cols-2">
-                {pillar.properties.map((item, idx) => (
-                  <motion.div
-                    key={item.propertyDisplay}
-                    initial={{ opacity: 0, y: 12 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.35, delay: idx * 0.04 }}
-                    className="rounded-2xl border border-white/10 bg-brand-black/80 p-6 flex flex-col justify-between transition hover:border-white/25"
-                  >
-                    <div>
-                      <div className="flex items-start justify-between gap-4 mb-3">
-                        <h3 className="font-display text-2xl uppercase tracking-wide text-white">
-                          {item.propertyDisplay}
-                        </h3>
-                        <span
-                          className="font-mono text-[10px] uppercase tracking-widest tabular-nums shrink-0"
-                          style={{ color: pillar.accent }}
-                        >
-                          0{idx + 1}
-                        </span>
-                      </div>
-                      <p className="text-sm leading-relaxed text-white/55">{item.detailCopy}</p>
-                    </div>
-
-                    <div className="mt-5 pt-4 border-t border-white/5 flex flex-wrap items-center gap-3">
-                      {item.links.map((link) => (
-                        <Link
-                          key={link.label}
-                          to={link.portfolioTarget}
-                          className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest transition-colors hover:text-white"
-                          style={{ color: pillar.accent }}
-                        >
-                          {link.label} 3D Card
-                          <ArrowUpRight className="h-3.5 w-3.5" />
-                        </Link>
-                      ))}
-                    </div>
-                  </motion.div>
-                ))}
+                {/* Detailed Operational Breakdown Cards */}
+                <div className="grid gap-4 md:grid-cols-2">
+                  {pillar.properties.map((item, idx) => {
+                    const isIndiaHi =
+                      locale === 'hi' && item.propertyDisplay === 'Esports India';
+                    const isIntlHi =
+                      locale === 'hi' &&
+                      item.propertyDisplay === 'International Regional Assets';
+                    const localizedItem: DivisionPropertyRow = isIndiaHi
+                      ? {
+                          ...item,
+                          propertyDisplay: t.ecosystem.indiaOverride.propertyDisplay,
+                          focus: t.ecosystem.indiaOverride.focus,
+                          audience: t.ecosystem.indiaOverride.audience,
+                          detailCopy: t.ecosystem.indiaOverride.detailCopy,
+                        }
+                      : isIntlHi
+                        ? {
+                            ...item,
+                            propertyDisplay: t.ecosystem.intlOverride.propertyDisplay,
+                            focus: t.ecosystem.intlOverride.focus,
+                            audience: t.ecosystem.intlOverride.audience,
+                            detailCopy: t.ecosystem.intlOverride.detailCopy,
+                          }
+                        : item;
+                    return (
+                      <EcosystemPortfolioCard
+                        key={item.propertyDisplay}
+                        item={localizedItem}
+                        idx={idx}
+                        accent={pillar.accent}
+                        tooltipLabel={t.ecosystem.tooltipLabel}
+                        tooltipAriaPrefix={t.ecosystem.tooltipAriaPrefix}
+                        cardSuffix={t.ecosystem.cardSuffix}
+                        hoverHint={t.ecosystem.hoverFocusHint}
+                      />
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          </section>
-        ))}
+            </section>
+          );
+        })}
 
         {/* Innovation Engine: EsportsX Venture Studio */}
         <section className="border-b border-white/5 bg-brand-green/[.02] px-6 py-24 md:px-10">
@@ -666,14 +865,14 @@ export default function Ecosystem() {
                   <div className="flex items-center gap-3 mb-5">
                     <Rocket className="h-5 w-5 text-brand-green" />
                     <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-brand-green">
-                      / Innovation Engine
+                      {t.ecosystem.ventureKicker}
                     </span>
                   </div>
                   <h2 className="font-display text-4xl uppercase leading-none md:text-6xl tracking-tight">
-                    EsportsX Venture Studio
+                    {t.ecosystem.ventureTitle}
                   </h2>
                   <p className="mt-6 text-base md:text-lg leading-relaxed text-white/60">
-                    Operating under National Brand Group, the EsportsX Venture Studio acts as an internal incubation engine that identifies, funds, and accelerates early-stage startups across AI gaming tools, EdTech, creator platforms, and gaming infrastructure.
+                    {t.ecosystem.ventureDesc}
                   </p>
                 </div>
 
@@ -682,14 +881,14 @@ export default function Ecosystem() {
                     to="/#venture"
                     className="inline-flex items-center gap-3 rounded-full bg-brand-green px-7 py-3 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-black transition hover:bg-white whitespace-nowrap shrink-0"
                   >
-                    Explore Venture Studio
+                    {t.ecosystem.ventureBtn1}
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link
                     to="/model"
                     className="inline-flex items-center gap-3 rounded-full border border-white/15 px-7 py-3 font-mono text-[10px] uppercase tracking-[0.2em] text-white transition hover:border-brand-green/60 hover:text-brand-green whitespace-nowrap shrink-0"
                   >
-                    See The EsportsX Model
+                    {t.ecosystem.ventureBtn2}
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
@@ -706,27 +905,27 @@ export default function Ecosystem() {
           <div className="relative z-10 mx-auto max-w-5xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.32em] text-brand-green">
               <Layers className="h-3.5 w-3.5" />
-              Strategic Summary &amp; Outlook
+              {t.ecosystem.outlookKicker}
             </div>
             <h2 className="font-display text-5xl uppercase leading-none md:text-7xl lg:text-8xl tracking-tight">
-              4-Pillar Institutional Architecture.
+              {t.ecosystem.outlookTitle}
             </h2>
             <p className="mx-auto mt-8 max-w-3xl text-lg leading-relaxed text-white/60">
-              The EsportsX ecosystem combines defensible domain IP, scalable cloud infrastructure, and a comprehensive 4-pillar brand portfolio to address the key growth vectors of the digital entertainment economy.
+              {t.ecosystem.outlookDesc}
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <Link
                 to="/#portfolio"
                 className="inline-flex items-center gap-3 rounded-full bg-brand-green px-7 py-3 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-black transition hover:bg-white whitespace-nowrap shrink-0"
               >
-                Explore 3D Portfolio Cards
+                {t.ecosystem.outlookBtn1}
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 to="/partner"
                 className="inline-flex items-center gap-3 rounded-full border border-white/15 px-7 py-3 font-mono text-[10px] uppercase tracking-[0.2em] text-white transition hover:border-brand-green/60 hover:text-brand-green whitespace-nowrap shrink-0"
               >
-                Partner With EsportsX
+                {t.ecosystem.outlookBtn2}
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>

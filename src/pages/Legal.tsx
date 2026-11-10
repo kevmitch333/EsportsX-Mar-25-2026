@@ -4,6 +4,7 @@ import { Shield, Scale, FileText } from 'lucide-react';
 import { CustomCursor } from '../components/CustomCursor';
 import { SiteNav } from '../components/SiteNav';
 import { SiteFooter } from '../components/SiteFooter';
+import { useLanguage } from '../context/LanguageContext';
 
 const HeroGeo = () => (
   <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
@@ -28,6 +29,8 @@ const HeroGeo = () => (
 );
 
 export default function Legal() {
+  const { t } = useLanguage();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -51,28 +54,22 @@ export default function Legal() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="font-display text-6xl md:text-8xl uppercase tracking-tight mb-16">Legal <span className="text-brand-green">Framework</span></h1>
+            <h1 className="font-display text-6xl md:text-8xl uppercase tracking-tight mb-16">{t.legal.titleMain} <span className="text-brand-green">{t.legal.titleAccent}</span></h1>
             
             <div className="space-y-24">
               {/* Privacy Policy */}
               <section id="privacy">
                 <div className="flex items-center gap-4 mb-8">
                   <Shield className="w-8 h-8 text-brand-green" />
-                  <h2 className="font-display text-3xl uppercase tracking-wider">Privacy Policy</h2>
+                  <h2 className="font-display text-3xl uppercase tracking-wider">{t.legal.privacy}</h2>
                 </div>
                 <div className="prose prose-invert max-w-none text-white/60 leading-relaxed space-y-6 font-light">
-                  <p>Last Updated: April 1, 2026</p>
-                  <p>
-                    EsportsX ("we," "us," or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website and interact with our ecosystem brands.
-                  </p>
-                  <h3 className="text-white font-mono text-sm uppercase tracking-widest mt-8">1. Information Collection</h3>
-                  <p>
-                    We collect information that you provide directly to us, such as when you fill out a contact form, subscribe to a newsletter, or engage with our venture studio. This may include your name, email address, and professional affiliation.
-                  </p>
-                  <h3 className="text-white font-mono text-sm uppercase tracking-widest mt-8">2. Use of Information</h3>
-                  <p>
-                    We use the information we collect to provide, maintain, and improve our services, to communicate with you about strategic opportunities, and to protect the security of our ecosystem.
-                  </p>
+                  <p>{t.legal.lastUpdated}</p>
+                  <p>{t.legal.privacyIntro}</p>
+                  <h3 className="text-white font-mono text-sm uppercase tracking-widest mt-8">{t.legal.collectionTitle}</h3>
+                  <p>{t.legal.collectionDesc}</p>
+                  <h3 className="text-white font-mono text-sm uppercase tracking-widest mt-8">{t.legal.useTitle}</h3>
+                  <p>{t.legal.useDesc}</p>
                 </div>
               </section>
 
@@ -80,20 +77,14 @@ export default function Legal() {
               <section id="terms">
                 <div className="flex items-center gap-4 mb-8">
                   <Scale className="w-8 h-8 text-brand-green" />
-                  <h2 className="font-display text-3xl uppercase tracking-wider">Terms of Service</h2>
+                  <h2 className="font-display text-3xl uppercase tracking-wider">{t.legal.terms}</h2>
                 </div>
                 <div className="prose prose-invert max-w-none text-white/60 leading-relaxed space-y-6 font-light">
-                  <p>
-                    By accessing or using the EsportsX website, you agree to be bound by these Terms of Service and all applicable laws and regulations.
-                  </p>
-                  <h3 className="text-white font-mono text-sm uppercase tracking-widest mt-8">1. Intellectual Property</h3>
-                  <p>
-                    The content, features, and functionality of this website, including but not limited to the "Architecture of Competitive Gaming" framework and our "Domain IP Fortress," are owned by EsportsX and are protected by international copyright, trademark, and other intellectual property laws.
-                  </p>
-                  <h3 className="text-white font-mono text-sm uppercase tracking-widest mt-8">2. Strategic Assets</h3>
-                  <p>
-                    Our portfolio of 250+ premium domains and associated brand identities are strategic assets. Unauthorized use or reproduction of these assets is strictly prohibited.
-                  </p>
+                  <p>{t.legal.termsIntro}</p>
+                  <h3 className="text-white font-mono text-sm uppercase tracking-widest mt-8">{t.legal.ipTitle}</h3>
+                  <p>{t.legal.ipDesc}</p>
+                  <h3 className="text-white font-mono text-sm uppercase tracking-widest mt-8">{t.legal.assetsTitle}</h3>
+                  <p>{t.legal.assetsDesc}</p>
                 </div>
               </section>
 
@@ -101,10 +92,10 @@ export default function Legal() {
               <section id="compliance">
                 <div className="flex items-center gap-4 mb-8">
                   <FileText className="w-8 h-8 text-brand-green" />
-                  <h2 className="font-display text-3xl uppercase tracking-wider">Institutional Compliance</h2>
+                  <h2 className="font-display text-3xl uppercase tracking-wider">{t.legal.compliance}</h2>
                 </div>
                 <p className="text-white/60 leading-relaxed font-light">
-                  EsportsX operates with institutional-grade compliance standards. For specific inquiries regarding our legal framework or regulatory positioning, please contact our strategic legal division at <a href="mailto:legal@esportsx.com" className="text-brand-green hover:underline">legal@esportsx.com</a>.
+                  {t.legal.complianceLead} <a href="mailto:legal@esportsx.com" className="text-brand-green hover:underline">legal@esportsx.com</a>.
                 </p>
               </section>
             </div>

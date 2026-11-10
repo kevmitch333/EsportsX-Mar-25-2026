@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import { motion } from 'motion/react';
 import { TrendingUp, Activity, Flame } from 'lucide-react';
 import { Brand } from '../constants';
+import { useLanguage } from '../context/LanguageContext';
 
 interface BrandSparklineProps {
   brand?: Brand;
@@ -123,6 +124,7 @@ export const BrandSparkline: React.FC<BrandSparklineProps> = ({
 }) => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const rawId = useId();
+  const { t } = useLanguage();
   const gradId = `spark-grad-${rawId.replace(/[^a-zA-Z0-9_-]/g, '')}`;
 
   const resolved = getDeterministicMetrics(brand);
@@ -197,7 +199,7 @@ export const BrandSparkline: React.FC<BrandSparklineProps> = ({
           <div className="flex items-center justify-between font-mono text-[9px]">
             <span className="text-white/40 flex items-center gap-1">
               <Flame className="w-2.5 h-2.5 text-white/30" />
-              Engagement
+              {t.sparkline.engagement}
             </span>
             <span className="font-bold tracking-wider text-white/80">
               {effectiveScore}
@@ -221,10 +223,10 @@ export const BrandSparkline: React.FC<BrandSparklineProps> = ({
           <div className="text-[8.5px] font-mono text-white/35 truncate">
             {hoveredIdx !== null ? (
               <span className="text-white/70">
-                P{hoveredIdx + 1} Trajectory: <strong className="text-white">{chartData[hoveredIdx]} pts</strong>
+                P{hoveredIdx + 1} {t.sparkline.trajectoryLabel}: <strong className="text-white">{chartData[hoveredIdx]} {t.sparkline.trajectorySuffix}</strong>
               </span>
             ) : (
-              'Institutional Velocity'
+              t.sparkline.velocity
             )}
           </div>
         </div>

@@ -5,71 +5,11 @@ import { ArrowRight, Network } from 'lucide-react';
 import { CustomCursor } from '../components/CustomCursor';
 import { SiteNav } from '../components/SiteNav';
 import { SiteFooter } from '../components/SiteFooter';
-
-const MODEL_STEPS = [
-  {
-    num: '01',
-    title: 'IP',
-    desc: 'Specialized esports brands and digital assets.',
-  },
-  {
-    num: '02',
-    title: 'Intelligence',
-    desc: 'Market research, institutional knowledge, and category expertise.',
-  },
-  {
-    num: '03',
-    title: 'Activation',
-    desc: 'Content, pilots, events, education, and community.',
-  },
-  {
-    num: '04',
-    title: 'Partnerships',
-    desc: 'Brands, universities, technology companies, operators, and investors.',
-  },
-  {
-    num: '05',
-    title: 'Commercialization',
-    desc: 'Operating ventures, licensing, sponsorship, strategic partnerships, and transactions.',
-  },
-];
-
-const BUSINESS_MODELS = [
-  {
-    title: 'Strategic Advisory',
-    desc: 'Strategy, market entry, business development, and institutional consulting.',
-  },
-  {
-    title: 'Events & Experiences',
-    desc: 'Conferences, competitions, campus activations, showcases, and experiential programs.',
-  },
-  {
-    title: 'Brand Partnerships',
-    desc: 'Sponsorship, activation, research, community engagement, and market development.',
-  },
-  {
-    title: 'Education',
-    desc: 'Curriculum, professional development, institutional programming, and workforce initiatives.',
-  },
-  {
-    title: 'IP & Licensing',
-    desc: 'Strategic commercialization of specialized esports brands and digital assets.',
-  },
-  {
-    title: 'Market-Entry Programs',
-    desc: 'Structured pathways into emerging geographic and demographic markets.',
-  },
-  {
-    title: 'Research & Intelligence',
-    desc: 'Insights into changing esports markets, business models, technologies, and communities.',
-  },
-  {
-    title: 'Venture Development',
-    desc: 'Incubating selected esports concepts into standalone operating opportunities.',
-  },
-];
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Model() {
+  const { t } = useLanguage();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -88,21 +28,21 @@ export default function Model() {
 
           <div className="relative z-10 mx-auto max-w-7xl">
             <div className="mb-6 font-mono text-[10px] uppercase tracking-[0.32em] text-brand-green">
-              / The EsportsX Model
+              {t.model.heroKicker}
             </div>
             <h1 className="max-w-4xl font-display text-5xl uppercase leading-none md:text-7xl lg:text-8xl tracking-tight">
-              From Digital Asset to Operating Opportunity.
+              {t.model.heroTitle}
             </h1>
             <p className="mt-7 max-w-3xl text-lg leading-relaxed text-white/55">
-              EsportsX takes a venture-development approach to esports: identify promising categories and underserved communities, activate specialized intellectual property, develop a market thesis, establish partnerships, create programming, and test real-world demand.
+              {t.model.heroDesc}
             </p>
 
             {/* 5-Stage Pipeline */}
             <div className="relative mt-14 grid gap-3 lg:grid-cols-5">
               <div className="absolute left-[8%] right-[8%] top-7 hidden h-px bg-gradient-to-r from-transparent via-brand-green/35 to-transparent lg:block" />
-              {MODEL_STEPS.map((step, idx) => (
+              {t.model.steps.map((step, idx) => (
                 <motion.div
-                  key={step.title}
+                  key={step.num}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.45, delay: idx * 0.08 }}
@@ -123,13 +63,13 @@ export default function Model() {
                 <Network className="mt-1 h-7 w-7 shrink-0 text-brand-green" />
                 <div>
                   <div className="font-mono text-[10px] uppercase tracking-[.25em] text-brand-green">
-                    The critical question
+                    {t.model.criticalLabel}
                   </div>
                   <p className="mt-3 max-w-4xl font-display text-3xl uppercase leading-tight md:text-5xl">
-                    What should this asset become?
+                    {t.model.criticalQuestion}
                   </p>
                   <p className="mt-5 max-w-4xl leading-relaxed text-white/55">
-                    An operating company, media property, event, educational platform, licensed brand, joint venture, strategic partnership—or an asset that creates greater value in someone else’s ecosystem? EsportsX provides the architecture for finding that answer.
+                    {t.model.criticalDesc}
                   </p>
                 </div>
               </div>
@@ -141,16 +81,16 @@ export default function Model() {
         <section className="px-6 py-24 md:px-10">
           <div className="mx-auto max-w-7xl">
             <div className="mb-6 font-mono text-[10px] uppercase tracking-[0.32em] text-brand-green">
-              / What We Build
+              {t.model.buildKicker}
             </div>
             <h2 className="font-display text-5xl uppercase leading-none md:text-7xl tracking-tight">
-              Multiple Business Models. One Esports Platform.
+              {t.model.buildTitle}
             </h2>
 
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {BUSINESS_MODELS.map((model, idx) => (
+              {t.model.businessModels.map((model, idx) => (
                 <div
-                  key={model.title}
+                  key={idx}
                   className="group rounded-2xl border border-white/10 p-6 transition hover:border-brand-green/30 hover:bg-white/[.02]"
                 >
                   <div className="font-mono text-[10px] tracking-[.2em] text-white/25 tabular-nums">
@@ -171,41 +111,35 @@ export default function Model() {
           <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2">
             <div>
               <div className="mb-6 font-mono text-[10px] uppercase tracking-[0.32em] text-brand-green">
-                / Why EsportsX
+                {t.model.whyKicker}
               </div>
               <h2 className="font-display text-5xl uppercase leading-none md:text-7xl tracking-tight">
-                Built From Inside the Evolution of Esports.
+                {t.model.whyTitle}
               </h2>
               <div className="mt-10 flex flex-wrap gap-4">
                 <Link
                   to="/partner"
                   className="inline-flex items-center gap-3 rounded-full bg-brand-green px-7 py-3 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-black transition hover:bg-white whitespace-nowrap shrink-0"
                 >
-                  Partner With EsportsX
+                  {t.model.ctaPartner}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   to="/#portfolio"
                   className="inline-flex items-center gap-3 rounded-full border border-white/15 px-7 py-3 font-mono text-[10px] uppercase tracking-[0.2em] text-white transition hover:border-brand-green/60 hover:text-brand-green whitespace-nowrap shrink-0"
                 >
-                  Explore Portfolio
+                  {t.model.ctaPortfolio}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
             </div>
 
             <div className="space-y-5 leading-relaxed text-white/55">
-              <p>
-                EsportsX is informed by years of work across collegiate esports, education, entertainment, technology, events, brand development, and competitive gaming.
-              </p>
-              <p>
-                Founder Kevin Mitchell has worked across the development of the collegiate esports ecosystem as an educator, entrepreneur, advisor, and event creator.
-              </p>
-              <p>
-                His esports work includes teaching esports at Emerson College, founding the College Esports Expo, helping develop collegiate competition and programming, creating esports education initiatives, and consulting with organizations across gaming, technology, entertainment, and institutional markets.
-              </p>
+              {t.model.whyParagraphs.map((paragraph, idx) => (
+                <p key={idx}>{paragraph}</p>
+              ))}
               <p className="rounded-xl border border-brand-green/20 bg-brand-green/[.03] p-6 text-xl text-white/85">
-                The next generation of esports companies will be built at the intersections — not inside traditional industry boundaries.
+                {t.model.whyCallout}
               </p>
             </div>
           </div>
