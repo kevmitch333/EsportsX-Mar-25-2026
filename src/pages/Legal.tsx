@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
-import { ArrowLeft, Shield, Scale, FileText } from 'lucide-react';
+import { Shield, Scale, FileText } from 'lucide-react';
+import { CustomCursor } from '../components/CustomCursor';
+import { SiteNav } from '../components/SiteNav';
+import { SiteFooter } from '../components/SiteFooter';
 
 const HeroGeo = () => (
   <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
@@ -26,58 +28,21 @@ const HeroGeo = () => (
 );
 
 export default function Legal() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.scrollTo(0, 0);
   }, []);
-
-  useEffect(() => {
-    const followMouse = () => {
-      setCursorPos(prev => ({
-        x: prev.x + (mousePos.x - prev.x) * 0.15,
-        y: prev.y + (mousePos.y - prev.y) * 0.15,
-      }));
-      requestAnimationFrame(followMouse);
-    };
-    const raf = requestAnimationFrame(followMouse);
-    return () => cancelAnimationFrame(raf);
-  }, [mousePos]);
 
   return (
     <div className="min-h-screen bg-brand-black text-white selection:bg-brand-green selection:text-black grain-overlay cursor-none overflow-x-hidden">
-      {/* Custom Cursor */}
-      <div 
-        className="fixed w-2.5 h-2.5 bg-brand-green rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-screen transition-[width,height] duration-150 hidden md:block"
-        style={{ left: mousePos.x, top: mousePos.y }}
-      />
-      <div 
-        className="fixed w-9 h-9 border border-brand-green/30 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-[width,height] duration-200 hidden md:block"
-        style={{ left: cursorPos.x, top: cursorPos.y }}
-      />
+      <CustomCursor />
 
       {/* Scanline Effect */}
       <div className="scanline" />
 
       <HeroGeo />
 
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 py-6 px-6 md:px-12 bg-brand-black/90 backdrop-blur-xl border-b border-white/10">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Link to="/" className="font-display text-2xl tracking-wider flex items-center gap-1">
-            ESPORTS<span className="text-brand-green">X</span>
-          </Link>
-          <Link to="/" className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-white/60 hover:text-brand-green transition-colors group">
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Back to Ecosystem
-          </Link>
-        </div>
-      </nav>
+      {/* Global Navigation */}
+      <SiteNav />
 
       <main className="pt-40 pb-24 px-6 md:px-12">
         <div className="max-w-4xl mx-auto">
@@ -147,20 +112,7 @@ export default function Legal() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="py-20 px-6 md:px-12 border-t border-white/5 bg-black">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
-          <Link to="/" className="font-display text-2xl tracking-wider flex items-center gap-1">
-            ESPORTS<span className="text-brand-green">X</span>
-          </Link>
-          <div className="text-white/20 font-mono text-[10px] uppercase tracking-widest">
-            © 2026 EsportsX Ecosystem. All Rights Reserved.
-          </div>
-          <Link to="/" className="text-[10px] font-mono uppercase tracking-widest text-white/60 hover:text-brand-green transition-colors">
-            Back to Ecosystem
-          </Link>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

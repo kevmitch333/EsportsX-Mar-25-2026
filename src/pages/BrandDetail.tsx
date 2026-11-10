@@ -2,16 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  ArrowLeft, 
+  ArrowLeft,
   ExternalLink, 
-  Linkedin,
   ChevronRight,
   X,
   Maximize2
 } from 'lucide-react';
-import { cn } from '../lib/utils';
 import { BRANDS } from '../constants';
 import { BrandSparkline } from '../components/BrandSparkline';
+import { CustomCursor } from '../components/CustomCursor';
+import { SiteNav } from '../components/SiteNav';
+import { SiteFooter } from '../components/SiteFooter';
 
 const HeroGeo = () => (
   <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
@@ -39,68 +40,37 @@ export default function BrandDetail() {
   const { id } = useParams();
   const brand = BRANDS.find(b => b.id === id);
 
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  useEffect(() => {
-    const followMouse = () => {
-      setCursorPos(prev => ({
-        x: prev.x + (mousePos.x - prev.x) * 0.15,
-        y: prev.y + (mousePos.y - prev.y) * 0.15,
-      }));
-      requestAnimationFrame(followMouse);
-    };
-    const frame = requestAnimationFrame(followMouse);
-    return () => cancelAnimationFrame(frame);
-  }, [mousePos]);
+    window.scrollTo(0, 0);
+  }, [id]);
 
   if (!brand) {
     return (
-      <div className="min-h-screen bg-brand-black flex flex-col items-center justify-center text-white">
-        <h1 className="text-4xl font-display mb-4 uppercase">Brand Not Found</h1>
-        <Link to="/" className="text-brand-green font-mono uppercase tracking-widest hover:underline">
-          Back to Portfolio
-        </Link>
+      <div className="min-h-screen bg-brand-black flex flex-col text-white grain-overlay">
+        <CustomCursor />
+        <SiteNav />
+        <div className="flex-1 flex flex-col items-center justify-center px-6 pt-24">
+          <h1 className="text-4xl font-display mb-4 uppercase">Brand Not Found</h1>
+          <Link to="/#portfolio" className="text-brand-green font-mono uppercase tracking-widest hover:underline">
+            Back to Portfolio
+          </Link>
+        </div>
+        <SiteFooter />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-brand-black text-white selection:bg-brand-green selection:text-black grain-overlay cursor-none overflow-x-hidden">
-      {/* Custom Cursor */}
-      <div 
-        className="fixed w-2.5 h-2.5 bg-brand-green rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-screen transition-[width,height] duration-150 hidden md:block"
-        style={{ left: mousePos.x, top: mousePos.y }}
-      />
-      <div 
-        className="fixed w-9 h-9 border border-brand-green/30 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-[width,height] duration-200 hidden md:block"
-        style={{ left: cursorPos.x, top: cursorPos.y }}
-      />
+      <CustomCursor />
 
       {/* Scanline Effect */}
       <div className="scanline" />
 
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 py-6 px-6 md:px-12 bg-brand-black/90 backdrop-blur-xl border-b border-white/10">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Link to="/" className="font-display text-2xl tracking-wider flex items-center gap-1">
-            ESPORTS<span className="text-brand-green">X</span>
-          </Link>
-          <Link to="/" className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-white/60 hover:text-brand-green transition-colors group">
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Back to Portfolio
-          </Link>
-        </div>
-      </nav>
+      {/* Global Navigation */}
+      <SiteNav />
 
       {/* Hero Section */}
       <section className="relative pt-48 pb-20 px-6 md:px-12 overflow-hidden border-b border-white/5">
@@ -116,6 +86,13 @@ export default function BrandDetail() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
+            <Link
+              to="/ecosystem"
+              className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-white/50 hover:text-brand-green transition-colors mb-8 group"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+              Back to Ecosystem
+            </Link>
             <div className="flex items-center gap-4 mb-10">
               <div 
                 className="p-5 rounded-xl bg-white/5 border border-white/10 text-3xl" 
@@ -319,20 +296,7 @@ export default function BrandDetail() {
         )}
       </AnimatePresence>
 
-      {/* Footer */}
-      <footer className="py-20 px-6 md:px-12 border-t border-white/5 bg-black">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
-          <Link to="/" className="font-display text-2xl tracking-wider flex items-center gap-1">
-            ESPORTS<span className="text-brand-green">X</span>
-          </Link>
-          <div className="text-white/20 font-mono text-[10px] uppercase tracking-widest">
-            © 2026 EsportsX Ecosystem. All Rights Reserved.
-          </div>
-          <Link to="/" className="text-[10px] font-mono uppercase tracking-widest text-white/60 hover:text-brand-green transition-colors">
-            Back to Portfolio
-          </Link>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

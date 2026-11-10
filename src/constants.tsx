@@ -47,84 +47,7 @@ export interface Brand {
 }
 
 export const BRANDS: Brand[] = [
-  // CORE PLATFORM (Green)
-  {
-    id: 'agoniq',
-    name: 'AGONiQ',
-    category: 'core',
-    tagline: 'AI-enhanced competitions & tournaments',
-    desc: 'The AI-enhanced competition engine powering EsportsX\'s next-generation tournament formats. AGONiQ integrates machine learning and generative AI tools into the fabric of competitive events.',
-    icon: <Cpu className="w-6 h-6" />,
-    domain: 'agoniq.com',
-    color: '#00ff88',
-    featured: true,
-    stats: { users: '50k+', growth: '+120%' },
-    images: [
-      'https://picsum.photos/seed/agoniq1/1200/800',
-      'https://picsum.photos/seed/agoniq2/1200/800',
-      'https://picsum.photos/seed/agoniq3/1200/800',
-      'https://picsum.photos/seed/agoniq4/1200/800'
-    ],
-    backInfo: {
-      sub: 'AI Competition Engine',
-      rows: [
-        { label: 'Model', val: 'AI-native tournament platform with generative challenge creation' },
-        { label: 'Audience', val: 'Competitive players, tournament operators, collegiate institutions' },
-        { label: 'Revenue', val: 'Platform licensing, entry fees, data analytics subscriptions' },
-        { label: 'Edge', val: 'First-mover in AI-integrated competition infrastructure' }
-      ]
-    }
-  },
-  {
-    id: 'warzai',
-    name: 'Warzai',
-    category: 'core',
-    tagline: 'The world\'s first AI-enhanced tournament format',
-    desc: 'Where "War" meets "Zai" — players use generative AI tools like ChatGPT, Claude, and Midjourney to solve real-world challenges spanning business strategy, creative design, and technical problem-solving.',
-    icon: <BrainCircuit className="w-6 h-6" />,
-    domain: 'warzai.com',
-    color: '#00ff88',
-    images: [
-      'https://picsum.photos/seed/warzai1/1200/800',
-      'https://picsum.photos/seed/warzai2/1200/800',
-      'https://picsum.photos/seed/warzai3/1200/800'
-    ],
-    backInfo: {
-      sub: 'AI Tournament Format',
-      rows: [
-        { label: 'Format', val: 'Participants solve complex challenges using AI tools in real-time competition' },
-        { label: 'Audience', val: 'College students, professionals, corporate teams, AI enthusiasts' },
-        { label: 'Revenue', val: 'Entry fees, corporate sponsorships, B2B talent assessment licensing' },
-        { label: 'Edge', val: 'Unique category — no direct competitor in AI-native competition' }
-      ]
-    }
-  },
-
   // COMPETITIVE TRACKS (Blue)
-  {
-    id: 'agoniq-collegiate',
-    name: 'AGONiQ Collegiate',
-    category: 'compete',
-    tagline: 'Cognitive competition meets NCAA compliance',
-    desc: 'The first AI-powered cognitive competition platform purpose-built for collegiate athletics. Transforms AI literacy into an athletic discipline.',
-    icon: <GraduationCap className="w-6 h-6" />,
-    domain: 'agoniq.com',
-    color: '#00d4ff',
-    images: [
-      'https://picsum.photos/seed/collegiate1/1200/800',
-      'https://picsum.photos/seed/collegiate2/1200/800',
-      'https://picsum.photos/seed/collegiate3/1200/800'
-    ],
-    backInfo: {
-      sub: 'NCAA Cognitive Platform',
-      rows: [
-        { label: 'Model', val: 'AI literacy competitions aligned with NCAA revenue sharing' },
-        { label: 'Audience', val: 'Universities, student-athletes, athletic departments' },
-        { label: 'Revenue', val: 'Institutional licensing, sponsorships, NIL revenue sharing' },
-        { label: 'Status', val: 'Active — pilot universities in development' }
-      ]
-    }
-  },
   {
     id: 'esports-fc',
     name: 'EsportsFC',
@@ -731,7 +654,6 @@ export const BRANDS: Brand[] = [
 
 export const CATEGORIES = [
   { id: 'all', label: 'All Brands', color: '#00ff88', overview: 'The complete EsportsX ecosystem spanning competition, education, and infrastructure.' },
-  { id: 'core', label: 'Core Platform', color: '#00ff88', overview: 'AI-enhanced tournament formats and global platform infrastructure.' },
   { id: 'compete', label: 'Competitive Tracks', color: '#00d4ff', overview: 'Specialized competitive tracks spanning collegiate, sports, and mobile.' },
   { id: 'edu', label: 'Education & Development', color: '#ff9f43', overview: 'Collegiate systems, NIL monetization, and K-12 gaming curriculum.' },
   { id: 'regional', label: 'Regional & Communities', color: '#a29bfe', overview: 'Hyper-local and demographic-specific gaming networks.' },

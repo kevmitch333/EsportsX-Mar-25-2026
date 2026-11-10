@@ -1,36 +1,26 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Landing from './pages/Landing';
-import Explore from './pages/Explore';
-import PlatformDetail from './pages/PlatformDetail';
+import BrandDetail from './pages/BrandDetail';
 import Legal from './pages/Legal';
-
-function ConversionDock() {
-  const location = useLocation();
-  if (location.pathname === '/explore') return null;
-
-  return (
-    <Link
-      to="/explore"
-      className="fixed bottom-4 right-4 z-[70] flex items-center gap-2 rounded-full border border-brand-green/30 bg-brand-black/90 px-4 py-3 font-mono text-[7px] uppercase tracking-[.14em] text-brand-green shadow-[0_10px_40px_rgba(0,0,0,.45)] backdrop-blur-xl transition hover:border-brand-green/60 hover:bg-brand-green hover:text-black md:bottom-5 md:right-5 md:gap-3 md:px-5 md:text-[8px] md:tracking-[.18em]"
-    >
-      Find your entry point <ArrowRight className="h-4 w-4" />
-    </Link>
-  );
-}
+import Model from './pages/Model';
+import Partner from './pages/Partner';
+import Ecosystem from './pages/Ecosystem';
+import About from './pages/About';
 
 export default function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/explore" element={<Explore />} />
-        <Route path="/platform/:id" element={<PlatformDetail />} />
-        <Route path="/brand/:id" element={<Navigate to="/explore" replace />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/about-us" element={<About />} />
+        <Route path="/ecosystem" element={<Ecosystem />} />
+        <Route path="/model" element={<Model />} />
+        <Route path="/partner" element={<Partner />} />
+        <Route path="/brand/:id" element={<BrandDetail />} />
         <Route path="/legal" element={<Legal />} />
       </Routes>
-      <ConversionDock />
     </Router>
   );
 }
