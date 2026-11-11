@@ -130,6 +130,13 @@ const en = {
       { val: '$605B', label: 'EdTech Market', sub: 'Digital Learning Sector' },
       { val: '$75B', label: 'AI Education', sub: 'Emerging Tech Vertical' },
     ],
+    ecosystemBanner: {
+      kicker: 'Institutional Scale · Live Execution',
+      title: 'Built to Connect Competition, Education & Capital.',
+      subtitle: 'Unified infrastructure powering global leagues, collegiate pipelines, and regional expansion.',
+      cta: 'Explore Ecosystem Spotlights',
+      alt: 'Competitive esports athletes and performance analysts moving through an architectural steel-and-concrete arena corridor',
+    },
     filterLabel: 'Filter:',
     categories: {
       all: 'All Brands',
@@ -769,6 +776,13 @@ const hi: TranslationSet = {
       { val: '$605B', label: 'एडटेक बाज़ार', sub: 'डिजिटल लर्निंग क्षेत्र' },
       { val: '$75B', label: 'एआई शिक्षा', sub: 'उभरता तकनीकी क्षेत्र' },
     ],
+    ecosystemBanner: {
+      kicker: 'संस्थागत विस्तार · लाइव निष्पादन',
+      title: 'प्रतिस्पर्धा, शिक्षा और पूंजी को जोड़ने वाला तंत्र।',
+      subtitle: 'वैश्विक लीग, कॉलेजिएट कार्यक्रम और क्षेत्रीय विस्तार को सशक्त बनाने वाला एकीकृत बुनियादी ढाँचा।',
+      cta: 'इकोसिस्टम स्पॉटलाइट्स देखें',
+      alt: 'आधुनिक स्टील और कंक्रीट ईस्पोर्ट्स एरीना कॉरिडोर से गुजरते प्रतिस्पर्धी खिलाड़ी और विश्लेषक',
+    },
     filterLabel: 'फ़िल्टर:',
     categories: {
       all: 'सभी ब्रांड्स',

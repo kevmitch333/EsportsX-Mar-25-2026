@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
 import { 
   ArrowRight,
   ExternalLink,
@@ -24,6 +24,7 @@ import { SiteFooter } from '../components/SiteFooter';
 import { useLanguage } from '../context/LanguageContext';
 import heroEsportsPlayerImg from '../assets/images/hero_esports_player_1794348240569.jpg';
 import marketConvergenceArenaImg from '../assets/images/market_convergence_arena_1794348241462.jpg';
+import ecosystemBannerImg from '../assets/images/esportsx_ecosystem_banner_1794349908597.jpg';
 
 const STAKEHOLDER_ICONS = [
   <Trophy key="trophy" className="w-5 h-5 text-brand-green" aria-hidden="true" />,
@@ -94,6 +95,14 @@ export default function Landing() {
   const [highlightedBrandId, setHighlightedBrandId] = useState<string | null>(null);
   const [heroImgFailed, setHeroImgFailed] = useState(false);
   const [marketImgFailed, setMarketImgFailed] = useState(false);
+  const [bannerImgFailed, setBannerImgFailed] = useState(false);
+  const bannerRef = useRef<HTMLElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const { scrollYProgress: bannerScrollProgress } = useScroll({
+    target: bannerRef,
+    offset: ['start end', 'end start'],
+  });
+  const bannerParallaxY = useTransform(bannerScrollProgress, [0, 1], ['-6%', '6%']);
   const location = useLocation();
   const { t, locale } = useLanguage();
 
@@ -400,6 +409,74 @@ export default function Landing() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Architectural Visual Break Banner */}
+      <section
+        ref={bannerRef}
+        aria-label={t.landing.ecosystemBanner.title}
+        className="group relative h-[320px] sm:h-[380px] md:h-[440px] lg:h-[480px] w-full overflow-hidden border-b border-white/10 bg-brand-black"
+      >
+        <div className="signal-grid absolute inset-0 z-0 opacity-[0.14] pointer-events-none" aria-hidden="true" />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 z-0 bg-gradient-to-br from-[#0e1512] via-brand-black to-[#070a09]"
+        />
+
+        {!bannerImgFailed && (
+          <motion.div
+            style={{ y: shouldReduceMotion ? 0 : bannerParallaxY }}
+            className="absolute -inset-y-8 inset-x-0 z-0 pointer-events-none select-none will-change-transform"
+          >
+            <img
+              src={ecosystemBannerImg}
+              alt={t.landing.ecosystemBanner.alt}
+              referrerPolicy="no-referrer"
+              onError={() => setBannerImgFailed(true)}
+              className="h-full w-full object-cover object-[65%_32%] brightness-90 contrast-110 transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+            />
+          </motion.div>
+        )}
+
+        {/* Measured Contrast Scrims keeping subjects visible while securing AA text contrast on left concrete column */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-brand-black/90 via-brand-black/55 to-transparent"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-brand-black/70 via-transparent to-brand-black/90"
+        />
+
+        {/* Editorial Anchor Overlay */}
+        <div className="relative z-20 mx-auto flex h-full max-w-7xl flex-col justify-end px-6 pb-8 pt-10 md:px-12 md:pb-12">
+          <div className="max-w-xl">
+            <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.26em] text-brand-green">
+              {t.landing.ecosystemBanner.kicker}
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl uppercase leading-[0.98] tracking-tight text-white text-balance">
+              {t.landing.ecosystemBanner.title}
+            </h2>
+            <p className="mt-3 max-w-md text-xs sm:text-sm leading-relaxed text-white/75">
+              {t.landing.ecosystemBanner.subtitle}
+            </p>
+            <div className="mt-5">
+              <button
+                type="button"
+                onClick={(e) => {
+                  if (!activeFilters.includes('all') && !activeFilters.includes('history')) {
+                    setActiveFilters(['all']);
+                  }
+                  scrollToSection(e, 'portfolio');
+                }}
+                className="inline-flex items-center gap-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-brand-green transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-sm cursor-pointer whitespace-nowrap"
+              >
+                <span>{t.landing.ecosystemBanner.cta}</span>
+                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true" />
+              </button>
+            </div>
           </div>
         </div>
       </section>
